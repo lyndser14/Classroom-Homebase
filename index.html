@@ -203,7 +203,7 @@
 
     /* Left Sidebar Tools */
     .sidebar {
-      width: 300px;
+      width: 305px;
       background: var(--bg-panel);
       border: 1px solid var(--border-light);
       border-radius: var(--radius-lg);
@@ -232,10 +232,24 @@
       overflow: hidden;
       background: #fff;
       flex-shrink: 0;
+      transition: opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
     }
 
     .tool-card.hidden-tool {
       display: none;
+    }
+
+    .tool-card.dragging-tool {
+      opacity: 0.45;
+      box-shadow: var(--shadow-md);
+    }
+
+    .tool-card.drag-over-top {
+      border-top: 3px solid var(--teal-primary);
+    }
+
+    .tool-card.drag-over-bottom {
+      border-bottom: 3px solid var(--teal-primary);
     }
 
     .tool-header {
@@ -253,10 +267,29 @@
     .tool-header span.title {
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 6px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+
+    .drag-grip {
+      font-family: sans-serif;
+      font-size: 0.95rem;
+      color: rgba(15, 23, 42, 0.38);
+      cursor: grab;
+      letter-spacing: -1px;
+      padding: 2px 4px 2px 0;
+      flex-shrink: 0;
+      touch-action: none;
+    }
+
+    .tool-header:hover .drag-grip {
+      color: rgba(15, 23, 42, 0.78);
+    }
+
+    .drag-grip:active {
+      cursor: grabbing;
     }
 
     .header-controls {
@@ -743,21 +776,25 @@
       border: 2px solid #cbd5e1;
     }
 
-    /* Portrait Playing Cards & Flashcards */
+    /* Portrait Playing Cards & Multi-Card Spread */
     .card-table-felt {
       background: #f1f5f9;
       border: 1px dashed #cbd5e1;
       border-radius: 12px;
-      padding: 14px 10px;
+      padding: 12px 8px;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: center;
+      gap: 8px;
       min-height: 196px;
+      max-height: 310px;
+      overflow-y: auto;
     }
 
     .playing-card {
-      width: 120px;
-      height: 172px;
+      width: 118px;
+      height: 170px;
       background: linear-gradient(180deg, #ffffff 0%, #fcfcfd 100%);
       border: 1.5px solid #94a3b8;
       border-radius: 12px;
@@ -766,10 +803,10 @@
       flex-direction: column;
       justify-content: space-between;
       box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12), 0 1px 2px rgba(15, 23, 42, 0.08);
-      margin: 0 auto;
       user-select: none;
       position: relative;
       transition: transform 0.15s ease;
+      flex-shrink: 0;
     }
 
     .playing-card-inner {
@@ -780,6 +817,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      overflow: hidden;
     }
 
     .playing-card.red {
@@ -815,8 +853,8 @@
     }
 
     .playing-card.custom-card {
-      width: 128px;
-      height: 180px;
+      width: 126px;
+      height: 174px;
       border-color: var(--teal-primary);
     }
 
@@ -828,16 +866,20 @@
     }
 
     .custom-card-badge {
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.06em;
       color: var(--teal-primary);
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .custom-card-text {
       font-family: var(--font-heading);
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       font-weight: 600;
       color: var(--text-main);
       line-height: 1.25;
@@ -862,9 +904,88 @@
 
     .card-center {
       font-family: Georgia, "Times New Roman", serif;
-      font-size: 2.35rem;
+      font-size: 2.3rem;
       text-align: center;
       line-height: 1;
+    }
+
+    /* Compact multi-card styling when drawing 2+ cards */
+    .card-table-felt.multi-spread .playing-card {
+      width: 78px;
+      height: 114px;
+      padding: 4px;
+      border-radius: 9px;
+    }
+
+    .card-table-felt.multi-spread .playing-card-inner {
+      padding: 4px 5px;
+      border-radius: 6px;
+    }
+
+    .card-table-felt.multi-spread .card-corner {
+      width: 16px;
+      font-size: 0.74rem;
+    }
+
+    .card-table-felt.multi-spread .card-center {
+      font-size: 1.5rem;
+    }
+
+    .card-table-felt.multi-spread .playing-card.custom-card {
+      width: 112px;
+      height: 138px;
+    }
+
+    .card-table-felt.multi-spread .custom-card-text {
+      font-size: 0.86rem;
+    }
+
+    .deck-controls-bar {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .deck-draw-count {
+      width: auto;
+      padding: 7px 8px;
+      font-size: 0.82rem;
+      flex-shrink: 0;
+    }
+
+    .saved-decks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 160px;
+      overflow-y: auto;
+    }
+
+    .saved-deck-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 6px 10px;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      background: #f8fafc;
+      font-size: 0.82rem;
+    }
+
+    .saved-deck-item.active-deck {
+      border-color: var(--teal-primary);
+      background: #f0fdfa;
+    }
+
+    .deck-type-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      color: var(--text-main);
+      margin-left: 4px;
     }
 
     /* Main Stage (Right) */
@@ -1004,7 +1125,7 @@
 
     .floating-tool-window {
       position: absolute;
-      width: 280px;
+      width: 290px;
       min-width: 220px;
       max-width: 92vw;
       max-height: 88%;
@@ -1138,6 +1259,7 @@
       flex-direction: column;
       gap: 14px;
       max-height: 88vh;
+      overflow-y: auto;
     }
 
     .modal h2 {
@@ -1189,23 +1311,32 @@
       display: flex;
     }
 
-    .toggle-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
+    .tool-order-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
-    .toggle-card {
+    .tool-order-row {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 8px;
-      padding: 8px 10px;
+      padding: 7px 10px;
       border: 1px solid var(--border-light);
       border-radius: 8px;
       background: #f8fafc;
       font-size: 0.84rem;
       font-weight: 600;
+    }
+
+    .tool-order-row label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
       cursor: pointer;
+      flex: 1;
     }
 
     .pill-list {
@@ -1348,6 +1479,25 @@
       cursor: not-allowed;
     }
 
+    .toggle-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .toggle-card {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      background: #f8fafc;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
     /* Backup Cards */
     .backup-card {
       border: 1px solid var(--border-light);
@@ -1398,7 +1548,7 @@
   <header>
     <div class="brand">
       <h1 id="headerTitle">Classroom Home Base</h1>
-      <p id="headerSubtitle">Tools &amp; Apps · click "Overlay" on any tool to float it over your presentation</p>
+      <p id="headerSubtitle">Tools &amp; Apps · drag tools to reorder or click "Overlay" to float on stage</p>
     </div>
     <div class="header-actions">
       <button type="button" class="btn" id="clearOverlaysBtn" style="display:none;">Close Overlays (<span id="overlayCountBadge">0</span>)</button>
@@ -1408,13 +1558,13 @@
   </header>
 
   <div class="workspace">
-    <!-- Left Sidebar -->
+    <!-- Left Sidebar (Tools can be dragged to rearrange) -->
     <aside class="sidebar" id="sidebar">
 
       <!-- Bookmarks -->
       <div class="tool-card open" data-tool="bookmarks">
         <div class="tool-header bg-blue" onclick="toggleTool(this)">
-          <span class="title">Bookmarks</span>
+          <span class="title"><span class="drag-grip" title="Drag to reorder">⋮⋮</span>Bookmarks</span>
           <div class="header-controls">
             <button type="button" class="overlay-toggle-btn" data-overlay-btn="bookmarks">Overlay</button>
             <span>▾</span>
@@ -1426,7 +1576,7 @@
       <!-- Random Name -->
       <div class="tool-card" data-tool="randomName">
         <div class="tool-header bg-pink" onclick="toggleTool(this)">
-          <span class="title">Random Name</span>
+          <span class="title"><span class="drag-grip" title="Drag to reorder">⋮⋮</span>Random Name</span>
           <div class="header-controls">
             <button type="button" class="overlay-toggle-btn" data-overlay-btn="randomName">Overlay</button>
             <span>▾</span>
@@ -1438,7 +1588,7 @@
       <!-- Groups & Partners -->
       <div class="tool-card open" data-tool="groups">
         <div class="tool-header bg-green" onclick="toggleTool(this)">
-          <span class="title">Groups &amp; Partners</span>
+          <span class="title"><span class="drag-grip" title="Drag to reorder">⋮⋮</span>Groups &amp; Partners</span>
           <div class="header-controls">
             <button type="button" class="overlay-toggle-btn" data-overlay-btn="groups">Overlay</button>
             <span>▾</span>
@@ -1450,7 +1600,7 @@
       <!-- Quick Message -->
       <div class="tool-card open" data-tool="quickMessage">
         <div class="tool-header bg-orange" onclick="toggleTool(this)">
-          <span class="title">Quick Message</span>
+          <span class="title"><span class="drag-grip" title="Drag to reorder">⋮⋮</span>Quick Message</span>
           <div class="header-controls">
             <button type="button" class="overlay-toggle-btn" data-overlay-btn="quickMessage">Overlay</button>
             <span>▾</span>
@@ -1462,7 +1612,7 @@
       <!-- Timer -->
       <div class="tool-card" data-tool="timer">
         <div class="tool-header bg-yellow" onclick="toggleTool(this)">
-          <span class="title">Timer</span>
+          <span class="title"><span class="drag-grip" title="Drag to reorder">⋮⋮</span>Timer</span>
           <div class="header-controls">
             <button type="button" class="overlay-toggle-btn" data-overlay-btn="timer">Overlay</button>
             <span>▾</span>
@@ -1474,7 +1624,7 @@
       <!-- Noise Meter -->
       <div class="tool-card" data-tool="noiseMeter">
         <div class="tool-header bg-pink" onclick="toggleTool(this)">
-          <span class="title">Noise Meter</span>
+          <span class="title"><span class="drag-grip" title="Drag to reorder">⋮⋮</span>Noise Meter</span>
           <div class="header-controls">
             <button type="button" class="overlay-toggle-btn" data-overlay-btn="noiseMeter">Overlay</button>
             <span>▾</span>
@@ -1486,7 +1636,7 @@
       <!-- Dice & Spinner -->
       <div class="tool-card" data-tool="diceSpinner">
         <div class="tool-header bg-purple" onclick="toggleTool(this)">
-          <span class="title">Dice &amp; Spinner</span>
+          <span class="title"><span class="drag-grip" title="Drag to reorder">⋮⋮</span>Dice &amp; Spinner</span>
           <div class="header-controls">
             <button type="button" class="overlay-toggle-btn" data-overlay-btn="diceSpinner">Overlay</button>
             <span>▾</span>
@@ -1498,7 +1648,7 @@
       <!-- Deck of Cards -->
       <div class="tool-card" data-tool="cardDeck">
         <div class="tool-header bg-orange" onclick="toggleTool(this)">
-          <span class="title">Deck of Cards</span>
+          <span class="title"><span class="drag-grip" title="Drag to reorder">⋮⋮</span>Deck of Cards</span>
           <div class="header-controls">
             <button type="button" class="overlay-toggle-btn" data-overlay-btn="cardDeck">Overlay</button>
             <span>▾</span>
@@ -1510,7 +1660,7 @@
       <!-- Voice Level -->
       <div class="tool-card" data-tool="voiceLevel">
         <div class="tool-header bg-purple" onclick="toggleTool(this)">
-          <span class="title">Voice Level</span>
+          <span class="title"><span class="drag-grip" title="Drag to reorder">⋮⋮</span>Voice Level</span>
           <div class="header-controls">
             <button type="button" class="overlay-toggle-btn" data-overlay-btn="voiceLevel">Overlay</button>
             <span>▾</span>
@@ -1522,7 +1672,7 @@
       <!-- Supplies Needed -->
       <div class="tool-card" data-tool="supplies">
         <div class="tool-header bg-blue" onclick="toggleTool(this)">
-          <span class="title">Supplies Needed</span>
+          <span class="title"><span class="drag-grip" title="Drag to reorder">⋮⋮</span>Supplies Needed</span>
           <div class="header-controls">
             <button type="button" class="overlay-toggle-btn" data-overlay-btn="supplies">Overlay</button>
             <span>▾</span>
@@ -1534,7 +1684,7 @@
       <!-- Clock -->
       <div class="tool-card" data-tool="clock">
         <div class="tool-header bg-green" onclick="toggleTool(this)">
-          <span class="title">Clock</span>
+          <span class="title"><span class="drag-grip" title="Drag to reorder">⋮⋮</span>Clock</span>
           <div class="header-controls">
             <button type="button" class="overlay-toggle-btn" data-overlay-btn="clock">Overlay</button>
             <span>▾</span>
@@ -1767,17 +1917,33 @@
 
     <!-- Deck of Cards Content -->
     <div id="content-cardDeck" style="display:flex; flex-direction:column; gap:10px;">
+      <div>
+        <label style="font-size:0.74rem; color:var(--text-muted);">Active Deck</label>
+        <select id="activeDeckQuickSelect" onchange="switchActiveDeckFromToolbar(this.value)"></select>
+      </div>
       <div class="card-table-felt" id="cardStage">
         <div class="playing-card card-back">
-          <div class="playing-card-inner">Click Draw Card</div>
+          <div class="playing-card-inner">Click Draw</div>
         </div>
       </div>
       <div class="tool-hint" id="deckStatusLabel" style="text-align:center;">52 cards remaining</div>
-      <div class="btn-row">
-        <button type="button" class="btn btn-primary" onclick="drawCard()">Draw Card</button>
-        <button type="button" class="btn" onclick="shuffleDeck()">Shuffle</button>
+      <div class="deck-controls-bar">
+        <select id="cardDrawCountSelect" class="deck-draw-count" title="Number of cards to draw" onchange="saveCardDrawCount()">
+          <option value="1">1 Card</option>
+          <option value="2">2 Cards</option>
+          <option value="3">3 Cards</option>
+          <option value="4">4 Cards</option>
+          <option value="5">5 Cards</option>
+          <option value="6">6 Cards</option>
+          <option value="8">8 Cards</option>
+          <option value="10">10 Cards</option>
+        </select>
+        <button type="button" class="btn btn-primary" id="drawCardsBtn" style="flex:1; justify-content:center;" onclick="drawCards()">Draw Card</button>
       </div>
-      <button type="button" class="btn btn-sm" style="justify-content:center;" onclick="openModal('editDeckModal')">Modify Deck</button>
+      <div class="btn-row">
+        <button type="button" class="btn" onclick="shuffleDeck()">Shuffle</button>
+        <button type="button" class="btn" onclick="openModal('editDeckModal')">Modify / Save Decks</button>
+      </div>
     </div>
 
     <!-- Voice Level Content -->
@@ -1894,47 +2060,75 @@
     </div>
   </div>
 
-  <!-- Modal: Modify Deck of Cards -->
+  <!-- Modal: Modify & Save Deck of Cards -->
   <div class="modal-backdrop" id="editDeckModal">
     <div class="modal">
-      <h2>Modify Deck of Cards</h2>
+      <h2>Create, Save &amp; Manage Card Decks</h2>
+
       <div>
-        <label>Deck Mode</label>
-        <select id="deckModeSelect" onchange="toggleDeckModeUI()">
-          <option value="standard">Standard Playing Cards (Filtered)</option>
-          <option value="custom">Custom Flashcard / Prompt Deck</option>
-        </select>
+        <label>Saved Decks Library</label>
+        <div class="saved-decks-list" id="savedDecksList"></div>
       </div>
 
-      <div id="standardDeckOptions" style="display:flex; flex-direction:column; gap:10px;">
+      <div style="border-top:1px solid var(--border-light); padding-top:10px; display:flex; flex-direction:column; gap:10px;">
         <div>
-          <label>Included Suits</label>
-          <div class="toggle-grid">
-            <label class="toggle-card"><input type="checkbox" id="suitSpades" checked> Spades</label>
-            <label class="toggle-card"><input type="checkbox" id="suitHearts" checked> Hearts</label>
-            <label class="toggle-card"><input type="checkbox" id="suitDiamonds" checked> Diamonds</label>
-            <label class="toggle-card"><input type="checkbox" id="suitClubs" checked> Clubs</label>
+          <label>Deck Type</label>
+          <select id="deckModeSelect" onchange="toggleDeckModeUI()">
+            <option value="custom">Custom Flashcard / Prompt Deck</option>
+            <option value="standard">Standard Playing Cards (Filtered Preset)</option>
+          </select>
+        </div>
+
+        <div id="standardDeckOptions" style="display:none; flex-direction:column; gap:10px;">
+          <div>
+            <label>Included Suits</label>
+            <div class="toggle-grid">
+              <label class="toggle-card"><input type="checkbox" id="suitSpades" checked> Spades (♠)</label>
+              <label class="toggle-card"><input type="checkbox" id="suitHearts" checked> Hearts (♥)</label>
+              <label class="toggle-card"><input type="checkbox" id="suitDiamonds" checked> Diamonds (♦)</label>
+              <label class="toggle-card"><input type="checkbox" id="suitClubs" checked> Clubs (♣)</label>
+            </div>
+          </div>
+          <div>
+            <label>Included Ranks</label>
+            <div class="toggle-grid">
+              <label class="toggle-card"><input type="checkbox" id="rankAce" checked> Aces (A)</label>
+              <label class="toggle-card"><input type="checkbox" id="rankNumbers" checked> Number Cards (2–10)</label>
+              <label class="toggle-card"><input type="checkbox" id="rankFace" checked> Face Cards (J, Q, K)</label>
+              <label class="toggle-card"><input type="checkbox" id="rankJokers"> Include 2 Jokers</label>
+            </div>
+          </div>
+          <div>
+            <label>Save Standard Preset As (optional)</label>
+            <div class="btn-row">
+              <input type="text" id="standardPresetNameInput" placeholder="e.g., Red Number Cards 2–10" />
+              <button type="button" class="btn" style="flex:0 0 auto;" onclick="saveNamedDeckFromModal()">Save Preset</button>
+            </div>
           </div>
         </div>
-        <div>
-          <label>Included Ranks</label>
-          <div class="toggle-grid">
-            <label class="toggle-card"><input type="checkbox" id="rankAce" checked> Aces (A)</label>
-            <label class="toggle-card"><input type="checkbox" id="rankNumbers" checked> Number Cards (2–10)</label>
-            <label class="toggle-card"><input type="checkbox" id="rankFace" checked> Face Cards (J, Q, K)</label>
-            <label class="toggle-card"><input type="checkbox" id="rankJokers"> Include 2 Jokers</label>
+
+        <div id="customDeckOptions" style="display:flex; flex-direction:column; gap:10px;">
+          <div>
+            <label>Deck Name</label>
+            <div class="btn-row">
+              <input type="text" id="customDeckNameInput" placeholder="e.g., Sight Words Unit 2, Multiplication Facts" />
+              <button type="button" class="btn" style="flex:0 0 auto;" onclick="saveNamedDeckFromModal()">Save Deck</button>
+              <button type="button" class="btn" style="flex:0 0 auto;" onclick="saveAsNewCustomDeck()" title="Save a separate copy">+ Save As New</button>
+            </div>
+          </div>
+
+          <div>
+            <label>Cards in Deck (one card per line)</label>
+            <textarea id="customDeckTextarea" rows="6" placeholder="2 + 2 = ?&#10;3 x 4 = ?&#10;10 - 6 = ?"></textarea>
           </div>
         </div>
       </div>
 
-      <div id="customDeckOptions" style="display:none; flex-direction:column; gap:6px;">
-        <label>Custom Cards (one card per line — great for sight words, math facts, or brain breaks)</label>
-        <textarea id="customDeckTextarea" rows="8" placeholder="2 + 2 = ?&#10;3 x 4 = ?&#10;10 - 6 = ?"></textarea>
-      </div>
+      <div id="deckModalStatus" class="status-msg"></div>
 
-      <div class="btn-row" style="margin-top:6px;">
+      <div class="btn-row" style="margin-top:4px;">
         <button type="button" class="btn" onclick="closeModal('editDeckModal')">Cancel</button>
-        <button type="button" class="btn btn-primary" onclick="saveDeckConfig()">Save &amp; Shuffle Deck</button>
+        <button type="button" class="btn btn-primary" onclick="applyAndCloseDeckModal()">Use &amp; Shuffle Deck</button>
       </div>
     </div>
   </div>
@@ -1982,8 +2176,8 @@
       <!-- Tab 2: Tools & Supplies -->
       <div class="settings-panel" id="toolsPanel">
         <div>
-          <label>Visible Sidebar Tools</label>
-          <div class="toggle-grid" id="toolTogglesGrid"></div>
+          <label>Sidebar Tools (Toggle Visibility or Reorder — you can also drag tools directly in the sidebar)</label>
+          <div class="tool-order-list" id="toolOrderList"></div>
         </div>
 
         <div style="border-top: 1px solid var(--border-light); padding-top: 10px;">
@@ -2021,7 +2215,7 @@
       <div class="settings-panel" id="backupPanel">
         <div class="backup-card">
           <h3>Export Setup File</h3>
-          <p>Download a <code>.json</code> backup file containing all your presentation tabs, folders, bookmarks, timer presets, custom dice/cards, overlays, rosters, and settings.</p>
+          <p>Download a <code>.json</code> backup file containing all your presentation tabs, folders, bookmarks, timer presets, saved card decks, custom dice, tool order, overlays, rosters, and settings.</p>
           <div>
             <button type="button" class="btn btn-primary" onclick="exportBackup()">Download Backup File</button>
           </div>
@@ -2029,7 +2223,7 @@
 
         <div class="backup-card">
           <h3>Import Setup File</h3>
-          <p>Restore your tabs, folders, bookmarks, timer presets, custom dice/cards, overlays, rosters, and settings from a previously exported <code>.json</code> backup file.</p>
+          <p>Restore your tabs, folders, bookmarks, timer presets, saved card decks, custom dice, tool order, overlays, rosters, and settings from a previously exported <code>.json</code> backup file.</p>
           <div>
             <input type="file" id="importFileInput" accept=".json,application/json" style="display:none;" onchange="importBackup(event)" />
             <button type="button" class="btn" onclick="document.getElementById('importFileInput').click()">Choose Backup File to Restore</button>
@@ -2038,7 +2232,7 @@
 
         <div class="backup-card" style="border-color:#fecaca; background:#fef2f2;">
           <h3 style="color:#991b1b;">Reset All Data</h3>
-          <p>Clear all saved tabs, folders, bookmarks, custom presets, dice/cards, overlays, and rosters to restore default settings.</p>
+          <p>Clear all saved tabs, folders, bookmarks, saved card decks, custom presets, tool order, overlays, and rosters to restore default settings.</p>
           <div>
             <button type="button" class="btn btn-danger" onclick="resetAllData()">Reset Home Base</button>
           </div>
@@ -2086,6 +2280,20 @@
       { value: "#e2e8f0", label: "Cloud Gray" }
     ];
 
+    const defaultToolOrder = [
+      "bookmarks",
+      "randomName",
+      "groups",
+      "quickMessage",
+      "timer",
+      "noiseMeter",
+      "diceSpinner",
+      "cardDeck",
+      "voiceLevel",
+      "supplies",
+      "clock"
+    ];
+
     // --- Default State ---
     const defaultRosters = {
       "My Class": [
@@ -2107,8 +2315,9 @@
 
     const defaultSettings = {
       title: "Classroom Home Base",
-      subtitle: "Tools & Apps · click \"Overlay\" on any tool to float it over your presentation",
+      subtitle: "Tools & Apps · drag tools to reorder or click \"Overlay\" to float on stage",
       theme: "pastel",
+      toolOrder: [...defaultToolOrder],
       visibleTools: {
         bookmarks: true,
         randomName: true,
@@ -2133,8 +2342,18 @@
 
     const defaultDeckConfig = {
       mode: "standard",
+      drawCount: 1,
       suits: { spades: true, hearts: true, diamonds: true, clubs: true },
       ranks: { ace: true, numbers: true, face: true, jokers: false },
+      activeSavedDeckId: "standard_full",
+      savedDecks: [
+        {
+          id: "math_starter",
+          name: "Math Facts Starter",
+          type: "custom",
+          cards: ["2 + 3 = ?", "5 + 4 = ?", "10 - 3 = ?", "6 x 2 = ?", "12 / 3 = ?", "8 + 7 = ?"]
+        }
+      ],
       customCards: [
         "2 + 3 = ?",
         "5 + 4 = ?",
@@ -2218,9 +2437,30 @@
 
     let settings = loadJSON(STORAGE_KEYS.SETTINGS, structuredClone(defaultSettings));
     settings.visibleTools = { ...defaultSettings.visibleTools, ...(settings.visibleTools || {}) };
+    settings.toolOrder = normalizeToolOrder(settings.toolOrder);
 
     let diceSpinner = { ...structuredClone(defaultDiceSpinner), ...loadJSON(STORAGE_KEYS.DICE_SPINNER, {}) };
     let deckConfig = { ...structuredClone(defaultDeckConfig), ...loadJSON(STORAGE_KEYS.DECK_CONFIG, {}) };
+
+    // Migrate legacy savedCustomDecks if present
+    if (!Array.isArray(deckConfig.savedDecks)) {
+      deckConfig.savedDecks = [];
+      if (Array.isArray(deckConfig.savedCustomDecks)) {
+        deckConfig.savedCustomDecks.forEach(d => {
+          deckConfig.savedDecks.push({
+            id: d.id || ("deck_" + Date.now() + Math.random()),
+            name: d.name || "Custom Deck",
+            type: "custom",
+            cards: Array.isArray(d.cards) ? [...d.cards] : [...defaultDeckConfig.customCards]
+          });
+        });
+      }
+    }
+    if (deckConfig.savedDecks.length === 0) {
+      deckConfig.savedDecks = structuredClone(defaultDeckConfig.savedDecks);
+    }
+    deckConfig.drawCount = Math.min(10, Math.max(1, parseInt(deckConfig.drawCount || "1", 10)));
+
     let timerConfig = { ...structuredClone(defaultTimerConfig), ...loadJSON(STORAGE_KEYS.TIMER_CONFIG, {}) };
 
     let rawOverlays = loadJSON(STORAGE_KEYS.OVERLAY_STATE, {});
@@ -2229,6 +2469,14 @@
       if (!toolMeta[k]) delete activeOverlays[k];
     });
     let topZIndex = 10;
+
+    function normalizeToolOrder(order) {
+      const base = Array.isArray(order) ? order.filter(k => toolMeta[k]) : [];
+      defaultToolOrder.forEach(k => {
+        if (!base.includes(k)) base.push(k);
+      });
+      return base;
+    }
 
     function loadJSON(key, fallback) {
       try {
@@ -2293,9 +2541,13 @@
 
       document.getElementById("diceCountSelect").value = diceSpinner.count;
       document.getElementById("diceTypeSelect").value = diceSpinner.type;
+      document.getElementById("cardDrawCountSelect").value = String(deckConfig.drawCount || 1);
+      updateDrawButtonText();
       document.getElementById("timerChimeToggle").checked = timerConfig.chimeEnabled;
       document.getElementById("timerChimeSound").value = timerConfig.chimeSound || "bell";
 
+      initSidebarDragAndDrop();
+      applySidebarOrder();
       mountAllTools();
 
       applySettings();
@@ -2307,8 +2559,102 @@
       renderStage();
       updateRemainingLabel();
       drawSpinnerWheel();
+      renderActiveDeckQuickSelect();
       shuffleDeck(true);
       startLiveClock();
+    }
+
+    // --- Rearrangeable Sidebar Tools (Drag & Drop + Touch/Pointer + Settings Controls) ---
+    let draggedToolKey = null;
+
+    function initSidebarDragAndDrop() {
+      const sidebar = document.getElementById("sidebar");
+      const cards = sidebar.querySelectorAll(".tool-card[data-tool]");
+
+      cards.forEach(card => {
+        const header = card.querySelector(".tool-header");
+        header.setAttribute("draggable", "true");
+
+        header.addEventListener("dragstart", (e) => {
+          if (e.target.closest("button")) {
+            e.preventDefault();
+            return;
+          }
+          draggedToolKey = card.getAttribute("data-tool");
+          card.classList.add("dragging-tool");
+          if (e.dataTransfer) {
+            e.dataTransfer.effectAllowed = "move";
+            e.dataTransfer.setData("text/plain", draggedToolKey);
+          }
+        });
+
+        header.addEventListener("dragend", () => {
+          draggedToolKey = null;
+          sidebar.querySelectorAll(".tool-card").forEach(c => {
+            c.classList.remove("dragging-tool", "drag-over-top", "drag-over-bottom");
+          });
+        });
+
+        card.addEventListener("dragover", (e) => {
+          if (!draggedToolKey || draggedToolKey === card.getAttribute("data-tool")) return;
+          e.preventDefault();
+          const rect = card.getBoundingClientRect();
+          const midY = rect.top + rect.height / 2;
+          card.classList.remove("drag-over-top", "drag-over-bottom");
+          if (e.clientY < midY) {
+            card.classList.add("drag-over-top");
+          } else {
+            card.classList.add("drag-over-bottom");
+          }
+        });
+
+        card.addEventListener("dragleave", () => {
+          card.classList.remove("drag-over-top", "drag-over-bottom");
+        });
+
+        card.addEventListener("drop", (e) => {
+          e.preventDefault();
+          const targetKey = card.getAttribute("data-tool");
+          const dropBefore = card.classList.contains("drag-over-top");
+          card.classList.remove("drag-over-top", "drag-over-bottom");
+
+          if (!draggedToolKey || !targetKey || draggedToolKey === targetKey) return;
+
+          const order = normalizeToolOrder(settings.toolOrder);
+          const fromIdx = order.indexOf(draggedToolKey);
+          if (fromIdx === -1) return;
+          order.splice(fromIdx, 1);
+
+          let toIdx = order.indexOf(targetKey);
+          if (!dropBefore) toIdx += 1;
+          order.splice(toIdx, 0, draggedToolKey);
+
+          settings.toolOrder = order;
+          saveState();
+          applySidebarOrder();
+        });
+      });
+    }
+
+    function applySidebarOrder() {
+      const sidebar = document.getElementById("sidebar");
+      const order = normalizeToolOrder(settings.toolOrder);
+      order.forEach(key => {
+        const card = sidebar.querySelector(`.tool-card[data-tool="${key}"]`);
+        if (card) sidebar.appendChild(card);
+      });
+    }
+
+    function moveToolOrder(key, direction) {
+      const order = normalizeToolOrder(settings.toolOrder);
+      const idx = order.indexOf(key);
+      const targetIdx = idx + direction;
+      if (idx === -1 || targetIdx < 0 || targetIdx >= order.length) return;
+      [order[idx], order[targetIdx]] = [order[targetIdx], order[idx]];
+      settings.toolOrder = order;
+      saveState();
+      applySidebarOrder();
+      renderToolOrderList();
     }
 
     // --- Full Screen ---
@@ -3098,14 +3444,80 @@
       closeModal("editSpinnerModal");
     }
 
-    // --- Portrait Deck of Cards ---
+    // --- Portrait Deck of Cards (Saved Decks + Multi-Card Draw) ---
     let activeDeck = [];
+    let drawnCardsCount = 0;
+
+    function updateDrawButtonText() {
+      const btn = document.getElementById("drawCardsBtn");
+      const count = deckConfig.drawCount || 1;
+      if (btn) {
+        btn.textContent = count > 1 ? `Draw ${count} Cards` : "Draw Card";
+      }
+    }
+
+    function saveCardDrawCount() {
+      deckConfig.drawCount = Math.min(10, Math.max(1, parseInt(document.getElementById("cardDrawCountSelect").value || "1", 10)));
+      updateDrawButtonText();
+      saveState();
+    }
+
+    function getActiveSavedDeck() {
+      return deckConfig.savedDecks.find(d => d.id === deckConfig.activeSavedDeckId) || null;
+    }
+
+    function renderActiveDeckQuickSelect() {
+      const sel = document.getElementById("activeDeckQuickSelect");
+      if (!sel) return;
+
+      const options = [`<option value="standard_full">Standard Playing Cards (Default)</option>`];
+      deckConfig.savedDecks.forEach(deck => {
+        const label = deck.type === "custom"
+          ? `${deck.name.replace(/</g, "&lt;")} (${deck.cards.length} cards)`
+          : `${deck.name.replace(/</g, "&lt;")} (Standard Preset)`;
+        options.push(`<option value="${deck.id.replace(/"/g, '&quot;')}">${label}</option>`);
+      });
+
+      sel.innerHTML = options.join("");
+      if (deckConfig.activeSavedDeckId && deckConfig.savedDecks.some(d => d.id === deckConfig.activeSavedDeckId)) {
+        sel.value = deckConfig.activeSavedDeckId;
+      } else {
+        sel.value = "standard_full";
+      }
+    }
+
+    function switchActiveDeckFromToolbar(val) {
+      if (val === "standard_full") {
+        deckConfig.mode = "standard";
+        deckConfig.activeSavedDeckId = "standard_full";
+        deckConfig.suits = { spades: true, hearts: true, diamonds: true, clubs: true };
+        deckConfig.ranks = { ace: true, numbers: true, face: true, jokers: false };
+      } else {
+        const found = deckConfig.savedDecks.find(d => d.id === val);
+        if (found) {
+          deckConfig.activeSavedDeckId = found.id;
+          deckConfig.mode = found.type;
+          if (found.type === "custom") {
+            deckConfig.customCards = [...found.cards];
+          } else {
+            deckConfig.suits = { ...found.suits };
+            deckConfig.ranks = { ...found.ranks };
+          }
+        }
+      }
+      saveState();
+      shuffleDeck();
+    }
 
     function buildDeck() {
       const cards = [];
       if (deckConfig.mode === "custom") {
-        const items = deckConfig.customCards.length > 0 ? deckConfig.customCards : ["Card 1"];
-        items.forEach(text => cards.push({ type: "custom", text }));
+        const savedDeck = getActiveSavedDeck();
+        const deckName = (savedDeck && savedDeck.type === "custom") ? savedDeck.name : "Prompt";
+        const items = (savedDeck && savedDeck.type === "custom" && savedDeck.cards.length > 0)
+          ? savedDeck.cards
+          : (deckConfig.customCards.length > 0 ? deckConfig.customCards : ["Card 1"]);
+        items.forEach(text => cards.push({ type: "custom", text, deckName }));
         return cards;
       }
 
@@ -3142,13 +3554,19 @@
 
     function shuffleDeck(silent = false) {
       activeDeck = buildDeck();
+      drawnCardsCount = 0;
       for (let i = activeDeck.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]];
       }
-      document.getElementById("deckStatusLabel").textContent = `${activeDeck.length} cards remaining`;
+      renderActiveDeckQuickSelect();
+      const savedDeck = getActiveSavedDeck();
+      const activeDeckLabel = savedDeck ? ` · ${savedDeck.name}` : "";
+      document.getElementById("deckStatusLabel").textContent = `${activeDeck.length} cards remaining${activeDeckLabel}`;
       if (!silent) {
-        document.getElementById("cardStage").innerHTML = `
+        const stage = document.getElementById("cardStage");
+        stage.classList.remove("multi-spread");
+        stage.innerHTML = `
           <div class="playing-card card-back">
             <div class="playing-card-inner">Deck Shuffled!<br>Click Draw</div>
           </div>
@@ -3156,57 +3574,259 @@
       }
     }
 
-    function drawCard() {
-      if (activeDeck.length === 0) {
-        document.getElementById("cardStage").innerHTML = `
-          <div class="playing-card card-back">
-            <div class="playing-card-inner">Deck Empty!<br>Click Shuffle</div>
-          </div>
-        `;
-        document.getElementById("deckStatusLabel").textContent = "0 cards remaining";
-        return;
-      }
-
-      const card = activeDeck.pop();
-      const stage = document.getElementById("cardStage");
-
+    function renderSingleCardHTML(card) {
       if (card.type === "custom") {
-        stage.innerHTML = `
+        return `
           <div class="playing-card custom-card">
             <div class="playing-card-inner">
-              <span class="custom-card-badge">Prompt</span>
-              <div class="custom-card-text">${card.text}</div>
+              <span class="custom-card-badge">${(card.deckName || "Prompt").replace(/</g, "&lt;")}</span>
+              <div class="custom-card-text">${card.text.replace(/</g, "&lt;")}</div>
               <span class="custom-card-badge">Card</span>
             </div>
           </div>
         `;
-      } else {
-        stage.innerHTML = `
-          <div class="playing-card ${card.color}">
-            <div class="playing-card-inner">
-              <div class="card-corner">
-                <span>${card.rank}</span>
-                <span>${card.suit}</span>
-              </div>
-              <div class="card-center">${card.suit}</div>
-              <div class="card-corner bottom">
-                <span>${card.rank}</span>
-                <span>${card.suit}</span>
-              </div>
+      }
+      return `
+        <div class="playing-card ${card.color}">
+          <div class="playing-card-inner">
+            <div class="card-corner">
+              <span>${card.rank}</span>
+              <span>${card.suit}</span>
+            </div>
+            <div class="card-center">${card.suit}</div>
+            <div class="card-corner bottom">
+              <span>${card.rank}</span>
+              <span>${card.suit}</span>
             </div>
           </div>
+        </div>
+      `;
+    }
+
+    function drawCards() {
+      const stage = document.getElementById("cardStage");
+      const savedDeck = getActiveSavedDeck();
+      const activeDeckLabel = savedDeck ? ` · ${savedDeck.name}` : "";
+
+      if (activeDeck.length === 0) {
+        stage.classList.remove("multi-spread");
+        stage.innerHTML = `
+          <div class="playing-card card-back">
+            <div class="playing-card-inner">Deck Empty!<br>Click Shuffle</div>
+          </div>
         `;
+        document.getElementById("deckStatusLabel").textContent = `0 cards remaining (${drawnCardsCount} drawn)${activeDeckLabel}`;
+        return;
       }
-      document.getElementById("deckStatusLabel").textContent = `${activeDeck.length} cards remaining`;
+
+      const desiredCount = deckConfig.drawCount || 1;
+      const toDraw = Math.min(desiredCount, activeDeck.length);
+      const drawn = [];
+      for (let i = 0; i < toDraw; i++) {
+        drawn.push(activeDeck.pop());
+        drawnCardsCount++;
+      }
+
+      stage.classList.toggle("multi-spread", drawn.length > 1);
+      stage.innerHTML = drawn.map(renderSingleCardHTML).join("");
+      document.getElementById("deckStatusLabel").textContent =
+        `${activeDeck.length} remaining · ${drawnCardsCount} drawn${activeDeckLabel}`;
+    }
+
+    function showDeckModalStatus(msg, type = "success") {
+      const el = document.getElementById("deckModalStatus");
+      if (!el) return;
+      el.textContent = msg;
+      el.className = `status-msg ${type}`;
     }
 
     function toggleDeckModeUI() {
       const mode = document.getElementById("deckModeSelect").value;
       document.getElementById("standardDeckOptions").style.display = mode === "standard" ? "flex" : "none";
       document.getElementById("customDeckOptions").style.display = mode === "custom" ? "flex" : "none";
+      renderSavedDecksList();
     }
 
-    function saveDeckConfig() {
+    function renderSavedDecksList() {
+      const list = document.getElementById("savedDecksList");
+      if (!list) return;
+      if (deckConfig.savedDecks.length === 0) {
+        list.innerHTML = `<div class="tool-hint">No saved decks yet. Name your deck below and click Save Deck.</div>`;
+        return;
+      }
+
+      list.innerHTML = deckConfig.savedDecks.map(deck => {
+        const isActive = deck.id === deckConfig.activeSavedDeckId;
+        const badgeText = deck.type === "custom" ? `${deck.cards.length} cards` : "Standard";
+        return `
+          <div class="saved-deck-item ${isActive ? "active-deck" : ""}">
+            <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+              <strong>${deck.name.replace(/</g, "&lt;")}</strong>
+              <span class="deck-type-badge">${badgeText}</span>
+            </div>
+            <div style="display:flex; gap:4px; flex-shrink:0;">
+              <button type="button" class="btn btn-sm ${isActive ? "btn-primary" : ""}" onclick="selectSavedDeckInModal('${deck.id}')">${isActive ? "Selected" : "Load"}</button>
+              <button type="button" class="icon-btn btn-danger" onclick="deleteSavedDeck('${deck.id}')" title="Delete saved deck">x</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function selectSavedDeckInModal(deckId) {
+      const found = deckConfig.savedDecks.find(d => d.id === deckId);
+      if (!found) return;
+      deckConfig.activeSavedDeckId = found.id;
+      deckConfig.mode = found.type;
+      document.getElementById("deckModeSelect").value = found.type;
+
+      if (found.type === "custom") {
+        deckConfig.customCards = [...found.cards];
+        document.getElementById("customDeckNameInput").value = found.name;
+        document.getElementById("customDeckTextarea").value = found.cards.join("\n");
+      } else {
+        deckConfig.suits = { ...found.suits };
+        deckConfig.ranks = { ...found.ranks };
+        document.getElementById("standardPresetNameInput").value = found.name;
+        document.getElementById("suitSpades").checked = found.suits.spades;
+        document.getElementById("suitHearts").checked = found.suits.hearts;
+        document.getElementById("suitDiamonds").checked = found.suits.diamonds;
+        document.getElementById("suitClubs").checked = found.suits.clubs;
+        document.getElementById("rankAce").checked = found.ranks.ace;
+        document.getElementById("rankNumbers").checked = found.ranks.numbers;
+        document.getElementById("rankFace").checked = found.ranks.face;
+        document.getElementById("rankJokers").checked = found.ranks.jokers;
+      }
+
+      saveState();
+      toggleDeckModeUI();
+      renderActiveDeckQuickSelect();
+      showDeckModalStatus(`Loaded "${found.name}".`);
+    }
+
+    function saveNamedDeckFromModal() {
+      const mode = document.getElementById("deckModeSelect").value;
+      if (mode === "custom") {
+        const nameInput = document.getElementById("customDeckNameInput");
+        const textArea = document.getElementById("customDeckTextarea");
+        const name = nameInput.value.trim() || `Custom Deck ${deckConfig.savedDecks.length + 1}`;
+        const cards = textArea.value
+          .split("\n")
+          .map(s => s.trim())
+          .filter(Boolean);
+
+        if (cards.length === 0) {
+          showDeckModalStatus("Add at least one card line before saving.", "error");
+          return;
+        }
+
+        const existingByName = deckConfig.savedDecks.find(
+          d => d.type === "custom" && d.name.toLowerCase() === name.toLowerCase()
+        );
+        if (existingByName) {
+          existingByName.name = name;
+          existingByName.cards = cards;
+          deckConfig.activeSavedDeckId = existingByName.id;
+        } else {
+          const newId = "deck_" + Date.now();
+          deckConfig.savedDecks.push({ id: newId, name, type: "custom", cards });
+          deckConfig.activeSavedDeckId = newId;
+        }
+
+        deckConfig.mode = "custom";
+        deckConfig.customCards = [...cards];
+        nameInput.value = name;
+        saveState();
+        renderSavedDecksList();
+        renderActiveDeckQuickSelect();
+        showDeckModalStatus(`Saved custom deck "${name}" (${cards.length} cards).`);
+      } else {
+        const nameInput = document.getElementById("standardPresetNameInput");
+        const name = nameInput.value.trim() || `Standard Preset ${deckConfig.savedDecks.length + 1}`;
+        const suits = {
+          spades: document.getElementById("suitSpades").checked,
+          hearts: document.getElementById("suitHearts").checked,
+          diamonds: document.getElementById("suitDiamonds").checked,
+          clubs: document.getElementById("suitClubs").checked
+        };
+        const ranks = {
+          ace: document.getElementById("rankAce").checked,
+          numbers: document.getElementById("rankNumbers").checked,
+          face: document.getElementById("rankFace").checked,
+          jokers: document.getElementById("rankJokers").checked
+        };
+
+        const existingByName = deckConfig.savedDecks.find(
+          d => d.type === "standard" && d.name.toLowerCase() === name.toLowerCase()
+        );
+        if (existingByName) {
+          existingByName.name = name;
+          existingByName.suits = suits;
+          existingByName.ranks = ranks;
+          deckConfig.activeSavedDeckId = existingByName.id;
+        } else {
+          const newId = "std_" + Date.now();
+          deckConfig.savedDecks.push({ id: newId, name, type: "standard", suits, ranks });
+          deckConfig.activeSavedDeckId = newId;
+        }
+
+        deckConfig.mode = "standard";
+        deckConfig.suits = suits;
+        deckConfig.ranks = ranks;
+        nameInput.value = name;
+        saveState();
+        renderSavedDecksList();
+        renderActiveDeckQuickSelect();
+        showDeckModalStatus(`Saved standard card preset "${name}".`);
+      }
+    }
+
+    function saveAsNewCustomDeck() {
+      const nameInput = document.getElementById("customDeckNameInput");
+      const textArea = document.getElementById("customDeckTextarea");
+      const baseName = nameInput.value.trim() || "Custom Deck";
+      const cards = textArea.value
+        .split("\n")
+        .map(s => s.trim())
+        .filter(Boolean);
+
+      if (cards.length === 0) {
+        showDeckModalStatus("Add at least one card line before saving.", "error");
+        return;
+      }
+
+      let candidateName = baseName;
+      let counter = 2;
+      while (deckConfig.savedDecks.some(d => d.name.toLowerCase() === candidateName.toLowerCase())) {
+        candidateName = `${baseName} (${counter++})`;
+      }
+
+      const newId = "deck_" + Date.now();
+      deckConfig.savedDecks.push({ id: newId, name: candidateName, type: "custom", cards });
+      deckConfig.activeSavedDeckId = newId;
+      deckConfig.mode = "custom";
+      deckConfig.customCards = [...cards];
+      nameInput.value = candidateName;
+
+      saveState();
+      renderSavedDecksList();
+      renderActiveDeckQuickSelect();
+      showDeckModalStatus(`Saved new copy "${candidateName}".`);
+    }
+
+    function deleteSavedDeck(deckId) {
+      deckConfig.savedDecks = deckConfig.savedDecks.filter(d => d.id !== deckId);
+      if (deckConfig.activeSavedDeckId === deckId) {
+        deckConfig.activeSavedDeckId = "standard_full";
+        deckConfig.mode = "standard";
+      }
+      saveState();
+      renderSavedDecksList();
+      renderActiveDeckQuickSelect();
+      showDeckModalStatus("Deck removed.");
+    }
+
+    function applyAndCloseDeckModal() {
       const mode = document.getElementById("deckModeSelect").value;
       deckConfig.mode = mode;
 
@@ -3223,6 +3843,10 @@
           face: document.getElementById("rankFace").checked,
           jokers: document.getElementById("rankJokers").checked
         };
+        const presetName = document.getElementById("standardPresetNameInput").value.trim();
+        if (presetName) {
+          saveNamedDeckFromModal();
+        }
       } else {
         const lines = document.getElementById("customDeckTextarea").value
           .split("\n")
@@ -3230,6 +3854,13 @@
           .filter(Boolean);
         if (lines.length > 0) {
           deckConfig.customCards = lines;
+          const typedName = document.getElementById("customDeckNameInput").value.trim();
+          const currentSaved = getActiveSavedDeck();
+          if (typedName) {
+            saveNamedDeckFromModal();
+          } else if (currentSaved && currentSaved.type === "custom") {
+            currentSaved.cards = [...lines];
+          }
         }
       }
 
@@ -3266,19 +3897,33 @@
       document.getElementById("settingsStatus").className = "status-msg";
     }
 
+    function renderToolOrderList() {
+      const list = document.getElementById("toolOrderList");
+      if (!list) return;
+      const order = normalizeToolOrder(settings.toolOrder);
+      list.innerHTML = order.map((key, idx) => {
+        const meta = toolMeta[key];
+        return `
+          <div class="tool-order-row">
+            <label>
+              <input type="checkbox" ${settings.visibleTools[key] !== false ? "checked" : ""} onchange="toggleToolVisibility('${key}', this.checked)">
+              <span>${meta.label}</span>
+            </label>
+            <div style="display:flex; gap:4px;">
+              <button type="button" class="icon-btn" onclick="moveToolOrder('${key}', -1)" ${idx === 0 ? "disabled" : ""} title="Move Up">↑</button>
+              <button type="button" class="icon-btn" onclick="moveToolOrder('${key}', 1)" ${idx === order.length - 1 ? "disabled" : ""} title="Move Down">↓</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
     function renderSettingsUI() {
       renderClassDropdowns();
       document.getElementById("settingsClassSelect").value = currentClass;
       loadSettingsRoster();
 
-      const grid = document.getElementById("toolTogglesGrid");
-      grid.innerHTML = Object.entries(toolMeta).map(([key, meta]) => `
-        <label class="toggle-card">
-          <input type="checkbox" ${settings.visibleTools[key] !== false ? "checked" : ""} onchange="toggleToolVisibility('${key}', this.checked)">
-          <span>${meta.label}</span>
-        </label>
-      `).join("");
-
+      renderToolOrderList();
       renderSettingsSupplyChips();
 
       document.getElementById("settingHeaderTitle").value = settings.title;
@@ -3542,7 +4187,7 @@
     function exportBackup() {
       const backupData = {
         app: "Classroom Home Base",
-        version: 11,
+        version: 14,
         exportedAt: new Date().toISOString(),
         data: {
           rosters,
@@ -3603,6 +4248,7 @@
             settings = {
               ...structuredClone(defaultSettings),
               ...payload.settings,
+              toolOrder: normalizeToolOrder(payload.settings.toolOrder),
               visibleTools: { ...defaultSettings.visibleTools, ...(payload.settings.visibleTools || {}) }
             };
           }
@@ -3622,8 +4268,11 @@
           saveState();
           document.getElementById("diceCountSelect").value = diceSpinner.count;
           document.getElementById("diceTypeSelect").value = diceSpinner.type;
+          document.getElementById("cardDrawCountSelect").value = String(deckConfig.drawCount || 1);
+          updateDrawButtonText();
           document.getElementById("timerChimeToggle").checked = timerConfig.chimeEnabled;
           document.getElementById("timerChimeSound").value = timerConfig.chimeSound || "bell";
+          applySidebarOrder();
           mountAllTools();
           applySettings();
           renderSettingsUI();
@@ -3647,7 +4296,7 @@
     }
 
     function resetAllData() {
-      if (!confirm("Reset all presentations, folders, bookmarks, timer presets, custom dice/cards, overlays, rosters, and settings back to defaults?")) return;
+      if (!confirm("Reset all presentations, folders, bookmarks, saved card decks, timer presets, custom dice, tool order, overlays, rosters, and settings back to defaults?")) return;
       Object.values(STORAGE_KEYS).forEach(k => localStorage.removeItem(k));
       rosters = structuredClone(defaultRosters);
       currentClass = "My Class";
@@ -3666,8 +4315,11 @@
       saveState();
       document.getElementById("diceCountSelect").value = diceSpinner.count;
       document.getElementById("diceTypeSelect").value = diceSpinner.type;
+      document.getElementById("cardDrawCountSelect").value = "1";
+      updateDrawButtonText();
       document.getElementById("timerChimeToggle").checked = timerConfig.chimeEnabled;
       document.getElementById("timerChimeSound").value = timerConfig.chimeSound;
+      applySidebarOrder();
       mountAllTools();
       applySettings();
       renderSettingsUI();
@@ -3815,7 +4467,6 @@
         activeFolderFilter = "ALL";
       }
 
-      // Only show the folder filter dropdown when at least one presentation has been assigned to a folder
       if (folders.length > 0) {
         filterWrap.classList.add("visible");
         filterSel.innerHTML = `<option value="ALL">All Presentations (${tabs.length})</option>` +
@@ -4052,6 +4703,7 @@
       } else if (id === "editSpinnerModal") {
         document.getElementById("spinnerSlicesTextarea").value = diceSpinner.spinnerSlices.join("\n");
       } else if (id === "editDeckModal") {
+        document.getElementById("deckModalStatus").className = "status-msg";
         document.getElementById("deckModeSelect").value = deckConfig.mode;
         document.getElementById("suitSpades").checked = deckConfig.suits.spades;
         document.getElementById("suitHearts").checked = deckConfig.suits.hearts;
@@ -4061,7 +4713,15 @@
         document.getElementById("rankNumbers").checked = deckConfig.ranks.numbers;
         document.getElementById("rankFace").checked = deckConfig.ranks.face;
         document.getElementById("rankJokers").checked = deckConfig.ranks.jokers;
-        document.getElementById("customDeckTextarea").value = deckConfig.customCards.join("\n");
+        const activeSaved = getActiveSavedDeck();
+        if (activeSaved && activeSaved.type === "custom") {
+          document.getElementById("customDeckNameInput").value = activeSaved.name;
+          document.getElementById("customDeckTextarea").value = activeSaved.cards.join("\n");
+        } else {
+          document.getElementById("customDeckNameInput").value = "";
+          document.getElementById("customDeckTextarea").value = deckConfig.customCards.join("\n");
+        }
+        document.getElementById("standardPresetNameInput").value = (activeSaved && activeSaved.type === "standard") ? activeSaved.name : "";
         toggleDeckModeUI();
       }
       document.getElementById(id).classList.add("open");
