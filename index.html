@@ -1,0 +1,3610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classroom Home Base</title>
+  <style>
+    :root {
+      --bg-app: #f7f8fa;
+      --bg-panel: #ffffff;
+      --border-light: #e2e8f0;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --teal-primary: #5e8b89;
+      --teal-hover: #4a7270;
+      --pastel-blue: #e0f2fe;
+      --pastel-pink: #fce7f3;
+      --pastel-green: #dcfce7;
+      --pastel-orange: #ffedd5;
+      --pastel-yellow: #fef3c7;
+      --pastel-purple: #f3e8ff;
+      --radius-lg: 14px;
+      --radius-md: 10px;
+      --radius-pill: 999px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 6px 20px rgba(15, 23, 42, 0.14);
+      --stripe-gradient: linear-gradient(90deg, #93c5fd 0%, #f9a8d4 25%, #86efac 50%, #fdba74 75%, #fde047 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-app);
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Rainbow Top Accent Bar */
+    .top-stripe {
+      height: 6px;
+      background: var(--stripe-gradient);
+      flex-shrink: 0;
+    }
+
+    /* Header */
+    header {
+      background: var(--bg-panel);
+      padding: 12px 24px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 50;
+    }
+
+    .brand h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      background: #fff;
+      border: 1px solid var(--border-light);
+      padding: 7px 14px;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-main);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    .btn-primary {
+      background: var(--teal-primary);
+      color: #fff;
+      border-color: var(--teal-primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--teal-hover);
+      border-color: var(--teal-hover);
+    }
+
+    .btn-danger {
+      color: #dc2626;
+      border-color: #fecaca;
+      background: #fef2f2;
+    }
+
+    .btn-danger:hover {
+      background: #fee2e2;
+    }
+
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 0.78rem;
+    }
+
+    /* Main Workspace */
+    .workspace {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      padding: 14px;
+      gap: 14px;
+    }
+
+    /* --- Google Sites / Sandbox Theater Full-Screen Mode --- */
+    body.theater-fullscreen .top-stripe,
+    body.theater-fullscreen header,
+    body.theater-fullscreen .sidebar,
+    body.theater-fullscreen .stage-toolbar {
+      display: none !important;
+    }
+
+    body.theater-fullscreen .workspace {
+      padding: 0;
+      gap: 0;
+    }
+
+    body.theater-fullscreen .main-stage {
+      border: none;
+      border-radius: 0;
+    }
+
+    .exit-theater-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 60;
+      background: rgba(15, 23, 42, 0.82);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 7px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(4px);
+    }
+
+    .exit-theater-btn:hover {
+      background: rgba(15, 23, 42, 0.96);
+    }
+
+    body.theater-fullscreen .exit-theater-btn {
+      display: inline-flex;
+    }
+
+    /* Left Sidebar Tools */
+    .sidebar {
+      width: 295px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 12px;
+      gap: 10px;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-sm);
+      transition: width 0.2s ease, padding 0.2s ease;
+      position: relative;
+      z-index: 40;
+    }
+
+    .sidebar.collapsed {
+      width: 0;
+      padding: 0;
+      border: none;
+      overflow: hidden;
+    }
+
+    .tool-card {
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: #fff;
+      flex-shrink: 0;
+    }
+
+    .tool-card.hidden-tool {
+      display: none;
+    }
+
+    .tool-header {
+      padding: 10px 12px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+      gap: 6px;
+    }
+
+    .tool-header span.title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .overlay-toggle-btn {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(15, 23, 42, 0.18);
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.12s ease;
+      position: relative;
+      z-index: 5;
+    }
+
+    .overlay-toggle-btn:hover {
+      background: #fff;
+      transform: scale(1.03);
+    }
+
+    .overlay-toggle-btn.active {
+      background: var(--teal-primary);
+      color: #fff;
+      border-color: var(--teal-primary);
+    }
+
+    .bg-blue { background-color: var(--pastel-blue); }
+    .bg-pink { background-color: var(--pastel-pink); }
+    .bg-green { background-color: var(--pastel-green); }
+    .bg-orange { background-color: var(--pastel-orange); }
+    .bg-yellow { background-color: var(--pastel-yellow); }
+    .bg-purple { background-color: var(--pastel-purple); }
+
+    .tool-body {
+      padding: 12px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      border-top: 1px solid var(--border-light);
+      font-size: 0.85rem;
+    }
+
+    .tool-card.open .tool-body {
+      display: flex;
+    }
+
+    .tool-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    select, input[type="text"], input[type="number"], textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      outline: none;
+      background: #fff;
+    }
+
+    select:focus, input:focus, textarea:focus {
+      border-color: var(--teal-primary);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-row .btn {
+      flex: 1;
+      justify-content: center;
+    }
+
+    /* Bookmarks List */
+    .bookmark-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .bookmark-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .bookmark-link {
+      flex: 1;
+      justify-content: space-between;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 7px 10px;
+    }
+
+    .bookmark-link span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .bookmark-del {
+      padding: 7px 9px;
+      border-radius: 8px;
+      border: 1px solid #fecaca;
+      background: #fef2f2;
+      color: #dc2626;
+      cursor: pointer;
+      font-size: 0.78rem;
+      flex-shrink: 0;
+    }
+
+    .bookmark-del:hover {
+      background: #fee2e2;
+    }
+
+    .bookmark-add-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border-light);
+    }
+
+    /* Tool Specific Displays */
+    .result-box {
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      font-weight: 600;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .group-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+
+    .group-item {
+      background: #f8fafc;
+      border: 1px solid var(--border-light);
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+    }
+
+    /* Timer */
+    .timer-display {
+      font-size: 2.1rem;
+      font-weight: 700;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      padding: 6px 0;
+      border-radius: 8px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .timer-display.finished {
+      background: #fef2f2;
+      color: #dc2626;
+      animation: pulseAlert 1s infinite;
+    }
+
+    @keyframes pulseAlert {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+
+    .timer-presets-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .preset-chip {
+      padding: 5px 9px;
+      border-radius: 8px;
+      border: 1px solid var(--border-light);
+      background: #f8fafc;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-main);
+    }
+
+    .preset-chip:hover {
+      background: #e2e8f0;
+    }
+
+    .timer-custom-inputs {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .timer-custom-inputs input {
+      padding: 6px 8px;
+      text-align: center;
+    }
+
+    .voice-levels {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .voice-btn {
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border-light);
+      background: #fff;
+      text-align: left;
+      cursor: pointer;
+      font-size: 0.82rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .voice-btn.active {
+      background: var(--teal-primary);
+      color: #fff;
+      border-color: var(--teal-primary);
+      font-weight: 600;
+    }
+
+    .supply-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.83rem;
+      cursor: pointer;
+    }
+
+    .clock-display {
+      font-size: 1.7rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    /* Noise Meter */
+    .noise-meter-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .noise-bar-container {
+      width: 100%;
+      height: 22px;
+      background: #e2e8f0;
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      position: relative;
+      border: 1px solid #cbd5e1;
+    }
+
+    .noise-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #22c55e 0%, #eab308 65%, #ef4444 90%);
+      transition: width 0.08s linear;
+    }
+
+    .noise-threshold-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: #0f172a;
+      z-index: 2;
+    }
+
+    .noise-status {
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 6px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      line-height: 1.35;
+    }
+
+    .noise-status.loud {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .sandbox-mic-help {
+      display: none;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 0.76rem;
+      color: #92400e;
+      line-height: 1.4;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sandbox-mic-help.visible {
+      display: flex;
+    }
+
+    /* Dice & Spinner */
+    .sub-tabs {
+      display: flex;
+      background: #f1f5f9;
+      padding: 3px;
+      border-radius: 8px;
+      gap: 4px;
+    }
+
+    .sub-tab {
+      flex: 1;
+      text-align: center;
+      padding: 5px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+    }
+
+    .sub-tab.active {
+      background: #fff;
+      color: var(--text-main);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .dice-tray {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      min-height: 54px;
+      padding: 8px;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+    }
+
+    .die-face {
+      min-width: 44px;
+      height: 44px;
+      padding: 0 8px;
+      background: #fff;
+      border: 2px solid var(--teal-primary);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--text-main);
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.15s ease;
+    }
+
+    .die-face.rolling {
+      transform: rotate(18deg) scale(0.92);
+    }
+
+    .spinner-stage {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .spinner-pointer {
+      width: 0;
+      height: 0;
+      border-left: 9px solid transparent;
+      border-right: 9px solid transparent;
+      border-top: 14px solid #dc2626;
+      margin-bottom: -10px;
+      z-index: 5;
+    }
+
+    .spinner-canvas {
+      border-radius: 50%;
+      box-shadow: var(--shadow-sm);
+      border: 2px solid #cbd5e1;
+    }
+
+    /* Playing Cards */
+    .playing-card {
+      width: 96px;
+      min-height: 126px;
+      background: #fff;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+      margin: 0 auto;
+      user-select: none;
+    }
+
+    .playing-card.red {
+      color: #dc2626;
+    }
+
+    .playing-card.black {
+      color: #0f172a;
+    }
+
+    .playing-card.custom-card {
+      width: 100%;
+      min-height: 84px;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-size: 1.05rem;
+      font-weight: 700;
+      border-color: var(--teal-primary);
+      padding: 12px;
+    }
+
+    .card-corner {
+      font-size: 0.9rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .card-corner.bottom {
+      align-self: flex-end;
+      transform: rotate(180deg);
+    }
+
+    .card-center {
+      font-size: 1.8rem;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    /* Main Stage (Right) */
+    .main-stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Presentation Toolbar */
+    .stage-toolbar {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      flex-shrink: 0;
+      background: #fcfcfd;
+    }
+
+    .tab-pill {
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 0.83rem;
+      font-weight: 500;
+      border: 1px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 0.1s ease;
+    }
+
+    .tab-pill:hover {
+      filter: brightness(0.96);
+    }
+
+    .tab-pill.active {
+      border-color: #475569;
+      font-weight: 700;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .spacer {
+      flex: 1;
+    }
+
+    /* Stage Viewport */
+    .viewport-wrapper {
+      flex: 1;
+      position: relative;
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    iframe#stageFrame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #fff;
+      display: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    body.dragging-overlay iframe#stageFrame {
+      pointer-events: none;
+    }
+
+    .empty-stage {
+      text-align: center;
+      padding: 32px;
+      max-width: 420px;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .empty-stage h2 {
+      font-size: 1.2rem;
+      color: var(--text-main);
+    }
+
+    .empty-stage p {
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* --- Floating Stage Overlays --- */
+    .stage-overlay-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 35;
+    }
+
+    .floating-tool-window {
+      position: absolute;
+      width: 280px;
+      min-width: 220px;
+      max-width: 92vw;
+      max-height: 88%;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(8px);
+      border: 1.5px solid #cbd5e1;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      pointer-events: auto;
+      overflow: hidden;
+      resize: both;
+    }
+
+    .floating-tool-header {
+      padding: 8px 12px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: grab;
+      user-select: none;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .floating-tool-header:active {
+      cursor: grabbing;
+    }
+
+    .floating-tool-body {
+      padding: 12px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.85rem;
+    }
+
+    .floating-close-btn {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text-main);
+    }
+
+    .floating-close-btn:hover {
+      background: #fee2e2;
+      color: #dc2626;
+      border-color: #fecaca;
+    }
+
+    /* Quick Memo Overlay Banner */
+    .memo-overlay {
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.96);
+      border: 2px solid var(--teal-primary);
+      border-radius: var(--radius-lg);
+      padding: 16px 28px;
+      max-width: 80%;
+      box-shadow: var(--shadow-md);
+      z-index: 45;
+      display: none;
+      text-align: center;
+    }
+
+    .memo-overlay.visible {
+      display: block;
+    }
+
+    .memo-overlay h3 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--teal-primary);
+      margin-bottom: 4px;
+    }
+
+    .memo-overlay p {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: pre-wrap;
+    }
+
+    .memo-close {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      background: #fff;
+      width: 560px;
+      max-width: 94vw;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-height: 88vh;
+    }
+
+    .modal h2 {
+      font-size: 1.15rem;
+    }
+
+    .modal label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* Settings Tabs */
+    .settings-tabs {
+      display: flex;
+      gap: 6px;
+      border-bottom: 1px solid var(--border-light);
+      padding-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .settings-tab-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: #f1f5f9;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .settings-tab-btn.active {
+      background: var(--teal-primary);
+      color: #fff;
+    }
+
+    .settings-panel {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .settings-panel.active {
+      display: flex;
+    }
+
+    .toggle-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .toggle-card {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      background: #f8fafc;
+      font-size: 0.83rem;
+      cursor: pointer;
+    }
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .edit-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f1f5f9;
+      border: 1px solid var(--border-light);
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 0.8rem;
+    }
+
+    .edit-chip button {
+      background: none;
+      border: none;
+      color: #dc2626;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    /* Manage Presentations List */
+    .manage-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      max-height: 360px;
+      padding-right: 4px;
+    }
+
+    .manage-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      background: #f8fafc;
+    }
+
+    .manage-row-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .manage-row-top input {
+      flex: 1;
+      padding: 6px 9px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .manage-color-select {
+      width: auto;
+      padding: 5px 8px;
+      font-size: 0.78rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .manage-url-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .manage-url-row span {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .manage-url-row input {
+      flex: 1;
+      padding: 5px 9px;
+      font-size: 0.8rem;
+      color: #334155;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .manage-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      flex-shrink: 0;
+    }
+
+    .manage-actions {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .icon-btn {
+      padding: 5px 8px;
+      border: 1px solid var(--border-light);
+      background: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .icon-btn:hover {
+      background: #e2e8f0;
+    }
+
+    .icon-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* Backup Cards */
+    .backup-card {
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .backup-card h3 {
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+
+    .backup-card p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .status-msg {
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 8px 10px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .status-msg.success {
+      display: block;
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-msg.error {
+      display: block;
+      background: #fee2e2;
+      color: #991b1b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-stripe"></div>
+
+  <header>
+    <div class="brand">
+      <h1 id="headerTitle">Classroom Home Base</h1>
+      <p id="headerSubtitle">Tools &amp; Apps · click "Overlay" on any tool to float it over your presentation</p>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="btn" id="clearOverlaysBtn" style="display:none;">✕ Close Overlays (<span id="overlayCountBadge">0</span>)</button>
+      <button type="button" class="btn" onclick="toggleSidebar()" id="toggleToolsBtn">‹ Hide Sidebar</button>
+      <button type="button" class="btn" onclick="openModal('settingsModal')">⚙ Settings</button>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <!-- Left Sidebar -->
+    <aside class="sidebar" id="sidebar">
+
+      <!-- Bookmarks -->
+      <div class="tool-card open" data-tool="bookmarks">
+        <div class="tool-header bg-blue" onclick="toggleTool(this)">
+          <span class="title">🔖 Bookmarks</span>
+          <div class="header-controls">
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="bookmarks">📌 Overlay</button>
+            <span>▾</span>
+          </div>
+        </div>
+        <div class="tool-body" id="slot-bookmarks"></div>
+      </div>
+
+      <!-- Random Name -->
+      <div class="tool-card" data-tool="randomName">
+        <div class="tool-header bg-pink" onclick="toggleTool(this)">
+          <span class="title">☆ Random Name</span>
+          <div class="header-controls">
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="randomName">📌 Overlay</button>
+            <span>▾</span>
+          </div>
+        </div>
+        <div class="tool-body" id="slot-randomName"></div>
+      </div>
+
+      <!-- Groups & Partners -->
+      <div class="tool-card open" data-tool="groups">
+        <div class="tool-header bg-green" onclick="toggleTool(this)">
+          <span class="title">👥 Groups &amp; Partners</span>
+          <div class="header-controls">
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="groups">📌 Overlay</button>
+            <span>▾</span>
+          </div>
+        </div>
+        <div class="tool-body" id="slot-groups"></div>
+      </div>
+
+      <!-- Quick Message -->
+      <div class="tool-card open" data-tool="quickMessage">
+        <div class="tool-header bg-orange" onclick="toggleTool(this)">
+          <span class="title">✏️ Quick Message</span>
+          <div class="header-controls">
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="quickMessage">📌 Overlay</button>
+            <span>▾</span>
+          </div>
+        </div>
+        <div class="tool-body" id="slot-quickMessage"></div>
+      </div>
+
+      <!-- Timer -->
+      <div class="tool-card" data-tool="timer">
+        <div class="tool-header bg-yellow" onclick="toggleTool(this)">
+          <span class="title">⏱️ Timer</span>
+          <div class="header-controls">
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="timer">📌 Overlay</button>
+            <span>▾</span>
+          </div>
+        </div>
+        <div class="tool-body" id="slot-timer"></div>
+      </div>
+
+      <!-- Noise Meter -->
+      <div class="tool-card" data-tool="noiseMeter">
+        <div class="tool-header bg-pink" onclick="toggleTool(this)">
+          <span class="title">🎙️ Noise Meter</span>
+          <div class="header-controls">
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="noiseMeter">📌 Overlay</button>
+            <span>▾</span>
+          </div>
+        </div>
+        <div class="tool-body" id="slot-noiseMeter"></div>
+      </div>
+
+      <!-- Dice & Spinner -->
+      <div class="tool-card" data-tool="diceSpinner">
+        <div class="tool-header bg-purple" onclick="toggleTool(this)">
+          <span class="title">🎲 Dice &amp; Spinner</span>
+          <div class="header-controls">
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="diceSpinner">📌 Overlay</button>
+            <span>▾</span>
+          </div>
+        </div>
+        <div class="tool-body" id="slot-diceSpinner"></div>
+      </div>
+
+      <!-- Deck of Cards -->
+      <div class="tool-card" data-tool="cardDeck">
+        <div class="tool-header bg-orange" onclick="toggleTool(this)">
+          <span class="title">🃏 Deck of Cards</span>
+          <div class="header-controls">
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="cardDeck">📌 Overlay</button>
+            <span>▾</span>
+          </div>
+        </div>
+        <div class="tool-body" id="slot-cardDeck"></div>
+      </div>
+
+      <!-- Voice Level -->
+      <div class="tool-card" data-tool="voiceLevel">
+        <div class="tool-header bg-purple" onclick="toggleTool(this)">
+          <span class="title">🔊 Voice Level</span>
+          <div class="header-controls">
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="voiceLevel">📌 Overlay</button>
+            <span>▾</span>
+          </div>
+        </div>
+        <div class="tool-body" id="slot-voiceLevel"></div>
+      </div>
+
+      <!-- Supplies Needed -->
+      <div class="tool-card" data-tool="supplies">
+        <div class="tool-header bg-blue" onclick="toggleTool(this)">
+          <span class="title">🎒 Supplies Needed</span>
+          <div class="header-controls">
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="supplies">📌 Overlay</button>
+            <span>▾</span>
+          </div>
+        </div>
+        <div class="tool-body" id="slot-supplies"></div>
+      </div>
+
+      <!-- Clock -->
+      <div class="tool-card" data-tool="clock">
+        <div class="tool-header bg-green" onclick="toggleTool(this)">
+          <span class="title">🕒 Clock</span>
+          <div class="header-controls">
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="clock">📌 Overlay</button>
+            <span>▾</span>
+          </div>
+        </div>
+        <div class="tool-body" id="slot-clock"></div>
+      </div>
+
+    </aside>
+
+    <!-- Right Main Stage -->
+    <main class="main-stage">
+      <div class="stage-toolbar" id="stageToolbar">
+        <button type="button" class="btn btn-primary" onclick="openModal('addTabModal')">＋ Presentation</button>
+        <button type="button" class="btn" onclick="openModal('manageModal')">Manage</button>
+        
+        <div id="tabContainer" style="display:flex; gap:8px; align-items:center;"></div>
+
+        <div class="spacer"></div>
+
+        <select id="classSelector" style="width: auto;" onchange="switchClass()"></select>
+
+        <button type="button" class="btn" onclick="refreshStage()" title="Refresh">↻ Refresh</button>
+        <button type="button" class="btn" id="fullScreenBtn" onclick="toggleFullScreen()" title="Full Screen">⛶ Full Screen</button>
+      </div>
+
+      <div class="viewport-wrapper" id="viewportWrapper">
+        <!-- Exit Button for Google Sites Theater Full-Screen Fallback -->
+        <button type="button" class="exit-theater-btn" onclick="exitFullScreenMode()">✕ Exit Full Screen</button>
+
+        <!-- Floating Overlay Layer -->
+        <div class="stage-overlay-layer" id="stageOverlayLayer"></div>
+
+        <!-- Quick Memo Banner -->
+        <div class="memo-overlay" id="memoOverlay">
+          <button type="button" class="memo-close" onclick="clearMemo()">✕</button>
+          <h3>Class Memo</h3>
+          <p id="memoText"></p>
+        </div>
+
+        <div class="empty-stage" id="emptyStage">
+          <h2>No Presentations Added Yet</h2>
+          <p>Click <strong>＋ Presentation</strong> above to embed a Google Slides deck, Canva slideshow, or classroom webpage. Click <strong>📌 Overlay</strong> on any tool to float it right on top of your slides!</p>
+          <button type="button" class="btn btn-primary" onclick="openModal('addTabModal')">＋ Add Your First Presentation</button>
+        </div>
+
+        <iframe id="stageFrame" src="" allowfullscreen allow="fullscreen; autoplay; microphone"></iframe>
+      </div>
+    </main>
+  </div>
+
+  <!-- Hidden Tool Templates Pool -->
+  <div id="toolTemplatesPool" style="display:none;">
+    <!-- Bookmarks Content -->
+    <div id="content-bookmarks" style="display:flex; flex-direction:column; gap:10px;">
+      <div class="bookmark-list" id="bookmarkList"></div>
+      <div class="bookmark-add-box">
+        <input type="text" id="newBookmarkTitle" placeholder="Bookmark title (e.g., Epic Books)" />
+        <input type="text" id="newBookmarkUrl" placeholder="URL (e.g., https://getepic.com)" />
+        <button type="button" class="btn btn-primary" style="justify-content:center;" onclick="addBookmark()">＋ Add Bookmark</button>
+      </div>
+    </div>
+
+    <!-- Random Name Content -->
+    <div id="content-randomName" style="display:flex; flex-direction:column; gap:10px;">
+      <div class="result-box" id="randomNameResult">Click pick to choose a student</div>
+      <div class="btn-row">
+        <button type="button" class="btn btn-primary" onclick="pickRandomStudent()">Pick Student</button>
+        <button type="button" class="btn" onclick="resetPicked()">Reset</button>
+      </div>
+      <div class="tool-hint" id="remainingCount">All students available</div>
+    </div>
+
+    <!-- Groups Content -->
+    <div id="content-groups" style="display:flex; flex-direction:column; gap:10px;">
+      <div class="tool-hint">Uses the class selected at the top of Home Base</div>
+      <div>
+        <label style="font-size:0.78rem; color:var(--text-muted);">Group mode</label>
+        <select id="groupMode">
+          <option value="size">Students per group</option>
+          <option value="count">Number of groups</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:0.78rem; color:var(--text-muted);">Count (2–18)</label>
+        <select id="groupNumber"></select>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn btn-primary" onclick="generateGroups()">Make Groups</button>
+        <button type="button" class="btn" onclick="generateGroups()">Shuffle Again</button>
+      </div>
+      <div class="group-list" id="groupsOutput"></div>
+    </div>
+
+    <!-- Quick Message Content -->
+    <div id="content-quickMessage" style="display:flex; flex-direction:column; gap:10px;">
+      <textarea id="memoInput" rows="3" placeholder="Type a memo for your class..."></textarea>
+      <div class="btn-row">
+        <button type="button" class="btn btn-primary" onclick="showMemo()">Show Banner</button>
+        <button type="button" class="btn" onclick="clearMemo()">Clear</button>
+      </div>
+    </div>
+
+    <!-- Timer Content -->
+    <div id="content-timer" style="display:flex; flex-direction:column; gap:10px;">
+      <div class="timer-display" id="timerDisplay">05:00</div>
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+          <span style="font-size:0.74rem; color:var(--text-muted);">Presets</span>
+          <button type="button" class="btn btn-sm" style="padding:2px 8px; font-size:0.72rem;" onclick="openModal('editTimerModal')">✎ Edit Presets</button>
+        </div>
+        <div class="timer-presets-grid" id="timerPresetsContainer"></div>
+      </div>
+      <div class="timer-custom-inputs">
+        <input type="number" id="customMinInput" min="0" max="180" placeholder="Min" />
+        <span style="font-weight:700;">:</span>
+        <input type="number" id="customSecInput" min="0" max="59" placeholder="Sec" />
+        <button type="button" class="btn btn-sm" onclick="applyCustomTimer()">Set</button>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn btn-primary" onclick="startTimer()">Start</button>
+        <button type="button" class="btn" onclick="pauseTimer()">Pause</button>
+        <button type="button" class="btn" onclick="resetTimer()">Reset</button>
+      </div>
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:6px; border-top:1px dashed var(--border-light); padding-top:8px;">
+        <label class="supply-item" style="font-size:0.76rem;">
+          <input type="checkbox" id="timerChimeToggle" onchange="saveTimerPrefs()" /> Chime at 00:00
+        </label>
+        <div style="display:flex; gap:4px; align-items:center;">
+          <select id="timerChimeSound" style="padding:3px 6px; font-size:0.75rem; width:auto;" onchange="saveTimerPrefs()">
+            <option value="bell">Bell</option>
+            <option value="xylophone">Xylophone</option>
+            <option value="zen">Zen Gong</option>
+          </select>
+          <button type="button" class="icon-btn" onclick="playTimerChime()" title="Test Sound">🔊</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Noise Meter Content -->
+    <div id="content-noiseMeter" style="display:flex; flex-direction:column; gap:10px;">
+      <div class="noise-meter-wrap">
+        <div class="noise-bar-container">
+          <div class="noise-bar-fill" id="noiseBarFill"></div>
+          <div class="noise-threshold-line" id="noiseThresholdLine" style="left: 65%;"></div>
+        </div>
+        <div class="noise-status" id="noiseStatus">Mic Off · Click Start</div>
+        <div class="sandbox-mic-help" id="sandboxMicHelp">
+          <span><strong>Google Sites Sandbox Block:</strong> Google Sites blocks microphone prompts inside embedded boxes.</span>
+          <button type="button" class="btn btn-sm btn-primary" style="justify-content:center;" onclick="openStandaloneMicPopup()">↗ Open Noise Meter Popup</button>
+        </div>
+        <div>
+          <label style="font-size:0.75rem; color:var(--text-muted); display:flex; justify-content:space-between;">
+            <span>Sensitivity / Threshold</span>
+            <span id="noiseThresholdLabel">65%</span>
+          </label>
+          <input type="range" id="noiseThresholdSlider" min="15" max="95" value="65" oninput="updateNoiseThreshold(this.value)" />
+        </div>
+        <label class="supply-item" style="font-size:0.78rem;">
+          <input type="checkbox" id="noiseChimeCheck" checked /> Play alert chime when too loud
+        </label>
+        <div class="btn-row">
+          <button type="button" class="btn btn-primary" id="noiseStartBtn" onclick="toggleNoiseMeter()">Start Mic</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dice & Spinner Content -->
+    <div id="content-diceSpinner" style="display:flex; flex-direction:column; gap:10px;">
+      <div class="sub-tabs">
+        <button type="button" class="sub-tab active" onclick="switchDiceTab('diceView', this)">🎲 Dice</button>
+        <button type="button" class="sub-tab" onclick="switchDiceTab('spinnerView', this)">🎡 Spinner</button>
+      </div>
+      <div id="diceView" style="display:flex; flex-direction:column; gap:8px;">
+        <div class="btn-row">
+          <div style="flex:1;">
+            <label style="font-size:0.74rem; color:var(--text-muted);">Number of Dice</label>
+            <select id="diceCountSelect" onchange="saveDicePrefs()">
+              <option value="1">1 Die</option>
+              <option value="2">2 Dice</option>
+              <option value="3">3 Dice</option>
+              <option value="4">4 Dice</option>
+              <option value="5">5 Dice</option>
+              <option value="6">6 Dice</option>
+            </select>
+          </div>
+          <div style="flex:1;">
+            <label style="font-size:0.74rem; color:var(--text-muted);">Die Type</label>
+            <select id="diceTypeSelect" onchange="saveDicePrefs()">
+              <option value="d6">6-Sided (1–6)</option>
+              <option value="d4">4-Sided (1–4)</option>
+              <option value="d8">8-Sided (1–8)</option>
+              <option value="d10">10-Sided (1–10)</option>
+              <option value="d12">12-Sided (1–12)</option>
+              <option value="d20">20-Sided (1–20)</option>
+              <option value="custom">Custom Faces</option>
+            </select>
+          </div>
+        </div>
+        <div class="dice-tray" id="diceTray">
+          <div class="die-face">?</div>
+        </div>
+        <div class="tool-hint" id="diceTotalLabel" style="text-align:center;">Click Roll to toss</div>
+        <div class="btn-row">
+          <button type="button" class="btn btn-primary" onclick="rollDice()">🎲 Roll Dice</button>
+          <button type="button" class="btn" onclick="openModal('editDiceModal')">✎ Edit</button>
+        </div>
+      </div>
+      <div id="spinnerView" style="display:none; flex-direction:column; gap:8px;">
+        <div class="spinner-stage">
+          <div class="spinner-pointer"></div>
+          <canvas id="spinnerCanvas" class="spinner-canvas" width="180" height="180"></canvas>
+        </div>
+        <div class="result-box" id="spinnerResult" style="min-height:36px; padding:6px;">Click Spin!</div>
+        <div class="btn-row">
+          <button type="button" class="btn btn-primary" onclick="spinWheel()">🎡 Spin</button>
+          <button type="button" class="btn" onclick="openModal('editSpinnerModal')">✎ Slices</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deck of Cards Content -->
+    <div id="content-cardDeck" style="display:flex; flex-direction:column; gap:10px;">
+      <div id="cardStage">
+        <div class="result-box" style="min-height:126px;">Click Draw Card to start</div>
+      </div>
+      <div class="tool-hint" id="deckStatusLabel" style="text-align:center;">52 cards remaining</div>
+      <div class="btn-row">
+        <button type="button" class="btn btn-primary" onclick="drawCard()">Draw Card</button>
+        <button type="button" class="btn" onclick="shuffleDeck()">Shuffle</button>
+      </div>
+      <button type="button" class="btn btn-sm" style="justify-content:center;" onclick="openModal('editDeckModal')">✎ Modify Deck</button>
+    </div>
+
+    <!-- Voice Level Content -->
+    <div id="content-voiceLevel" style="display:flex; flex-direction:column; gap:10px;">
+      <div class="voice-levels" id="voiceLevels">
+        <button type="button" class="voice-btn active" onclick="selectVoice(this)"><span>0 · Silent</span><span>🤫</span></button>
+        <button type="button" class="voice-btn" onclick="selectVoice(this)"><span>1 · Whisper</span><span>💬</span></button>
+        <button type="button" class="voice-btn" onclick="selectVoice(this)"><span>2 · Partner Talk</span><span>👥</span></button>
+        <button type="button" class="voice-btn" onclick="selectVoice(this)"><span>3 · Group Work</span><span>🗣️</span></button>
+        <button type="button" class="voice-btn" onclick="selectVoice(this)"><span>4 · Outside Voice</span><span>📢</span></button>
+      </div>
+    </div>
+
+    <!-- Supplies Needed Content -->
+    <div id="content-supplies" style="display:flex; flex-direction:column; gap:10px;">
+      <div id="suppliesList" style="display:flex; flex-direction:column; gap:8px;"></div>
+    </div>
+
+    <!-- Clock Content -->
+    <div id="content-clock" style="display:flex; flex-direction:column; gap:10px;">
+      <div class="clock-display" id="liveClock">12:00:00 PM</div>
+    </div>
+  </div>
+
+  <!-- Modal: Add Presentation Tab -->
+  <div class="modal-backdrop" id="addTabModal">
+    <div class="modal">
+      <h2>Add Presentation or Webpage</h2>
+      <div>
+        <label>Tab Title</label>
+        <input type="text" id="newTabTitle" placeholder="e.g., Math Lesson 4" />
+      </div>
+      <div>
+        <label>Embed URL (Google Slides, Canva ?embed, or Website)</label>
+        <input type="text" id="newTabUrl" placeholder="https://docs.google.com/presentation/d/..." />
+      </div>
+      <div>
+        <label>Tab Color</label>
+        <select id="newTabColor">
+          <option value="#fef3c7">Soft Yellow</option>
+          <option value="#ffedd5">Soft Peach</option>
+          <option value="#dcfce7">Soft Mint</option>
+          <option value="#e0f2fe">Soft Sky</option>
+          <option value="#fce7f3">Soft Pink</option>
+        </select>
+      </div>
+      <div class="btn-row" style="margin-top:8px;">
+        <button type="button" class="btn" onclick="closeModal('addTabModal')">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="addNewTab()">Add Tab</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Manage Presentations -->
+  <div class="modal-backdrop" id="manageModal">
+    <div class="modal">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2>Manage Presentations</h2>
+        <button type="button" class="btn btn-primary" onclick="closeModal('manageModal'); openModal('addTabModal');">＋ New</button>
+      </div>
+      <p style="font-size:0.8rem; color:var(--text-muted);">Edit titles, paste a new slide URL, change tab colors, or reorder:</p>
+      <div class="manage-list" id="manageList"></div>
+      <div class="btn-row" style="margin-top:4px;">
+        <button type="button" class="btn btn-primary" onclick="closeModal('manageModal')">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Edit Timer Presets -->
+  <div class="modal-backdrop" id="editTimerModal">
+    <div class="modal">
+      <h2>⏱️ Customize Timer Presets</h2>
+      <p style="font-size:0.8rem; color:var(--text-muted);">Create custom quick-click timer buttons for your classroom routines:</p>
+      <div class="pill-list" id="timerPresetChips"></div>
+      <div class="btn-row">
+        <input type="text" id="newPresetLabel" placeholder="Label (e.g., Clean Up)" style="flex:2;" />
+        <input type="number" id="newPresetMins" min="0" max="180" placeholder="Min" style="flex:1;" />
+        <input type="number" id="newPresetSecs" min="0" max="59" placeholder="Sec" style="flex:1;" />
+        <button type="button" class="btn btn-primary" style="flex:0 0 auto;" onclick="addTimerPreset()">＋ Add</button>
+      </div>
+      <div class="btn-row" style="margin-top:6px;">
+        <button type="button" class="btn" onclick="resetTimerPresets()">Reset Defaults</button>
+        <button type="button" class="btn btn-primary" onclick="closeModal('editTimerModal')">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Customize Custom Dice -->
+  <div class="modal-backdrop" id="editDiceModal">
+    <div class="modal">
+      <h2>🎲 Customize Custom Die Faces</h2>
+      <p style="font-size:0.8rem; color:var(--text-muted);">Enter one face value per line (numbers, words, fractions, or emojis). Selecting <strong>Custom Faces</strong> in the Dice tool will roll from this list:</p>
+      <textarea id="customDiceTextarea" rows="8" placeholder="1&#10;2&#10;3&#10;4&#10;5&#10;6"></textarea>
+      <div class="btn-row">
+        <button type="button" class="btn" onclick="resetCustomDice()">Reset to 1–6</button>
+        <button type="button" class="btn" onclick="closeModal('editDiceModal')">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="saveCustomDice()">Save Die</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Customize Spinner Slices -->
+  <div class="modal-backdrop" id="editSpinnerModal">
+    <div class="modal">
+      <h2>🎡 Customize Spinner Slices</h2>
+      <p style="font-size:0.8rem; color:var(--text-muted);">Enter one slice label per line (or click Load Class Roster to spin student names):</p>
+      <textarea id="spinnerSlicesTextarea" rows="8"></textarea>
+      <div class="btn-row">
+        <button type="button" class="btn" onclick="loadRosterIntoSpinner()">Load Class Roster</button>
+        <button type="button" class="btn" onclick="closeModal('editSpinnerModal')">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="saveSpinnerSlices()">Save Spinner</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Modify Deck of Cards -->
+  <div class="modal-backdrop" id="editDeckModal">
+    <div class="modal">
+      <h2>🃏 Modify Deck of Cards</h2>
+      <div>
+        <label>Deck Mode</label>
+        <select id="deckModeSelect" onchange="toggleDeckModeUI()">
+          <option value="standard">Standard Playing Cards (Filtered)</option>
+          <option value="custom">Custom Flashcard / Prompt Deck</option>
+        </select>
+      </div>
+
+      <div id="standardDeckOptions" style="display:flex; flex-direction:column; gap:10px;">
+        <div>
+          <label>Included Suits</label>
+          <div class="toggle-grid">
+            <label class="toggle-card"><input type="checkbox" id="suitSpades" checked> ♠ Spades</label>
+            <label class="toggle-card"><input type="checkbox" id="suitHearts" checked> ♥ Hearts</label>
+            <label class="toggle-card"><input type="checkbox" id="suitDiamonds" checked> ♦ Diamonds</label>
+            <label class="toggle-card"><input type="checkbox" id="suitClubs" checked> ♣ Clubs</label>
+          </div>
+        </div>
+        <div>
+          <label>Included Ranks</label>
+          <div class="toggle-grid">
+            <label class="toggle-card"><input type="checkbox" id="rankAce" checked> Aces (A)</label>
+            <label class="toggle-card"><input type="checkbox" id="rankNumbers" checked> Number Cards (2–10)</label>
+            <label class="toggle-card"><input type="checkbox" id="rankFace" checked> Face Cards (J, Q, K)</label>
+            <label class="toggle-card"><input type="checkbox" id="rankJokers"> Include 2 Jokers</label>
+          </div>
+        </div>
+      </div>
+
+      <div id="customDeckOptions" style="display:none; flex-direction:column; gap:6px;">
+        <label>Custom Cards (one card per line — great for sight words, math facts, or brain breaks)</label>
+        <textarea id="customDeckTextarea" rows="8" placeholder="2 + 2 = ?&#10;3 × 4 = ?&#10;10 - 6 = ?"></textarea>
+      </div>
+
+      <div class="btn-row" style="margin-top:6px;">
+        <button type="button" class="btn" onclick="closeModal('editDeckModal')">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="saveDeckConfig()">Save &amp; Shuffle Deck</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Unified Settings -->
+  <div class="modal-backdrop" id="settingsModal">
+    <div class="modal">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2>⚙ Home Base Settings</h2>
+      </div>
+
+      <div class="settings-tabs">
+        <button type="button" class="settings-tab-btn active" onclick="switchSettingsTab('rosterPanel', this)">👥 Class Rosters</button>
+        <button type="button" class="settings-tab-btn" onclick="switchSettingsTab('toolsPanel', this)">🧰 Tools &amp; Supplies</button>
+        <button type="button" class="settings-tab-btn" onclick="switchSettingsTab('appearancePanel', this)">🎨 Display &amp; Theme</button>
+        <button type="button" class="settings-tab-btn" onclick="switchSettingsTab('backupPanel', this)">💾 Backup &amp; Reset</button>
+      </div>
+
+      <!-- Tab 1: Class Rosters & Blocks -->
+      <div class="settings-panel active" id="rosterPanel">
+        <div>
+          <label>Select Class Block to Edit</label>
+          <div class="btn-row">
+            <select id="settingsClassSelect" onchange="loadSettingsRoster()"></select>
+            <button type="button" class="btn btn-danger" onclick="deleteClassBlock()" id="deleteClassBtn">Delete Class</button>
+          </div>
+        </div>
+
+        <div>
+          <label>Add New Class Block</label>
+          <div class="btn-row">
+            <input type="text" id="newClassNameInput" placeholder="e.g., Period 1 or Reading Group" />
+            <button type="button" class="btn" style="flex:0 0 auto;" onclick="addClassBlock()">＋ Add Class</button>
+          </div>
+        </div>
+
+        <div>
+          <label>Student Roster (one student name per line)</label>
+          <textarea id="rosterTextarea" rows="7"></textarea>
+        </div>
+
+        <button type="button" class="btn btn-primary" style="justify-content:center;" onclick="saveRoster()">Save Student Roster</button>
+      </div>
+
+      <!-- Tab 2: Tools & Supplies -->
+      <div class="settings-panel" id="toolsPanel">
+        <div>
+          <label>Visible Sidebar Tools</label>
+          <div class="toggle-grid" id="toolTogglesGrid"></div>
+        </div>
+
+        <div style="border-top: 1px solid var(--border-light); padding-top: 10px;">
+          <label>Customize "Supplies Needed" Checklist</label>
+          <div class="pill-list" id="settingsSuppliesChips" style="margin-bottom:8px;"></div>
+          <div class="btn-row">
+            <input type="text" id="newSupplyInput" placeholder="Add supply item (e.g., Folder)" />
+            <button type="button" class="btn" style="flex:0 0 auto;" onclick="addSupplyItem()">＋ Add</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Display & Theme -->
+      <div class="settings-panel" id="appearancePanel">
+        <div>
+          <label>Dashboard Main Title</label>
+          <input type="text" id="settingHeaderTitle" onchange="saveAppearance()" />
+        </div>
+        <div>
+          <label>Dashboard Subtitle</label>
+          <input type="text" id="settingHeaderSubtitle" onchange="saveAppearance()" />
+        </div>
+        <div>
+          <label>Accent Theme</label>
+          <select id="settingTheme" onchange="saveAppearance()">
+            <option value="pastel">Pastel Rainbow &amp; Sage Teal (Default)</option>
+            <option value="ocean">Ocean Breeze (Blue &amp; Slate)</option>
+            <option value="warm">Warm Classroom (Amber &amp; Terracotta)</option>
+            <option value="botanical">Botanical Garden (Forest &amp; Mint)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Tab 4: Backup & Reset -->
+      <div class="settings-panel" id="backupPanel">
+        <div class="backup-card">
+          <h3>Export Setup File</h3>
+          <p>Download a <code>.json</code> backup file containing all your presentation tabs, bookmarks, timer presets, custom dice/cards, overlays, rosters, and settings.</p>
+          <div>
+            <button type="button" class="btn btn-primary" onclick="exportBackup()">⬇ Download Backup File</button>
+          </div>
+        </div>
+
+        <div class="backup-card">
+          <h3>Import Setup File</h3>
+          <p>Restore your tabs, bookmarks, timer presets, custom dice/cards, overlays, rosters, and settings from a previously exported <code>.json</code> backup file.</p>
+          <div>
+            <input type="file" id="importFileInput" accept=".json,application/json" style="display:none;" onchange="importBackup(event)" />
+            <button type="button" class="btn" onclick="document.getElementById('importFileInput').click()">⬆ Choose Backup File to Restore</button>
+          </div>
+        </div>
+
+        <div class="backup-card" style="border-color:#fecaca; background:#fef2f2;">
+          <h3 style="color:#991b1b;">Reset All Data</h3>
+          <p>Clear all saved tabs, bookmarks, custom presets, dice/cards, overlays, and rosters to restore default settings.</p>
+          <div>
+            <button type="button" class="btn btn-danger" onclick="resetAllData()">Reset Home Base</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="settingsStatus" class="status-msg"></div>
+
+      <div class="btn-row" style="margin-top:4px;">
+        <button type="button" class="btn btn-primary" onclick="closeModal('settingsModal')">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Storage Keys ---
+    const STORAGE_KEYS = {
+      ROSTERS: "chb_rosters_v1",
+      CURRENT_CLASS: "chb_current_class_v1",
+      TABS: "chb_tabs_v1",
+      ACTIVE_TAB: "chb_active_tab_v1",
+      SUPPLIES: "chb_supplies_v1",
+      BOOKMARKS: "chb_bookmarks_v1",
+      SETTINGS: "chb_settings_v1",
+      DICE_SPINNER: "chb_dice_spinner_v1",
+      DECK_CONFIG: "chb_deck_config_v1",
+      TIMER_CONFIG: "chb_timer_config_v1",
+      OVERLAY_STATE: "chb_overlays_v1"
+    };
+
+    // --- Default State ---
+    const defaultRosters = {
+      "My Class": [
+        "Liam", "Emma", "Noah", "Olivia", "Oliver", "Ava",
+        "Elijah", "Sophia", "Mateo", "Isabella", "Lucas", "Mia",
+        "Levi", "Charlotte", "Asher", "Amelia", "James", "Harper"
+      ],
+      "Morning Block": ["Aiden", "Chloe", "Ethan", "Grace", "Mason", "Lily", "Logan", "Zoe"],
+      "Afternoon Block": ["Jack", "Nora", "Owen", "Riley", "Luke", "Aria", "Henry", "Ellie"]
+    };
+
+    const defaultSupplies = [
+      { label: "Pencil & Eraser", checked: true },
+      { label: "Reading Notebook", checked: false },
+      { label: "Chromebook", checked: false },
+      { label: "Glue Stick & Scissors", checked: false },
+      { label: "Whiteboard & Marker", checked: false }
+    ];
+
+    const defaultSettings = {
+      title: "Classroom Home Base",
+      subtitle: "Tools & Apps · click \"Overlay\" on any tool to float it over your presentation",
+      theme: "pastel",
+      visibleTools: {
+        bookmarks: true,
+        randomName: true,
+        groups: true,
+        quickMessage: true,
+        timer: true,
+        noiseMeter: true,
+        diceSpinner: true,
+        cardDeck: true,
+        voiceLevel: true,
+        supplies: true,
+        clock: true
+      }
+    };
+
+    const defaultDiceSpinner = {
+      count: 1,
+      type: "d6",
+      customFaces: ["1", "2", "3", "4", "5", "6"],
+      spinnerSlices: ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5", "Option 6"]
+    };
+
+    const defaultDeckConfig = {
+      mode: "standard",
+      suits: { spades: true, hearts: true, diamonds: true, clubs: true },
+      ranks: { ace: true, numbers: true, face: true, jokers: false },
+      customCards: [
+        "2 + 3 = ?",
+        "5 + 4 = ?",
+        "10 - 3 = ?",
+        "6 × 2 = ?",
+        "12 ÷ 3 = ?",
+        "8 + 7 = ?"
+      ]
+    };
+
+    const defaultTimerConfig = {
+      chimeEnabled: true,
+      chimeSound: "bell",
+      presets: [
+        { label: "1m", seconds: 60 },
+        { label: "2m Clean Up", seconds: 120 },
+        { label: "5m", seconds: 300 },
+        { label: "10m", seconds: 600 },
+        { label: "15m Centers", seconds: 900 }
+      ]
+    };
+
+    const toolMeta = {
+      bookmarks: { label: "🔖 Bookmarks", bg: "bg-blue" },
+      randomName: { label: "☆ Random Name", bg: "bg-pink" },
+      groups: { label: "👥 Groups & Partners", bg: "bg-green" },
+      quickMessage: { label: "✏️ Quick Message", bg: "bg-orange" },
+      timer: { label: "⏱️ Timer", bg: "bg-yellow" },
+      noiseMeter: { label: "🎙️ Noise Meter", bg: "bg-pink" },
+      diceSpinner: { label: "🎲 Dice & Spinner", bg: "bg-purple" },
+      cardDeck: { label: "🃏 Deck of Cards", bg: "bg-orange" },
+      voiceLevel: { label: "🔊 Voice Level", bg: "bg-purple" },
+      supplies: { label: "🎒 Supplies Needed", bg: "bg-blue" },
+      clock: { label: "🕒 Clock", bg: "bg-green" }
+    };
+
+    const themes = {
+      pastel: {
+        primary: "#5e8b89",
+        hover: "#4a7270",
+        stripe: "linear-gradient(90deg, #93c5fd 0%, #f9a8d4 25%, #86efac 50%, #fdba74 75%, #fde047 100%)"
+      },
+      ocean: {
+        primary: "#2563eb",
+        hover: "#1d4ed8",
+        stripe: "linear-gradient(90deg, #38bdf8 0%, #3b82f6 50%, #6366f1 100%)"
+      },
+      warm: {
+        primary: "#c2410c",
+        hover: "#9a3412",
+        stripe: "linear-gradient(90deg, #fbbf24 0%, #f97316 50%, #ef4444 100%)"
+      },
+      botanical: {
+        primary: "#15803d",
+        hover: "#166534",
+        stripe: "linear-gradient(90deg, #86efac 0%, #22c55e 50%, #0d9488 100%)"
+      }
+    };
+
+    // Load from localStorage safely
+    let rosters = loadJSON(STORAGE_KEYS.ROSTERS, structuredClone(defaultRosters));
+    let currentClass = localStorage.getItem(STORAGE_KEYS.CURRENT_CLASS) || "My Class";
+    if (!rosters[currentClass]) currentClass = Object.keys(rosters)[0];
+
+    let availableStudents = [...rosters[currentClass]];
+    let tabs = loadJSON(STORAGE_KEYS.TABS, []);
+    let activeTabIndex = parseInt(localStorage.getItem(STORAGE_KEYS.ACTIVE_TAB) ?? "-1", 10);
+    if (activeTabIndex >= tabs.length) activeTabIndex = tabs.length - 1;
+
+    let supplies = loadJSON(STORAGE_KEYS.SUPPLIES, structuredClone(defaultSupplies));
+    let bookmarks = loadJSON(STORAGE_KEYS.BOOKMARKS, []);
+    let settings = loadJSON(STORAGE_KEYS.SETTINGS, structuredClone(defaultSettings));
+    settings.visibleTools = { ...defaultSettings.visibleTools, ...(settings.visibleTools || {}) };
+
+    let diceSpinner = { ...structuredClone(defaultDiceSpinner), ...loadJSON(STORAGE_KEYS.DICE_SPINNER, {}) };
+    let deckConfig = { ...structuredClone(defaultDeckConfig), ...loadJSON(STORAGE_KEYS.DECK_CONFIG, {}) };
+    let timerConfig = { ...structuredClone(defaultTimerConfig), ...loadJSON(STORAGE_KEYS.TIMER_CONFIG, {}) };
+
+    let rawOverlays = loadJSON(STORAGE_KEYS.OVERLAY_STATE, {});
+    let activeOverlays = (rawOverlays && typeof rawOverlays === "object" && !Array.isArray(rawOverlays)) ? rawOverlays : {};
+    // Remove any invalid/stale overlay keys
+    Object.keys(activeOverlays).forEach(k => {
+      if (!toolMeta[k]) delete activeOverlays[k];
+    });
+    let topZIndex = 10;
+
+    function loadJSON(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEYS.ROSTERS, JSON.stringify(rosters));
+        localStorage.setItem(STORAGE_KEYS.CURRENT_CLASS, currentClass);
+        localStorage.setItem(STORAGE_KEYS.TABS, JSON.stringify(tabs));
+        localStorage.setItem(STORAGE_KEYS.ACTIVE_TAB, String(activeTabIndex));
+        localStorage.setItem(STORAGE_KEYS.SUPPLIES, JSON.stringify(supplies));
+        localStorage.setItem(STORAGE_KEYS.BOOKMARKS, JSON.stringify(bookmarks));
+        localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+        localStorage.setItem(STORAGE_KEYS.DICE_SPINNER, JSON.stringify(diceSpinner));
+        localStorage.setItem(STORAGE_KEYS.DECK_CONFIG, JSON.stringify(deckConfig));
+        localStorage.setItem(STORAGE_KEYS.TIMER_CONFIG, JSON.stringify(timerConfig));
+        localStorage.setItem(STORAGE_KEYS.OVERLAY_STATE, JSON.stringify(activeOverlays));
+      } catch (e) {
+        console.warn("Unable to save to localStorage:", e);
+      }
+    }
+
+    // --- Initialization ---
+    function init() {
+      // Wire up all overlay toggle buttons cleanly via event listeners
+      document.querySelectorAll("[data-overlay-btn]").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const key = btn.getAttribute("data-overlay-btn");
+          if (key) toggleOverlayTool(key);
+        });
+      });
+
+      const clearBtn = document.getElementById("clearOverlaysBtn");
+      if (clearBtn) {
+        clearBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          clearAllOverlays();
+        });
+      }
+
+      const groupSelect = document.getElementById("groupNumber");
+      for (let i = 2; i <= 18; i++) {
+        const opt = document.createElement("option");
+        opt.value = i;
+        opt.textContent = i;
+        groupSelect.appendChild(opt);
+      }
+
+      document.getElementById("diceCountSelect").value = diceSpinner.count;
+      document.getElementById("diceTypeSelect").value = diceSpinner.type;
+      document.getElementById("timerChimeToggle").checked = timerConfig.chimeEnabled;
+      document.getElementById("timerChimeSound").value = timerConfig.chimeSound || "bell";
+
+      mountAllTools();
+
+      applySettings();
+      renderClassDropdowns();
+      renderBookmarks();
+      renderTimerPresets();
+      renderSupplies();
+      renderStage();
+      updateRemainingLabel();
+      drawSpinnerWheel();
+      shuffleDeck(true);
+      startLiveClock();
+    }
+
+    // --- Full Screen (Supports both Native Chrome Fullscreen & Google Sites Sandboxed Iframe) ---
+    function getFullscreenElement() {
+      return document.fullscreenElement ||
+             document.webkitFullscreenElement ||
+             document.mozFullScreenElement ||
+             document.msFullscreenElement ||
+             null;
+    }
+
+    async function toggleFullScreen() {
+      const isNativeFs = Boolean(getFullscreenElement());
+      const isTheaterFs = document.body.classList.contains("theater-fullscreen");
+
+      if (isNativeFs || isTheaterFs) {
+        exitFullScreenMode();
+        return;
+      }
+
+      const target = document.documentElement;
+      const reqFn = target.requestFullscreen ||
+                    target.webkitRequestFullscreen ||
+                    target.mozRequestFullScreen ||
+                    target.msRequestFullscreen;
+
+      if (reqFn && document.fullscreenEnabled !== false) {
+        try {
+          await reqFn.call(target);
+          updateFullScreenButtonState();
+          return;
+        } catch (err) {
+          // Blocked by Google Sites sandboxed iframe -> fall through to Theater Fullscreen
+        }
+      }
+
+      document.body.classList.add("theater-fullscreen");
+      updateFullScreenButtonState();
+    }
+
+    function exitFullScreenMode() {
+      document.body.classList.remove("theater-fullscreen");
+      if (getFullscreenElement()) {
+        const exitFn = document.exitFullscreen ||
+                       document.webkitExitFullscreen ||
+                       document.mozCancelFullScreen ||
+                       document.msExitFullscreen;
+        if (exitFn) {
+          exitFn.call(document).catch(() => {});
+        }
+      }
+      updateFullScreenButtonState();
+    }
+
+    function updateFullScreenButtonState() {
+      const btn = document.getElementById("fullScreenBtn");
+      const active = Boolean(getFullscreenElement()) || document.body.classList.contains("theater-fullscreen");
+      btn.textContent = active ? "✕ Exit Full Screen" : "⛶ Full Screen";
+    }
+
+    document.addEventListener("fullscreenchange", updateFullScreenButtonState);
+    document.addEventListener("webkitfullscreenchange", updateFullScreenButtonState);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && document.body.classList.contains("theater-fullscreen")) {
+        exitFullScreenMode();
+      }
+    });
+
+    // --- Overlay Engine ---
+    function mountAllTools() {
+      const overlayLayer = document.getElementById("stageOverlayLayer");
+      const pool = document.getElementById("toolTemplatesPool");
+
+      // First rescue all tool content elements into the hidden pool so clearing overlayLayer never destroys them
+      Object.keys(toolMeta).forEach(key => {
+        const contentEl = document.getElementById(`content-${key}`);
+        if (contentEl && pool) {
+          pool.appendChild(contentEl);
+        }
+      });
+
+      overlayLayer.innerHTML = "";
+
+      Object.keys(toolMeta).forEach(key => {
+        const contentEl = document.getElementById(`content-${key}`);
+        const slotEl = document.getElementById(`slot-${key}`);
+        const btn = document.querySelector(`[data-overlay-btn="${key}"]`);
+
+        if (!contentEl || !slotEl) return;
+
+        if (activeOverlays[key]) {
+          const pos = activeOverlays[key];
+          if (pos.z && pos.z > topZIndex) topZIndex = pos.z;
+
+          const win = document.createElement("div");
+          win.className = "floating-tool-window";
+          win.id = `overlay-win-${key}`;
+          win.style.left = `${Number(pos.x) || 24}px`;
+          win.style.top = `${Number(pos.y) || 24}px`;
+          win.style.zIndex = pos.z || ++topZIndex;
+
+          win.addEventListener("mousedown", () => bringOverlayToFront(key));
+
+          const header = document.createElement("div");
+          header.className = `floating-tool-header ${toolMeta[key].bg}`;
+
+          const titleSpan = document.createElement("span");
+          titleSpan.textContent = toolMeta[key].label;
+
+          const dockBtn = document.createElement("button");
+          dockBtn.type = "button";
+          dockBtn.className = "floating-close-btn";
+          dockBtn.textContent = "↙ Dock";
+          dockBtn.title = "Return to Sidebar";
+          dockBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dockToolToSidebar(key);
+          });
+
+          header.appendChild(titleSpan);
+          header.appendChild(dockBtn);
+          makeDraggable(win, header, key);
+
+          const body = document.createElement("div");
+          body.className = "floating-tool-body";
+          body.appendChild(contentEl);
+
+          win.appendChild(header);
+          win.appendChild(body);
+          overlayLayer.appendChild(win);
+
+          slotEl.innerHTML = "";
+          const hintDiv = document.createElement("div");
+          hintDiv.className = "tool-hint";
+          hintDiv.style.cssText = "text-align:center; padding:6px 0;";
+          hintDiv.append("Floating over presentation · ");
+
+          const dockLink = document.createElement("a");
+          dockLink.href = "#";
+          dockLink.style.cssText = "color:var(--teal-primary); font-weight:600;";
+          dockLink.textContent = "Dock back";
+          dockLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dockToolToSidebar(key);
+          });
+
+          hintDiv.appendChild(dockLink);
+          slotEl.appendChild(hintDiv);
+
+          if (btn) {
+            btn.textContent = "✓ Overlaid";
+            btn.classList.add("active");
+          }
+        } else {
+          slotEl.innerHTML = "";
+          slotEl.appendChild(contentEl);
+          if (btn) {
+            btn.textContent = "📌 Overlay";
+            btn.classList.remove("active");
+          }
+        }
+      });
+
+      updateOverlayHeaderBadge();
+    }
+
+    function toggleOverlayTool(key) {
+      if (activeOverlays[key]) {
+        dockToolToSidebar(key);
+      } else {
+        popOutToolToOverlay(key);
+      }
+    }
+
+    function popOutToolToOverlay(key) {
+      const existingCount = Object.keys(activeOverlays).length;
+      const offsetX = 24 + (existingCount % 5) * 34;
+      const offsetY = 24 + (existingCount % 5) * 34;
+
+      activeOverlays[key] = {
+        x: offsetX,
+        y: offsetY,
+        z: ++topZIndex
+      };
+      saveState();
+      mountAllTools();
+      if (key === "diceSpinner") {
+        drawSpinnerWheel();
+      }
+    }
+
+    function dockToolToSidebar(key) {
+      delete activeOverlays[key];
+      saveState();
+      mountAllTools();
+      if (key === "diceSpinner") {
+        drawSpinnerWheel();
+      }
+    }
+
+    function clearAllOverlays() {
+      activeOverlays = {};
+      saveState();
+      mountAllTools();
+      drawSpinnerWheel();
+    }
+
+    function bringOverlayToFront(key) {
+      if (!activeOverlays[key]) return;
+      activeOverlays[key].z = ++topZIndex;
+      const win = document.getElementById(`overlay-win-${key}`);
+      if (win) win.style.zIndex = activeOverlays[key].z;
+      saveState();
+    }
+
+    function updateOverlayHeaderBadge() {
+      const count = Object.keys(activeOverlays).length;
+      const btn = document.getElementById("clearOverlaysBtn");
+      const badge = document.getElementById("overlayCountBadge");
+      if (badge) badge.textContent = count;
+      if (btn) btn.style.display = count > 0 ? "inline-flex" : "none";
+    }
+
+    function makeDraggable(winEl, handleEl, key) {
+      let isDragging = false;
+      let startX = 0;
+      let startY = 0;
+      let origLeft = 0;
+      let origTop = 0;
+
+      handleEl.addEventListener("mousedown", (e) => {
+        if (e.target.closest("button")) return;
+        isDragging = true;
+        document.body.classList.add("dragging-overlay");
+        startX = e.clientX;
+        startY = e.clientY;
+        origLeft = winEl.offsetLeft;
+        origTop = winEl.offsetTop;
+        bringOverlayToFront(key);
+
+        const onMouseMove = (moveEvent) => {
+          if (!isDragging) return;
+          const stage = document.getElementById("viewportWrapper");
+          const maxLeft = Math.max(0, stage.clientWidth - winEl.offsetWidth);
+          const maxTop = Math.max(0, stage.clientHeight - 40);
+
+          const nextLeft = Math.min(Math.max(0, origLeft + (moveEvent.clientX - startX)), maxLeft);
+          const nextTop = Math.min(Math.max(0, origTop + (moveEvent.clientY - startY)), maxTop);
+
+          winEl.style.left = `${nextLeft}px`;
+          winEl.style.top = `${nextTop}px`;
+        };
+
+        const onMouseUp = () => {
+          if (!isDragging) return;
+          isDragging = false;
+          document.body.classList.remove("dragging-overlay");
+          document.removeEventListener("mousemove", onMouseMove);
+          document.removeEventListener("mouseup", onMouseUp);
+
+          if (activeOverlays[key]) {
+            activeOverlays[key].x = winEl.offsetLeft;
+            activeOverlays[key].y = winEl.offsetTop;
+            saveState();
+          }
+        };
+
+        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mouseup", onMouseUp);
+      });
+    }
+
+    // --- Timer ---
+    let timerLastSetSeconds = 300;
+    let timerSeconds = 300;
+    let timerInterval = null;
+
+    function renderTimerPresets() {
+      const container = document.getElementById("timerPresetsContainer");
+      if (!timerConfig.presets || timerConfig.presets.length === 0) {
+        container.innerHTML = `<span class="tool-hint">No presets. Click Edit Presets to add.</span>`;
+        return;
+      }
+      container.innerHTML = timerConfig.presets.map(p => `
+        <button type="button" class="preset-chip" onclick="setTimerSeconds(${p.seconds})">${p.label}</button>
+      `).join("");
+    }
+
+    function updateTimerDisplay() {
+      const display = document.getElementById("timerDisplay");
+      const mins = String(Math.floor(timerSeconds / 60)).padStart(2, "0");
+      const secs = String(timerSeconds % 60).padStart(2, "0");
+      display.textContent = `${mins}:${secs}`;
+      if (timerSeconds > 0) {
+        display.classList.remove("finished");
+      }
+    }
+
+    function setTimerSeconds(totalSecs) {
+      pauseTimer();
+      timerLastSetSeconds = Math.max(1, totalSecs);
+      timerSeconds = timerLastSetSeconds;
+      document.getElementById("timerDisplay").classList.remove("finished");
+      updateTimerDisplay();
+    }
+
+    function applyCustomTimer() {
+      const m = parseInt(document.getElementById("customMinInput").value || "0", 10);
+      const s = parseInt(document.getElementById("customSecInput").value || "0", 10);
+      const total = Math.max(0, m * 60 + s);
+      if (total > 0) {
+        setTimerSeconds(total);
+        document.getElementById("customMinInput").value = "";
+        document.getElementById("customSecInput").value = "";
+      }
+    }
+
+    function startTimer() {
+      if (timerInterval) return;
+      if (timerSeconds === 0) {
+        timerSeconds = timerLastSetSeconds;
+        updateTimerDisplay();
+      }
+      document.getElementById("timerDisplay").classList.remove("finished");
+
+      timerInterval = setInterval(() => {
+        if (timerSeconds > 0) {
+          timerSeconds--;
+          updateTimerDisplay();
+          if (timerSeconds === 0) {
+            pauseTimer();
+            document.getElementById("timerDisplay").classList.add("finished");
+            if (timerConfig.chimeEnabled) {
+              playTimerChime();
+            }
+          }
+        } else {
+          pauseTimer();
+        }
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+
+    function resetTimer() {
+      setTimerSeconds(timerLastSetSeconds);
+    }
+
+    function saveTimerPrefs() {
+      timerConfig.chimeEnabled = document.getElementById("timerChimeToggle").checked;
+      timerConfig.chimeSound = document.getElementById("timerChimeSound").value;
+      saveState();
+    }
+
+    function playTimerChime() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const sound = timerConfig.chimeSound || "bell";
+
+        if (sound === "bell") {
+          const notes = [783.99, 659.25];
+          notes.forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.25);
+            gain.gain.setValueAtTime(0.25, ctx.currentTime + i * 0.25);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.25 + 0.9);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(ctx.currentTime + i * 0.25);
+            osc.stop(ctx.currentTime + i * 0.25 + 0.9);
+          });
+        } else if (sound === "xylophone") {
+          const notes = [523.25, 659.25, 783.99, 1046.5];
+          notes.forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = "triangle";
+            osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.14);
+            gain.gain.setValueAtTime(0.25, ctx.currentTime + i * 0.14);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.14 + 0.45);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(ctx.currentTime + i * 0.14);
+            osc.stop(ctx.currentTime + i * 0.14 + 0.45);
+          });
+        } else {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(392.0, ctx.currentTime);
+          gain.gain.setValueAtTime(0.32, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.8);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 1.8);
+        }
+      } catch {}
+    }
+
+    function renderTimerPresetChips() {
+      const container = document.getElementById("timerPresetChips");
+      container.innerHTML = timerConfig.presets.map((p, idx) => {
+        const m = Math.floor(p.seconds / 60);
+        const s = p.seconds % 60;
+        const timeText = s > 0 ? `${m}m ${s}s` : `${m}m`;
+        return `
+          <span class="edit-chip">
+            <strong>${p.label}</strong> (${timeText})
+            <button type="button" onclick="removeTimerPreset(${idx})" title="Remove">✕</button>
+          </span>
+        `;
+      }).join("");
+    }
+
+    function addTimerPreset() {
+      const labelInput = document.getElementById("newPresetLabel");
+      const minInput = document.getElementById("newPresetMins");
+      const secInput = document.getElementById("newPresetSecs");
+
+      const mins = parseInt(minInput.value || "0", 10);
+      const secs = parseInt(secInput.value || "0", 10);
+      const totalSeconds = Math.max(0, mins * 60 + secs);
+      if (totalSeconds <= 0) return;
+
+      const defaultLabel = secs > 0 ? `${mins}:${String(secs).padStart(2, "0")}` : `${mins}m`;
+      const label = labelInput.value.trim() || defaultLabel;
+
+      timerConfig.presets.push({ label, seconds: totalSeconds });
+      labelInput.value = "";
+      minInput.value = "";
+      secInput.value = "";
+      saveState();
+      renderTimerPresets();
+      renderTimerPresetChips();
+    }
+
+    function removeTimerPreset(idx) {
+      timerConfig.presets.splice(idx, 1);
+      saveState();
+      renderTimerPresets();
+      renderTimerPresetChips();
+    }
+
+    function resetTimerPresets() {
+      timerConfig.presets = structuredClone(defaultTimerConfig.presets);
+      saveState();
+      renderTimerPresets();
+      renderTimerPresetChips();
+    }
+
+    // --- Noise Meter ---
+    let noiseStream = null;
+    let noiseAudioCtx = null;
+    let noiseAnalyser = null;
+    let noiseAnimId = null;
+    let noiseThreshold = 65;
+    let lastChimeTime = 0;
+
+    function updateNoiseThreshold(val) {
+      noiseThreshold = parseInt(val, 10);
+      document.getElementById("noiseThresholdLabel").textContent = `${noiseThreshold}%`;
+      document.getElementById("noiseThresholdLine").style.left = `${noiseThreshold}%`;
+    }
+
+    async function toggleNoiseMeter() {
+      const btn = document.getElementById("noiseStartBtn");
+      const statusEl = document.getElementById("noiseStatus");
+      const barFill = document.getElementById("noiseBarFill");
+      const helpBox = document.getElementById("sandboxMicHelp");
+
+      if (noiseStream) {
+        cancelAnimationFrame(noiseAnimId);
+        noiseStream.getTracks().forEach(t => t.stop());
+        if (noiseAudioCtx) noiseAudioCtx.close();
+        noiseStream = null;
+        noiseAudioCtx = null;
+        barFill.style.width = "0%";
+        statusEl.textContent = "Mic Off · Click Start";
+        statusEl.classList.remove("loud");
+        btn.textContent = "Start Mic";
+        btn.classList.add("btn-primary");
+        return;
+      }
+
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        statusEl.textContent = "Mic unavailable in this frame";
+        statusEl.classList.add("loud");
+        helpBox.classList.add("visible");
+        return;
+      }
+
+      try {
+        noiseStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        helpBox.classList.remove("visible");
+        noiseAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const source = noiseAudioCtx.createMediaStreamSource(noiseStream);
+        noiseAnalyser = noiseAudioCtx.createAnalyser();
+        noiseAnalyser.fftSize = 256;
+        source.connect(noiseAnalyser);
+
+        const dataArray = new Uint8Array(noiseAnalyser.frequencyBinCount);
+        btn.textContent = "Stop Mic";
+        btn.classList.remove("btn-primary");
+
+        const tick = () => {
+          noiseAnalyser.getByteFrequencyData(dataArray);
+          let sum = 0;
+          for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
+          const avg = sum / dataArray.length;
+          const level = Math.min(100, Math.round((avg / 110) * 100));
+
+          barFill.style.width = `${level}%`;
+          if (level > noiseThreshold) {
+            statusEl.textContent = `⚠️ Too Loud! (${level}%)`;
+            statusEl.classList.add("loud");
+            if (document.getElementById("noiseChimeCheck").checked && Date.now() - lastChimeTime > 4000) {
+              lastChimeTime = Date.now();
+              playGentleChime();
+            }
+          } else {
+            statusEl.textContent = `✅ Good Volume (${level}%)`;
+            statusEl.classList.remove("loud");
+          }
+          noiseAnimId = requestAnimationFrame(tick);
+        };
+        tick();
+      } catch (err) {
+        const isInIframe = window.self !== window.top;
+        statusEl.textContent = isInIframe
+          ? "Blocked by Google Sites iframe"
+          : "Mic blocked · Check browser lock icon";
+        statusEl.classList.add("loud");
+        helpBox.classList.add("visible");
+      }
+    }
+
+    function openStandaloneMicPopup() {
+      const popup = window.open("", "ClassroomNoiseMeter", "width=340,height=280,resizable=yes");
+      if (!popup) {
+        alert("Pop-up blocked! Allow pop-ups for this site or open your Home Base page directly in a new tab.");
+        return;
+      }
+      popup.document.write(`<!DOCTYPE html>
+<html>
+<head>
+  <title>Classroom Noise Meter</title>
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 18px; background: #f8fafc; color: #1e293b; display: flex; flex-direction: column; gap: 12px; }
+    h2 { font-size: 1.05rem; margin: 0; }
+    .bar-wrap { height: 26px; background: #e2e8f0; border-radius: 999px; overflow: hidden; position: relative; border: 1px solid #cbd5e1; }
+    .bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #22c55e 0%, #eab308 65%, #ef4444 90%); transition: width 0.08s linear; }
+    .line { position: absolute; top: 0; bottom: 0; width: 3px; background: #0f172a; left: ${noiseThreshold}%; }
+    .status { text-align: center; font-weight: 700; padding: 8px; border-radius: 8px; background: #e2e8f0; }
+    .status.loud { background: #fee2e2; color: #b91c1c; }
+    button { padding: 9px 14px; border-radius: 8px; border: none; background: #5e8b89; color: #fff; font-weight: 600; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h2>🎙️ Classroom Noise Meter</h2>
+  <div class="bar-wrap"><div class="bar-fill" id="fill"></div><div class="line" id="line"></div></div>
+  <div class="status" id="status">Requesting microphone...</div>
+  <label style="font-size:0.82rem;">Threshold: <span id="lbl">${noiseThreshold}%</span>
+    <input type="range" min="15" max="95" value="${noiseThreshold}" style="width:100%;" oninput="thresh=Number(this.value);document.getElementById('lbl').textContent=thresh+'%';document.getElementById('line').style.left=thresh+'%';">
+  </label>
+  <script>
+    let thresh = ${noiseThreshold}, lastChime = 0;
+    function chime() {
+      const c = new (window.AudioContext || window.webkitAudioContext)();
+      const o = c.createOscillator(), g = c.createGain();
+      o.frequency.setValueAtTime(523.25, c.currentTime);
+      g.gain.setValueAtTime(0.2, c.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.5);
+      o.connect(g); g.connect(c.destination); o.start(); o.stop(c.currentTime + 0.5);
+    }
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const src = ctx.createMediaStreamSource(stream);
+      const an = ctx.createAnalyser(); an.fftSize = 256; src.connect(an);
+      const data = new Uint8Array(an.frequencyBinCount);
+      const loop = () => {
+        an.getByteFrequencyData(data);
+        const avg = data.reduce((a, b) => a + b, 0) / data.length;
+        const lvl = Math.min(100, Math.round((avg / 110) * 100));
+        document.getElementById('fill').style.width = lvl + '%';
+        const st = document.getElementById('status');
+        if (lvl > thresh) {
+          st.textContent = '⚠️ Too Loud! (' + lvl + '%)'; st.classList.add('loud');
+          if (Date.now() - lastChime > 4000) { lastChime = Date.now(); chime(); }
+        } else {
+          st.textContent = '✅ Good Volume (' + lvl + '%)'; st.classList.remove('loud');
+        }
+        requestAnimationFrame(loop);
+      };
+      loop();
+    }).catch(() => {
+      const st = document.getElementById('status');
+      st.textContent = '❌ Microphone permission blocked in browser settings.';
+      st.classList.add('loud');
+    });
+  <\/script>
+</body>
+</html>`);
+      popup.document.close();
+    }
+
+    function playGentleChime() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(659.25, ctx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.18, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.5);
+      } catch {}
+    }
+
+    // --- Dice & Spinner ---
+    function switchDiceTab(viewId, btn) {
+      document.querySelectorAll("#diceView, #spinnerView").forEach(v => v.style.display = "none");
+      document.querySelectorAll(".sub-tab").forEach(b => b.classList.remove("active"));
+      document.getElementById(viewId).style.display = "flex";
+      btn.classList.add("active");
+      if (viewId === "spinnerView") drawSpinnerWheel();
+    }
+
+    function saveDicePrefs() {
+      diceSpinner.count = parseInt(document.getElementById("diceCountSelect").value, 10);
+      diceSpinner.type = document.getElementById("diceTypeSelect").value;
+      saveState();
+    }
+
+    function getDieFaces() {
+      const type = diceSpinner.type;
+      if (type === "custom") {
+        return diceSpinner.customFaces.length > 0 ? diceSpinner.customFaces : ["1", "2", "3", "4", "5", "6"];
+      }
+      const sidesMap = { d4: 4, d6: 6, d8: 8, d10: 10, d12: 12, d20: 20 };
+      const max = sidesMap[type] || 6;
+      return Array.from({ length: max }, (_, i) => String(i + 1));
+    }
+
+    function rollDice() {
+      const count = diceSpinner.count;
+      const faces = getDieFaces();
+      const tray = document.getElementById("diceTray");
+      const totalLabel = document.getElementById("diceTotalLabel");
+
+      const results = [];
+      for (let i = 0; i < count; i++) {
+        results.push(faces[Math.floor(Math.random() * faces.length)]);
+      }
+
+      tray.innerHTML = results.map(val => `<div class="die-face rolling">${val}</div>`).join("");
+      setTimeout(() => {
+        tray.querySelectorAll(".die-face").forEach(el => el.classList.remove("rolling"));
+      }, 150);
+
+      const allNumeric = results.every(r => !isNaN(Number(r)));
+      if (allNumeric && results.length > 1) {
+        const sum = results.reduce((acc, v) => acc + Number(v), 0);
+        totalLabel.textContent = `Total: ${sum}`;
+      } else {
+        totalLabel.textContent = `Rolled ${count} ${diceSpinner.type === "custom" ? "custom" : diceSpinner.type.toUpperCase()}`;
+      }
+    }
+
+    function resetCustomDice() {
+      document.getElementById("customDiceTextarea").value = "1\n2\n3\n4\n5\n6";
+    }
+
+    function saveCustomDice() {
+      const lines = document.getElementById("customDiceTextarea").value
+        .split("\n")
+        .map(s => s.trim())
+        .filter(Boolean);
+      if (lines.length > 0) {
+        diceSpinner.customFaces = lines;
+        diceSpinner.type = "custom";
+        document.getElementById("diceTypeSelect").value = "custom";
+        saveState();
+      }
+      closeModal("editDiceModal");
+    }
+
+    // Spinner Wheel
+    let spinnerAngle = 0;
+    let isSpinning = false;
+    const wheelColors = ["#93c5fd", "#f9a8d4", "#86efac", "#fdba74", "#fde047", "#c4b5fd", "#67e8f9", "#fca5a5"];
+
+    function drawSpinnerWheel() {
+      const canvas = document.getElementById("spinnerCanvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const slices = diceSpinner.spinnerSlices.length > 0 ? diceSpinner.spinnerSlices : ["1", "2"];
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+      const radius = cx - 4;
+      const arc = (2 * Math.PI) / slices.length;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      slices.forEach((label, i) => {
+        const start = spinnerAngle + i * arc;
+        const end = start + arc;
+
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, radius, start, end);
+        ctx.closePath();
+        ctx.fillStyle = wheelColors[i % wheelColors.length];
+        ctx.fill();
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(start + arc / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#1e293b";
+        ctx.font = "bold 11px sans-serif";
+        const displayLabel = label.length > 12 ? label.slice(0, 11) + "…" : label;
+        ctx.fillText(displayLabel, radius - 10, 4);
+        ctx.restore();
+      });
+    }
+
+    function spinWheel() {
+      if (isSpinning) return;
+      const slices = diceSpinner.spinnerSlices;
+      if (slices.length === 0) return;
+
+      isSpinning = true;
+      document.getElementById("spinnerResult").textContent = "Spinning...";
+      const extraSpins = (4 + Math.random() * 4) * 2 * Math.PI;
+      const startAngle = spinnerAngle;
+      const targetAngle = startAngle + extraSpins;
+      const duration = 2200;
+      const startTime = performance.now();
+
+      const animate = (now) => {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        spinnerAngle = startAngle + (targetAngle - startAngle) * easeOut;
+        drawSpinnerWheel();
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          isSpinning = false;
+          const normalized = ((1.5 * Math.PI - (spinnerAngle % (2 * Math.PI))) + 2 * Math.PI) % (2 * Math.PI);
+          const sliceIndex = Math.floor(normalized / ((2 * Math.PI) / slices.length)) % slices.length;
+          document.getElementById("spinnerResult").innerHTML = `🎉 <strong>${slices[sliceIndex]}</strong>`;
+        }
+      };
+      requestAnimationFrame(animate);
+    }
+
+    function loadRosterIntoSpinner() {
+      document.getElementById("spinnerSlicesTextarea").value = rosters[currentClass].join("\n");
+    }
+
+    function saveSpinnerSlices() {
+      const lines = document.getElementById("spinnerSlicesTextarea").value
+        .split("\n")
+        .map(s => s.trim())
+        .filter(Boolean);
+      if (lines.length > 0) {
+        diceSpinner.spinnerSlices = lines;
+        saveState();
+        drawSpinnerWheel();
+      }
+      closeModal("editSpinnerModal");
+    }
+
+    // --- Deck of Cards ---
+    let activeDeck = [];
+
+    function buildDeck() {
+      const cards = [];
+      if (deckConfig.mode === "custom") {
+        const items = deckConfig.customCards.length > 0 ? deckConfig.customCards : ["Card 1"];
+        items.forEach(text => cards.push({ type: "custom", text }));
+        return cards;
+      }
+
+      const suitDefs = [
+        { key: "spades", symbol: "♠", color: "black" },
+        { key: "hearts", symbol: "♥", color: "red" },
+        { key: "diamonds", symbol: "♦", color: "red" },
+        { key: "clubs", symbol: "♣", color: "black" }
+      ];
+
+      const ranks = [];
+      if (deckConfig.ranks.ace) ranks.push("A");
+      if (deckConfig.ranks.numbers) ranks.push("2", "3", "4", "5", "6", "7", "8", "9", "10");
+      if (deckConfig.ranks.face) ranks.push("J", "Q", "K");
+
+      suitDefs.forEach(s => {
+        if (deckConfig.suits[s.key]) {
+          ranks.forEach(r => {
+            cards.push({ type: "standard", rank: r, suit: s.symbol, color: s.color });
+          });
+        }
+      });
+
+      if (deckConfig.ranks.jokers) {
+        cards.push({ type: "standard", rank: "JOKER", suit: "🃏", color: "red" });
+        cards.push({ type: "standard", rank: "JOKER", suit: "🃏", color: "black" });
+      }
+
+      if (cards.length === 0) {
+        cards.push({ type: "standard", rank: "A", suit: "♠", color: "black" });
+      }
+      return cards;
+    }
+
+    function shuffleDeck(silent = false) {
+      activeDeck = buildDeck();
+      for (let i = activeDeck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]];
+      }
+      document.getElementById("deckStatusLabel").textContent = `${activeDeck.length} cards remaining`;
+      if (!silent) {
+        document.getElementById("cardStage").innerHTML = `<div class="result-box" style="min-height:126px;">Deck shuffled! Click Draw Card</div>`;
+      }
+    }
+
+    function drawCard() {
+      if (activeDeck.length === 0) {
+        document.getElementById("cardStage").innerHTML = `<div class="result-box" style="min-height:126px;">Deck empty! Click Shuffle</div>`;
+        document.getElementById("deckStatusLabel").textContent = "0 cards remaining";
+        return;
+      }
+
+      const card = activeDeck.pop();
+      const stage = document.getElementById("cardStage");
+
+      if (card.type === "custom") {
+        stage.innerHTML = `<div class="playing-card custom-card">${card.text}</div>`;
+      } else {
+        stage.innerHTML = `
+          <div class="playing-card ${card.color}">
+            <div class="card-corner">${card.rank}<br>${card.suit}</div>
+            <div class="card-center">${card.suit}</div>
+            <div class="card-corner bottom">${card.rank}<br>${card.suit}</div>
+          </div>
+        `;
+      }
+      document.getElementById("deckStatusLabel").textContent = `${activeDeck.length} cards remaining`;
+    }
+
+    function toggleDeckModeUI() {
+      const mode = document.getElementById("deckModeSelect").value;
+      document.getElementById("standardDeckOptions").style.display = mode === "standard" ? "flex" : "none";
+      document.getElementById("customDeckOptions").style.display = mode === "custom" ? "flex" : "none";
+    }
+
+    function saveDeckConfig() {
+      const mode = document.getElementById("deckModeSelect").value;
+      deckConfig.mode = mode;
+
+      if (mode === "standard") {
+        deckConfig.suits = {
+          spades: document.getElementById("suitSpades").checked,
+          hearts: document.getElementById("suitHearts").checked,
+          diamonds: document.getElementById("suitDiamonds").checked,
+          clubs: document.getElementById("suitClubs").checked
+        };
+        deckConfig.ranks = {
+          ace: document.getElementById("rankAce").checked,
+          numbers: document.getElementById("rankNumbers").checked,
+          face: document.getElementById("rankFace").checked,
+          jokers: document.getElementById("rankJokers").checked
+        };
+      } else {
+        const lines = document.getElementById("customDeckTextarea").value
+          .split("\n")
+          .map(s => s.trim())
+          .filter(Boolean);
+        if (lines.length > 0) {
+          deckConfig.customCards = lines;
+        }
+      }
+
+      saveState();
+      shuffleDeck();
+      closeModal("editDeckModal");
+    }
+
+    // --- Settings Application & Controls ---
+    function applySettings() {
+      document.getElementById("headerTitle").textContent = settings.title || defaultSettings.title;
+      document.getElementById("headerSubtitle").textContent = settings.subtitle || defaultSettings.subtitle;
+
+      const theme = themes[settings.theme] || themes.pastel;
+      document.documentElement.style.setProperty("--teal-primary", theme.primary);
+      document.documentElement.style.setProperty("--teal-hover", theme.hover);
+      document.documentElement.style.setProperty("--stripe-gradient", theme.stripe);
+
+      document.querySelectorAll(".tool-card[data-tool]").forEach(card => {
+        const key = card.getAttribute("data-tool");
+        const isHidden = settings.visibleTools[key] === false;
+        card.classList.toggle("hidden-tool", isHidden);
+        if (isHidden && activeOverlays[key]) {
+          dockToolToSidebar(key);
+        }
+      });
+    }
+
+    function switchSettingsTab(panelId, btn) {
+      document.querySelectorAll(".settings-tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".settings-panel").forEach(p => p.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById(panelId).classList.add("active");
+      document.getElementById("settingsStatus").className = "status-msg";
+    }
+
+    function renderSettingsUI() {
+      renderClassDropdowns();
+      document.getElementById("settingsClassSelect").value = currentClass;
+      loadSettingsRoster();
+
+      const grid = document.getElementById("toolTogglesGrid");
+      grid.innerHTML = Object.entries(toolMeta).map(([key, meta]) => `
+        <label class="toggle-card">
+          <input type="checkbox" ${settings.visibleTools[key] !== false ? "checked" : ""} onchange="toggleToolVisibility('${key}', this.checked)">
+          <span>${meta.label}</span>
+        </label>
+      `).join("");
+
+      renderSettingsSupplyChips();
+
+      document.getElementById("settingHeaderTitle").value = settings.title;
+      document.getElementById("settingHeaderSubtitle").value = settings.subtitle;
+      document.getElementById("settingTheme").value = settings.theme;
+    }
+
+    function toggleToolVisibility(key, isVisible) {
+      settings.visibleTools[key] = isVisible;
+      saveState();
+      applySettings();
+    }
+
+    function renderSettingsSupplyChips() {
+      const container = document.getElementById("settingsSuppliesChips");
+      container.innerHTML = supplies.map((item, idx) => `
+        <span class="edit-chip">
+          ${item.label}
+          <button type="button" onclick="removeSupplyItem(${idx})" title="Remove">✕</button>
+        </span>
+      `).join("");
+    }
+
+    function addSupplyItem() {
+      const input = document.getElementById("newSupplyInput");
+      const val = input.value.trim();
+      if (!val) return;
+      supplies.push({ label: val, checked: false });
+      input.value = "";
+      saveState();
+      renderSupplies();
+      renderSettingsSupplyChips();
+    }
+
+    function removeSupplyItem(idx) {
+      supplies.splice(idx, 1);
+      saveState();
+      renderSupplies();
+      renderSettingsSupplyChips();
+    }
+
+    function saveAppearance() {
+      settings.title = document.getElementById("settingHeaderTitle").value.trim() || defaultSettings.title;
+      settings.subtitle = document.getElementById("settingHeaderSubtitle").value.trim() || defaultSettings.subtitle;
+      settings.theme = document.getElementById("settingTheme").value;
+      saveState();
+      applySettings();
+    }
+
+    function showSettingsStatus(message, type) {
+      const el = document.getElementById("settingsStatus");
+      el.textContent = message;
+      el.className = `status-msg ${type}`;
+    }
+
+    // --- Class Blocks & Roster Management ---
+    function renderClassDropdowns() {
+      const names = Object.keys(rosters);
+      const mainSel = document.getElementById("classSelector");
+      const setSel = document.getElementById("settingsClassSelect");
+
+      const optionsHTML = names.map(name => `<option value="${name.replace(/"/g, '&quot;')}">${name}</option>`).join("");
+      mainSel.innerHTML = optionsHTML;
+      setSel.innerHTML = optionsHTML;
+
+      mainSel.value = currentClass;
+      setSel.value = currentClass;
+      document.getElementById("deleteClassBtn").disabled = names.length <= 1;
+    }
+
+    function loadSettingsRoster() {
+      const selected = document.getElementById("settingsClassSelect").value;
+      document.getElementById("rosterTextarea").value = (rosters[selected] || []).join("\n");
+    }
+
+    function addClassBlock() {
+      const input = document.getElementById("newClassNameInput");
+      const name = input.value.trim();
+      if (!name) return;
+      if (rosters[name]) {
+        showSettingsStatus("A class with that name already exists.", "error");
+        return;
+      }
+      rosters[name] = ["Student 1", "Student 2", "Student 3", "Student 4"];
+      currentClass = name;
+      input.value = "";
+      saveState();
+      renderClassDropdowns();
+      loadSettingsRoster();
+      resetPicked();
+      showSettingsStatus(`Added "${name}"! Enter your student names below and click Save.`, "success");
+    }
+
+    function deleteClassBlock() {
+      const names = Object.keys(rosters);
+      if (names.length <= 1) return;
+      const target = document.getElementById("settingsClassSelect").value;
+      delete rosters[target];
+      currentClass = Object.keys(rosters)[0];
+      saveState();
+      renderClassDropdowns();
+      loadSettingsRoster();
+      resetPicked();
+      showSettingsStatus(`Deleted "${target}".`, "success");
+    }
+
+    function saveRoster() {
+      const targetClass = document.getElementById("settingsClassSelect").value;
+      const lines = document.getElementById("rosterTextarea").value
+        .split("\n")
+        .map(s => s.trim())
+        .filter(Boolean);
+      if (lines.length > 0) {
+        rosters[targetClass] = lines;
+        currentClass = targetClass;
+        saveState();
+        renderClassDropdowns();
+        resetPicked();
+        showSettingsStatus(`Saved ${lines.length} students to "${targetClass}".`, "success");
+      } else {
+        showSettingsStatus("Please enter at least one student name.", "error");
+      }
+    }
+
+    function switchClass() {
+      currentClass = document.getElementById("classSelector").value;
+      saveState();
+      resetPicked();
+      document.getElementById("groupsOutput").innerHTML = "";
+    }
+
+    // --- Bookmarks ---
+    function renderBookmarks() {
+      const list = document.getElementById("bookmarkList");
+      if (bookmarks.length === 0) {
+        list.innerHTML = `<div class="tool-hint">No bookmarks yet. Add one below!</div>`;
+        return;
+      }
+
+      list.innerHTML = bookmarks.map((bm, idx) => `
+        <div class="bookmark-row">
+          <a href="${bm.url}" target="_blank" rel="noopener noreferrer" class="btn bookmark-link" title="${bm.url}">
+            <span>${bm.title}</span>
+            <span>↗</span>
+          </a>
+          <button type="button" class="bookmark-del" onclick="removeBookmark(${idx})" title="Remove bookmark">✕</button>
+        </div>
+      `).join("");
+    }
+
+    function addBookmark() {
+      const titleInput = document.getElementById("newBookmarkTitle");
+      const urlInput = document.getElementById("newBookmarkUrl");
+      const title = titleInput.value.trim();
+      let url = urlInput.value.trim();
+
+      if (!title || !url) return;
+      if (!/^https?:\/\//i.test(url)) {
+        url = "https://" + url;
+      }
+
+      bookmarks.push({ title, url });
+      titleInput.value = "";
+      urlInput.value = "";
+      saveState();
+      renderBookmarks();
+    }
+
+    function removeBookmark(idx) {
+      bookmarks.splice(idx, 1);
+      saveState();
+      renderBookmarks();
+    }
+
+    // --- Backup, Restore & Reset ---
+    function exportBackup() {
+      const backupData = {
+        app: "Classroom Home Base",
+        version: 8,
+        exportedAt: new Date().toISOString(),
+        data: {
+          rosters,
+          currentClass,
+          tabs,
+          activeTabIndex,
+          supplies,
+          bookmarks,
+          settings,
+          diceSpinner,
+          deckConfig,
+          timerConfig,
+          activeOverlays
+        }
+      };
+
+      const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const dateStamp = new Date().toISOString().slice(0, 10);
+      a.href = url;
+      a.download = `classroom-home-base-backup-${dateStamp}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      showSettingsStatus("Backup file downloaded successfully!", "success");
+    }
+
+    function importBackup(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          const payload = parsed.data || parsed;
+
+          if (!payload || typeof payload !== "object" || !Array.isArray(payload.tabs) || typeof payload.rosters !== "object") {
+            throw new Error("Invalid backup file format.");
+          }
+
+          rosters = payload.rosters;
+          currentClass = payload.currentClass && rosters[payload.currentClass]
+            ? payload.currentClass
+            : Object.keys(rosters)[0];
+          tabs = payload.tabs;
+          activeTabIndex = typeof payload.activeTabIndex === "number" ? payload.activeTabIndex : (tabs.length > 0 ? 0 : -1);
+          if (activeTabIndex >= tabs.length) activeTabIndex = tabs.length - 1;
+          supplies = Array.isArray(payload.supplies) ? payload.supplies : structuredClone(defaultSupplies);
+          bookmarks = Array.isArray(payload.bookmarks) ? payload.bookmarks : [];
+          if (payload.settings) {
+            settings = {
+              ...structuredClone(defaultSettings),
+              ...payload.settings,
+              visibleTools: { ...defaultSettings.visibleTools, ...(payload.settings.visibleTools || {}) }
+            };
+          }
+          if (payload.diceSpinner) {
+            diceSpinner = { ...structuredClone(defaultDiceSpinner), ...payload.diceSpinner };
+          }
+          if (payload.deckConfig) {
+            deckConfig = { ...structuredClone(defaultDeckConfig), ...payload.deckConfig };
+          }
+          if (payload.timerConfig) {
+            timerConfig = { ...structuredClone(defaultTimerConfig), ...payload.timerConfig };
+          }
+          activeOverlays = payload.activeOverlays && typeof payload.activeOverlays === "object"
+            ? payload.activeOverlays
+            : {};
+
+          saveState();
+          document.getElementById("diceCountSelect").value = diceSpinner.count;
+          document.getElementById("diceTypeSelect").value = diceSpinner.type;
+          document.getElementById("timerChimeToggle").checked = timerConfig.chimeEnabled;
+          document.getElementById("timerChimeSound").value = timerConfig.chimeSound || "bell";
+          mountAllTools();
+          applySettings();
+          renderSettingsUI();
+          resetPicked();
+          document.getElementById("groupsOutput").innerHTML = "";
+          renderBookmarks();
+          renderTimerPresets();
+          renderSupplies();
+          renderStage();
+          drawSpinnerWheel();
+          shuffleDeck();
+
+          showSettingsStatus("Setup restored successfully!", "success");
+        } catch (err) {
+          showSettingsStatus("Could not restore file: make sure it is a valid Classroom Home Base JSON backup.", "error");
+        } finally {
+          event.target.value = "";
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function resetAllData() {
+      if (!confirm("Reset all presentations, bookmarks, timer presets, custom dice/cards, overlays, rosters, and settings back to defaults?")) return;
+      Object.values(STORAGE_KEYS).forEach(k => localStorage.removeItem(k));
+      rosters = structuredClone(defaultRosters);
+      currentClass = "My Class";
+      tabs = [];
+      activeTabIndex = -1;
+      supplies = structuredClone(defaultSupplies);
+      bookmarks = [];
+      settings = structuredClone(defaultSettings);
+      diceSpinner = structuredClone(defaultDiceSpinner);
+      deckConfig = structuredClone(defaultDeckConfig);
+      timerConfig = structuredClone(defaultTimerConfig);
+      activeOverlays = {};
+
+      saveState();
+      document.getElementById("diceCountSelect").value = diceSpinner.count;
+      document.getElementById("diceTypeSelect").value = diceSpinner.type;
+      document.getElementById("timerChimeToggle").checked = timerConfig.chimeEnabled;
+      document.getElementById("timerChimeSound").value = timerConfig.chimeSound;
+      mountAllTools();
+      applySettings();
+      renderSettingsUI();
+      resetPicked();
+      document.getElementById("groupsOutput").innerHTML = "";
+      renderBookmarks();
+      renderTimerPresets();
+      renderSupplies();
+      renderStage();
+      drawSpinnerWheel();
+      shuffleDeck();
+      showSettingsStatus("All data has been reset to defaults.", "success");
+    }
+
+    // --- Sidebar & Accordions ---
+    function toggleSidebar() {
+      const sb = document.getElementById("sidebar");
+      const btn = document.getElementById("toggleToolsBtn");
+      sb.classList.toggle("collapsed");
+      btn.textContent = sb.classList.contains("collapsed") ? "› Show Sidebar" : "‹ Hide Sidebar";
+    }
+
+    function toggleTool(headerEl) {
+      headerEl.parentElement.classList.toggle("open");
+    }
+
+    // --- Supplies Checklist ---
+    function renderSupplies() {
+      const list = document.getElementById("suppliesList");
+      if (supplies.length === 0) {
+        list.innerHTML = `<div class="tool-hint">No supply items configured. Add items in Settings.</div>`;
+        return;
+      }
+      list.innerHTML = supplies.map((item, idx) => `
+        <label class="supply-item">
+          <input type="checkbox" ${item.checked ? "checked" : ""} onchange="toggleSupply(${idx}, this.checked)">
+          ${item.label}
+        </label>
+      `).join("");
+    }
+
+    function toggleSupply(idx, checked) {
+      supplies[idx].checked = checked;
+      saveState();
+    }
+
+    // --- Random Name Picker ---
+    function pickRandomStudent() {
+      if (availableStudents.length === 0) {
+        document.getElementById("randomNameResult").textContent = "Everyone has been picked! Click Reset.";
+        return;
+      }
+      const idx = Math.floor(Math.random() * availableStudents.length);
+      const chosen = availableStudents.splice(idx, 1)[0];
+      document.getElementById("randomNameResult").innerHTML = `<span style="font-size:1.2rem; color:#0f172a;">🎉 ${chosen}</span>`;
+      updateRemainingLabel();
+    }
+
+    function resetPicked() {
+      availableStudents = [...rosters[currentClass]];
+      document.getElementById("randomNameResult").textContent = "Click pick to choose a student";
+      updateRemainingLabel();
+    }
+
+    function updateRemainingLabel() {
+      document.getElementById("remainingCount").textContent =
+        `${availableStudents.length} of ${rosters[currentClass].length} students remaining`;
+    }
+
+    // --- Groups & Partners ---
+    function generateGroups() {
+      const mode = document.getElementById("groupMode").value;
+      const num = parseInt(document.getElementById("groupNumber").value, 10);
+      const students = [...rosters[currentClass]];
+
+      for (let i = students.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [students[i], students[j]] = [students[j], students[i]];
+      }
+
+      const groups = [];
+      if (mode === "size") {
+        for (let i = 0; i < students.length; i += num) {
+          groups.push(students.slice(i, i + num));
+        }
+      } else {
+        for (let i = 0; i < num; i++) groups.push([]);
+        students.forEach((student, idx) => {
+          groups[idx % num].push(student);
+        });
+      }
+
+      const out = document.getElementById("groupsOutput");
+      out.innerHTML = groups
+        .filter(g => g.length > 0)
+        .map((g, idx) => `<div class="group-item"><strong>Group ${idx + 1}:</strong> ${g.join(", ")}</div>`)
+        .join("");
+    }
+
+    // --- Quick Message Overlay ---
+    function showMemo() {
+      const text = document.getElementById("memoInput").value.trim();
+      if (!text) return;
+      document.getElementById("memoText").textContent = text;
+      document.getElementById("memoOverlay").classList.add("visible");
+    }
+
+    function clearMemo() {
+      document.getElementById("memoInput").value = "";
+      document.getElementById("memoOverlay").classList.remove("visible");
+    }
+
+    // --- Voice Level ---
+    function selectVoice(btn) {
+      document.querySelectorAll(".voice-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    }
+
+    // --- Live Clock ---
+    function startLiveClock() {
+      const update = () => {
+        document.getElementById("liveClock").textContent = new Date().toLocaleTimeString();
+      };
+      update();
+      setInterval(update, 1000);
+    }
+
+    // --- Stage Tabs, Manage Modal & Iframe ---
+    function normalizeEmbedUrl(rawUrl) {
+      let url = rawUrl.trim();
+      if (!url) return "";
+      if (!/^https?:\/\//i.test(url)) {
+        url = "https://" + url;
+      }
+      if (url.includes("docs.google.com/presentation") && url.includes("/edit")) {
+        const hashIndex = url.indexOf("#");
+        const hashPart = hashIndex !== -1 ? url.slice(hashIndex) : "";
+        const basePart = hashIndex !== -1 ? url.slice(0, hashIndex) : url;
+        url = basePart.replace(/\/edit.*$/, "/embed?start=false&loop=false&delayms=3000") + hashPart;
+      }
+      return url;
+    }
+
+    function renderStage() {
+      const container = document.getElementById("tabContainer");
+      const frame = document.getElementById("stageFrame");
+      const empty = document.getElementById("emptyStage");
+
+      container.innerHTML = tabs.map((tab, idx) => `
+        <button
+          type="button"
+          class="tab-pill ${idx === activeTabIndex ? 'active' : ''}"
+          style="background-color: ${tab.color};"
+          onclick="selectTab(${idx})"
+        >${tab.title}</button>
+      `).join("");
+
+      if (tabs.length === 0 || activeTabIndex < 0 || !tabs[activeTabIndex]) {
+        frame.style.display = "none";
+        frame.src = "";
+        empty.style.display = "flex";
+      } else {
+        empty.style.display = "none";
+        frame.style.display = "block";
+        if (frame.src !== tabs[activeTabIndex].url) {
+          frame.src = tabs[activeTabIndex].url;
+        }
+      }
+    }
+
+    function selectTab(idx) {
+      activeTabIndex = idx;
+      saveState();
+      renderStage();
+    }
+
+    function addNewTab() {
+      const title = document.getElementById("newTabTitle").value.trim() || "New Slide Deck";
+      const url = normalizeEmbedUrl(document.getElementById("newTabUrl").value);
+      const color = document.getElementById("newTabColor").value;
+
+      if (!url) return;
+
+      tabs.push({ title, url, color });
+      document.getElementById("newTabTitle").value = "";
+      document.getElementById("newTabUrl").value = "";
+      closeModal("addTabModal");
+      selectTab(tabs.length - 1);
+    }
+
+    const tabColorOptions = [
+      { value: "#fef3c7", label: "Yellow" },
+      { value: "#ffedd5", label: "Peach" },
+      { value: "#dcfce7", label: "Mint" },
+      { value: "#e0f2fe", label: "Sky" },
+      { value: "#fce7f3", label: "Pink" }
+    ];
+
+    function renderManageList() {
+      const list = document.getElementById("manageList");
+      if (tabs.length === 0) {
+        list.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted); text-align:center; padding:16px 0;">No presentations added yet.</p>`;
+        return;
+      }
+
+      list.innerHTML = tabs.map((tab, idx) => `
+        <div class="manage-row">
+          <div class="manage-row-top">
+            <span class="manage-swatch" style="background:${tab.color};"></span>
+            <input type="text" value="${tab.title.replace(/"/g, '&quot;')}" onchange="renameTab(${idx}, this.value)" placeholder="Tab Title" />
+            <select class="manage-color-select" onchange="recolorTab(${idx}, this.value)" title="Tab Color">
+              ${tabColorOptions.map(opt => `<option value="${opt.value}" ${tab.color === opt.value ? "selected" : ""}>${opt.label}</option>`).join("")}
+            </select>
+            <div class="manage-actions">
+              <button type="button" class="icon-btn" onclick="moveTab(${idx}, -1)" ${idx === 0 ? "disabled" : ""} title="Move Left">↑</button>
+              <button type="button" class="icon-btn" onclick="moveTab(${idx}, 1)" ${idx === tabs.length - 1 ? "disabled" : ""} title="Move Right">↓</button>
+              <button type="button" class="icon-btn btn-danger" onclick="deleteTab(${idx})" title="Remove">✕</button>
+            </div>
+          </div>
+          <div class="manage-url-row">
+            <span>🔗 URL</span>
+            <input type="text" value="${tab.url.replace(/"/g, '&quot;')}" onchange="updateTabUrl(${idx}, this.value)" placeholder="https://docs.google.com/presentation/d/..." />
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renameTab(idx, newTitle) {
+      const trimmed = newTitle.trim();
+      if (trimmed) {
+        tabs[idx].title = trimmed;
+        saveState();
+        renderStage();
+      }
+    }
+
+    function recolorTab(idx, newColor) {
+      tabs[idx].color = newColor;
+      saveState();
+      renderManageList();
+      renderStage();
+    }
+
+    function updateTabUrl(idx, rawUrl) {
+      const normalized = normalizeEmbedUrl(rawUrl);
+      if (!normalized) {
+        renderManageList();
+        return;
+      }
+      tabs[idx].url = normalized;
+      saveState();
+      renderManageList();
+      renderStage();
+    }
+
+    function moveTab(idx, dir) {
+      const target = idx + dir;
+      if (target < 0 || target >= tabs.length) return;
+      const activeTab = tabs[activeTabIndex];
+      [tabs[idx], tabs[target]] = [tabs[target], tabs[idx]];
+      activeTabIndex = tabs.indexOf(activeTab);
+      saveState();
+      renderManageList();
+      renderStage();
+    }
+
+    function deleteTab(idx) {
+      tabs.splice(idx, 1);
+      if (tabs.length === 0) {
+        activeTabIndex = -1;
+      } else if (activeTabIndex >= tabs.length) {
+        activeTabIndex = tabs.length - 1;
+      }
+      saveState();
+      renderManageList();
+      renderStage();
+    }
+
+    function refreshStage() {
+      const frame = document.getElementById("stageFrame");
+      if (frame.src) frame.src = frame.src;
+    }
+
+    // --- Modals ---
+    function openModal(id) {
+      if (id === "settingsModal") {
+        renderSettingsUI();
+        document.getElementById("settingsStatus").className = "status-msg";
+      } else if (id === "manageModal") {
+        renderManageList();
+      } else if (id === "editTimerModal") {
+        renderTimerPresetChips();
+      } else if (id === "editDiceModal") {
+        document.getElementById("customDiceTextarea").value = diceSpinner.customFaces.join("\n");
+      } else if (id === "editSpinnerModal") {
+        document.getElementById("spinnerSlicesTextarea").value = diceSpinner.spinnerSlices.join("\n");
+      } else if (id === "editDeckModal") {
+        document.getElementById("deckModeSelect").value = deckConfig.mode;
+        document.getElementById("suitSpades").checked = deckConfig.suits.spades;
+        document.getElementById("suitHearts").checked = deckConfig.suits.hearts;
+        document.getElementById("suitDiamonds").checked = deckConfig.suits.diamonds;
+        document.getElementById("suitClubs").checked = deckConfig.suits.clubs;
+        document.getElementById("rankAce").checked = deckConfig.ranks.ace;
+        document.getElementById("rankNumbers").checked = deckConfig.ranks.numbers;
+        document.getElementById("rankFace").checked = deckConfig.ranks.face;
+        document.getElementById("rankJokers").checked = deckConfig.ranks.jokers;
+        document.getElementById("customDeckTextarea").value = deckConfig.customCards.join("\n");
+        toggleDeckModeUI();
+      }
+      document.getElementById(id).classList.add("open");
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove("open");
+    }
+
+    init();
+  </script>
+</body>
+</html>
