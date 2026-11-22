@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Classroom Home Base</title>
+  <!-- Teacher Cute Rounded Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-app: #f7f8fa;
@@ -19,8 +23,10 @@
       --pastel-orange: #ffedd5;
       --pastel-yellow: #fef3c7;
       --pastel-purple: #f3e8ff;
-      --radius-lg: 14px;
-      --radius-md: 10px;
+      --font-heading: "Fredoka", "Quicksand", "Comic Sans MS", cursive, sans-serif;
+      --font-body: "Quicksand", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --radius-lg: 16px;
+      --radius-md: 11px;
       --radius-pill: 999px;
       --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
       --shadow-md: 0 6px 20px rgba(15, 23, 42, 0.14);
@@ -31,7 +37,18 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: var(--font-body);
+    }
+
+    h1, h2, h3,
+    .tool-header,
+    .floating-tool-header,
+    .timer-display,
+    .clock-display,
+    .tab-pill,
+    .settings-tab-btn {
+      font-family: var(--font-heading);
+      letter-spacing: 0.01em;
     }
 
     body {
@@ -45,7 +62,7 @@
 
     /* Rainbow Top Accent Bar */
     .top-stripe {
-      height: 6px;
+      height: 7px;
       background: var(--stripe-gradient);
       flex-shrink: 0;
     }
@@ -64,13 +81,14 @@
     }
 
     .brand h1 {
-      font-size: 1.35rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-main);
     }
 
     .brand p {
-      font-size: 0.8rem;
+      font-size: 0.82rem;
+      font-weight: 600;
       color: var(--text-muted);
       margin-top: 2px;
     }
@@ -87,7 +105,7 @@
       padding: 7px 14px;
       border-radius: var(--radius-md);
       font-size: 0.85rem;
-      font-weight: 500;
+      font-weight: 700;
       color: var(--text-main);
       cursor: pointer;
       display: inline-flex;
@@ -166,7 +184,7 @@
       padding: 7px 14px;
       border-radius: var(--radius-pill);
       font-size: 0.82rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       display: none;
       align-items: center;
@@ -185,7 +203,7 @@
 
     /* Left Sidebar Tools */
     .sidebar {
-      width: 295px;
+      width: 300px;
       background: var(--bg-panel);
       border: 1px solid var(--border-light);
       border-radius: var(--radius-lg);
@@ -223,7 +241,7 @@
     .tool-header {
       padding: 10px 12px;
       font-weight: 600;
-      font-size: 0.88rem;
+      font-size: 0.94rem;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -249,9 +267,10 @@
     }
 
     .overlay-toggle-btn {
+      font-family: var(--font-body);
       font-size: 0.72rem;
-      font-weight: 600;
-      padding: 3px 8px;
+      font-weight: 700;
+      padding: 3px 9px;
       border-radius: var(--radius-pill);
       border: 1px solid rgba(15, 23, 42, 0.18);
       background: rgba(255, 255, 255, 0.9);
@@ -294,7 +313,7 @@
     }
 
     .tool-hint {
-      font-size: 0.75rem;
+      font-size: 0.76rem;
       color: var(--text-muted);
       font-style: italic;
     }
@@ -305,6 +324,7 @@
       border: 1px solid var(--border-light);
       border-radius: 8px;
       font-size: 0.85rem;
+      font-weight: 600;
       outline: none;
       background: #fff;
     }
@@ -333,7 +353,7 @@
     .bookmark-row {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
 
     .bookmark-link {
@@ -343,6 +363,11 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       padding: 7px 10px;
+      border: 1px solid rgba(15, 23, 42, 0.12);
+    }
+
+    .bookmark-link:hover {
+      filter: brightness(0.96);
     }
 
     .bookmark-link span {
@@ -350,19 +375,46 @@
       text-overflow: ellipsis;
     }
 
+    .bookmark-action-btn {
+      padding: 7px 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border-light);
+      background: #fff;
+      color: var(--text-main);
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .bookmark-action-btn:hover {
+      background: #f1f5f9;
+    }
+
     .bookmark-del {
-      padding: 7px 9px;
+      padding: 7px 8px;
       border-radius: 8px;
       border: 1px solid #fecaca;
       background: #fef2f2;
       color: #dc2626;
       cursor: pointer;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
+      font-weight: 700;
       flex-shrink: 0;
     }
 
     .bookmark-del:hover {
       background: #fee2e2;
+    }
+
+    .bookmark-edit-card {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
     .bookmark-add-box {
@@ -373,6 +425,33 @@
       border-top: 1px dashed var(--border-light);
     }
 
+    /* Color Swatch Picker Row */
+    .color-swatch-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      align-items: center;
+    }
+
+    .color-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(15, 23, 42, 0.2);
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+
+    .color-dot:hover {
+      transform: scale(1.12);
+    }
+
+    .color-dot.selected {
+      outline: 2px solid #0f172a;
+      outline-offset: 1px;
+      transform: scale(1.1);
+    }
+
     /* Tool Specific Displays */
     .result-box {
       background: #f8fafc;
@@ -380,7 +459,7 @@
       border-radius: 8px;
       padding: 10px;
       text-align: center;
-      font-weight: 600;
+      font-weight: 700;
       min-height: 44px;
       display: flex;
       align-items: center;
@@ -402,13 +481,13 @@
       border: 1px solid var(--border-light);
       padding: 6px 8px;
       border-radius: 6px;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
     }
 
     /* Timer */
     .timer-display {
-      font-size: 2.1rem;
-      font-weight: 700;
+      font-size: 2.2rem;
+      font-weight: 600;
       text-align: center;
       font-variant-numeric: tabular-nums;
       padding: 6px 0;
@@ -439,7 +518,7 @@
       border: 1px solid var(--border-light);
       background: #f8fafc;
       font-size: 0.78rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       color: var(--text-main);
     }
@@ -472,29 +551,43 @@
       background: #fff;
       text-align: left;
       cursor: pointer;
-      font-size: 0.82rem;
+      font-size: 0.84rem;
+      font-weight: 600;
       display: flex;
       justify-content: space-between;
+      align-items: center;
     }
 
     .voice-btn.active {
       background: var(--teal-primary);
       color: #fff;
       border-color: var(--teal-primary);
-      font-weight: 600;
+      font-weight: 700;
+    }
+
+    .voice-badge {
+      font-size: 0.72rem;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.08);
+    }
+
+    .voice-btn.active .voice-badge {
+      background: rgba(255, 255, 255, 0.25);
     }
 
     .supply-item {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 0.83rem;
+      font-size: 0.84rem;
+      font-weight: 600;
       cursor: pointer;
     }
 
     .clock-display {
-      font-size: 1.7rem;
-      font-weight: 700;
+      font-size: 1.85rem;
+      font-weight: 600;
       text-align: center;
       padding: 8px 0;
     }
@@ -578,7 +671,7 @@
       text-align: center;
       padding: 5px;
       font-size: 0.78rem;
-      font-weight: 600;
+      font-weight: 700;
       border-radius: 6px;
       cursor: pointer;
       border: none;
@@ -614,8 +707,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 800;
-      font-size: 1rem;
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 1.1rem;
       color: var(--text-main);
       box-shadow: var(--shadow-sm);
       transition: transform 0.15s ease;
@@ -649,20 +743,43 @@
       border: 2px solid #cbd5e1;
     }
 
-    /* Playing Cards */
+    /* Portrait Playing Cards & Flashcards */
+    .card-table-felt {
+      background: #f1f5f9;
+      border: 1px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 14px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 196px;
+    }
+
     .playing-card {
-      width: 96px;
-      min-height: 126px;
-      background: #fff;
-      border: 2px solid #cbd5e1;
-      border-radius: 10px;
-      padding: 8px;
+      width: 120px;
+      height: 172px;
+      background: linear-gradient(180deg, #ffffff 0%, #fcfcfd 100%);
+      border: 1.5px solid #94a3b8;
+      border-radius: 12px;
+      padding: 7px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      box-shadow: var(--shadow-sm);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12), 0 1px 2px rgba(15, 23, 42, 0.08);
       margin: 0 auto;
       user-select: none;
+      position: relative;
+      transition: transform 0.15s ease;
+    }
+
+    .playing-card-inner {
+      flex: 1;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 8px;
+      padding: 6px 7px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .playing-card.red {
@@ -673,22 +790,69 @@
       color: #0f172a;
     }
 
-    .playing-card.custom-card {
-      width: 100%;
-      min-height: 84px;
+    .playing-card.card-back {
+      background: repeating-linear-gradient(
+        45deg,
+        #e0f2fe,
+        #e0f2fe 8px,
+        #bae6fd 8px,
+        #bae6fd 16px
+      );
+      border-color: var(--teal-primary);
+    }
+
+    .playing-card.card-back .playing-card-inner {
+      background: rgba(255, 255, 255, 0.88);
+      border-color: var(--teal-primary);
+      align-items: center;
       justify-content: center;
+      text-align: center;
+      font-family: var(--font-heading);
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--teal-primary);
+      padding: 10px;
+    }
+
+    .playing-card.custom-card {
+      width: 128px;
+      height: 180px;
+      border-color: var(--teal-primary);
+    }
+
+    .playing-card.custom-card .playing-card-inner {
+      border-color: rgba(94, 139, 137, 0.35);
+      justify-content: space-between;
       align-items: center;
       text-align: center;
-      font-size: 1.05rem;
+    }
+
+    .custom-card-badge {
+      font-size: 0.65rem;
       font-weight: 700;
-      border-color: var(--teal-primary);
-      padding: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--teal-primary);
+    }
+
+    .custom-card-text {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.25;
+      word-break: break-word;
     }
 
     .card-corner {
-      font-size: 0.9rem;
-      font-weight: 800;
-      line-height: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 22px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.02;
     }
 
     .card-corner.bottom {
@@ -697,9 +861,10 @@
     }
 
     .card-center {
-      font-size: 1.8rem;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 2.35rem;
       text-align: center;
-      font-weight: 700;
+      line-height: 1;
     }
 
     /* Main Stage (Right) */
@@ -726,15 +891,43 @@
       background: #fcfcfd;
     }
 
+    .folder-filter-wrap {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: #f1f5f9;
+      padding: 3px 8px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      flex-shrink: 0;
+    }
+
+    .folder-filter-wrap label {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .folder-filter-wrap select {
+      border: none;
+      background: transparent;
+      padding: 3px 4px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      width: auto;
+      cursor: pointer;
+    }
+
     .tab-pill {
-      padding: 6px 14px;
+      padding: 6px 15px;
       border-radius: var(--radius-pill);
-      font-size: 0.83rem;
+      font-size: 0.86rem;
       font-weight: 500;
-      border: 1px solid transparent;
+      border: 1.5px solid rgba(15, 23, 42, 0.08);
       cursor: pointer;
       white-space: nowrap;
-      transition: transform 0.1s ease;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
     }
 
     .tab-pill:hover {
@@ -742,8 +935,8 @@
     }
 
     .tab-pill.active {
-      border-color: #475569;
-      font-weight: 700;
+      border-color: #334155;
+      font-weight: 600;
       box-shadow: var(--shadow-sm);
     }
 
@@ -779,7 +972,7 @@
     .empty-stage {
       text-align: center;
       padding: 32px;
-      max-width: 420px;
+      max-width: 440px;
       color: var(--text-muted);
       display: flex;
       flex-direction: column;
@@ -788,12 +981,12 @@
     }
 
     .empty-stage h2 {
-      font-size: 1.2rem;
+      font-size: 1.35rem;
       color: var(--text-main);
     }
 
     .empty-stage p {
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       line-height: 1.5;
     }
 
@@ -824,9 +1017,9 @@
     }
 
     .floating-tool-header {
-      padding: 8px 12px;
-      font-weight: 700;
-      font-size: 0.85rem;
+      padding: 9px 12px;
+      font-weight: 600;
+      font-size: 0.92rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -849,6 +1042,7 @@
     }
 
     .floating-close-btn {
+      font-family: var(--font-body);
       background: rgba(255, 255, 255, 0.85);
       border: 1px solid rgba(0, 0, 0, 0.15);
       border-radius: 6px;
@@ -887,15 +1081,16 @@
     }
 
     .memo-overlay h3 {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       color: var(--teal-primary);
       margin-bottom: 4px;
     }
 
     .memo-overlay p {
-      font-size: 1.35rem;
+      font-family: var(--font-heading);
+      font-size: 1.45rem;
       font-weight: 600;
       color: var(--text-main);
       white-space: pre-wrap;
@@ -908,6 +1103,7 @@
       background: none;
       border: none;
       font-size: 1.1rem;
+      font-weight: 700;
       cursor: pointer;
       color: var(--text-muted);
     }
@@ -929,7 +1125,7 @@
 
     .modal {
       background: #fff;
-      width: 560px;
+      width: 580px;
       max-width: 94vw;
       border-radius: var(--radius-lg);
       padding: 20px;
@@ -941,12 +1137,13 @@
     }
 
     .modal h2 {
-      font-size: 1.15rem;
+      font-size: 1.25rem;
+      font-weight: 600;
     }
 
     .modal label {
       font-size: 0.82rem;
-      font-weight: 600;
+      font-weight: 700;
       display: block;
       margin-bottom: 4px;
     }
@@ -965,8 +1162,8 @@
       border-radius: 8px;
       border: 1px solid transparent;
       background: #f1f5f9;
-      font-size: 0.82rem;
-      font-weight: 600;
+      font-size: 0.84rem;
+      font-weight: 500;
       color: var(--text-muted);
       cursor: pointer;
     }
@@ -1002,7 +1199,8 @@
       border: 1px solid var(--border-light);
       border-radius: 8px;
       background: #f8fafc;
-      font-size: 0.83rem;
+      font-size: 0.84rem;
+      font-weight: 600;
       cursor: pointer;
     }
 
@@ -1021,6 +1219,7 @@
       padding: 4px 10px;
       border-radius: var(--radius-pill);
       font-size: 0.8rem;
+      font-weight: 600;
     }
 
     .edit-chip button {
@@ -1060,14 +1259,33 @@
     .manage-row-top input {
       flex: 1;
       padding: 6px 9px;
-      font-size: 0.85rem;
-      font-weight: 600;
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .manage-row-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .manage-row-meta label {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    .manage-folder-input {
+      flex: 1;
+      padding: 5px 8px;
+      font-size: 0.8rem;
     }
 
     .manage-color-select {
       width: auto;
       padding: 5px 8px;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       border-radius: 6px;
       cursor: pointer;
     }
@@ -1080,7 +1298,7 @@
 
     .manage-url-row span {
       font-size: 0.75rem;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text-muted);
       flex-shrink: 0;
     }
@@ -1094,10 +1312,10 @@
     }
 
     .manage-swatch {
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
-      border: 1px solid rgba(0, 0, 0, 0.15);
+      border: 1.5px solid rgba(0, 0, 0, 0.18);
       flex-shrink: 0;
     }
 
@@ -1114,6 +1332,7 @@
       border-radius: 6px;
       cursor: pointer;
       font-size: 0.8rem;
+      font-weight: 700;
     }
 
     .icon-btn:hover {
@@ -1137,19 +1356,19 @@
     }
 
     .backup-card h3 {
-      font-size: 0.9rem;
+      font-size: 0.96rem;
       color: var(--text-main);
     }
 
     .backup-card p {
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
       line-height: 1.4;
     }
 
     .status-msg {
       font-size: 0.82rem;
-      font-weight: 600;
+      font-weight: 700;
       padding: 8px 10px;
       border-radius: 8px;
       display: none;
@@ -1178,9 +1397,9 @@
       <p id="headerSubtitle">Tools &amp; Apps · click "Overlay" on any tool to float it over your presentation</p>
     </div>
     <div class="header-actions">
-      <button type="button" class="btn" id="clearOverlaysBtn" style="display:none;">✕ Close Overlays (<span id="overlayCountBadge">0</span>)</button>
-      <button type="button" class="btn" onclick="toggleSidebar()" id="toggleToolsBtn">‹ Hide Sidebar</button>
-      <button type="button" class="btn" onclick="openModal('settingsModal')">⚙ Settings</button>
+      <button type="button" class="btn" id="clearOverlaysBtn" style="display:none;">Close Overlays (<span id="overlayCountBadge">0</span>)</button>
+      <button type="button" class="btn" onclick="toggleSidebar()" id="toggleToolsBtn">Hide Sidebar</button>
+      <button type="button" class="btn" onclick="openModal('settingsModal')">Settings</button>
     </div>
   </header>
 
@@ -1191,9 +1410,9 @@
       <!-- Bookmarks -->
       <div class="tool-card open" data-tool="bookmarks">
         <div class="tool-header bg-blue" onclick="toggleTool(this)">
-          <span class="title">🔖 Bookmarks</span>
+          <span class="title">Bookmarks</span>
           <div class="header-controls">
-            <button type="button" class="overlay-toggle-btn" data-overlay-btn="bookmarks">📌 Overlay</button>
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="bookmarks">Overlay</button>
             <span>▾</span>
           </div>
         </div>
@@ -1203,9 +1422,9 @@
       <!-- Random Name -->
       <div class="tool-card" data-tool="randomName">
         <div class="tool-header bg-pink" onclick="toggleTool(this)">
-          <span class="title">☆ Random Name</span>
+          <span class="title">Random Name</span>
           <div class="header-controls">
-            <button type="button" class="overlay-toggle-btn" data-overlay-btn="randomName">📌 Overlay</button>
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="randomName">Overlay</button>
             <span>▾</span>
           </div>
         </div>
@@ -1215,9 +1434,9 @@
       <!-- Groups & Partners -->
       <div class="tool-card open" data-tool="groups">
         <div class="tool-header bg-green" onclick="toggleTool(this)">
-          <span class="title">👥 Groups &amp; Partners</span>
+          <span class="title">Groups &amp; Partners</span>
           <div class="header-controls">
-            <button type="button" class="overlay-toggle-btn" data-overlay-btn="groups">📌 Overlay</button>
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="groups">Overlay</button>
             <span>▾</span>
           </div>
         </div>
@@ -1227,9 +1446,9 @@
       <!-- Quick Message -->
       <div class="tool-card open" data-tool="quickMessage">
         <div class="tool-header bg-orange" onclick="toggleTool(this)">
-          <span class="title">✏️ Quick Message</span>
+          <span class="title">Quick Message</span>
           <div class="header-controls">
-            <button type="button" class="overlay-toggle-btn" data-overlay-btn="quickMessage">📌 Overlay</button>
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="quickMessage">Overlay</button>
             <span>▾</span>
           </div>
         </div>
@@ -1239,9 +1458,9 @@
       <!-- Timer -->
       <div class="tool-card" data-tool="timer">
         <div class="tool-header bg-yellow" onclick="toggleTool(this)">
-          <span class="title">⏱️ Timer</span>
+          <span class="title">Timer</span>
           <div class="header-controls">
-            <button type="button" class="overlay-toggle-btn" data-overlay-btn="timer">📌 Overlay</button>
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="timer">Overlay</button>
             <span>▾</span>
           </div>
         </div>
@@ -1251,9 +1470,9 @@
       <!-- Noise Meter -->
       <div class="tool-card" data-tool="noiseMeter">
         <div class="tool-header bg-pink" onclick="toggleTool(this)">
-          <span class="title">🎙️ Noise Meter</span>
+          <span class="title">Noise Meter</span>
           <div class="header-controls">
-            <button type="button" class="overlay-toggle-btn" data-overlay-btn="noiseMeter">📌 Overlay</button>
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="noiseMeter">Overlay</button>
             <span>▾</span>
           </div>
         </div>
@@ -1263,9 +1482,9 @@
       <!-- Dice & Spinner -->
       <div class="tool-card" data-tool="diceSpinner">
         <div class="tool-header bg-purple" onclick="toggleTool(this)">
-          <span class="title">🎲 Dice &amp; Spinner</span>
+          <span class="title">Dice &amp; Spinner</span>
           <div class="header-controls">
-            <button type="button" class="overlay-toggle-btn" data-overlay-btn="diceSpinner">📌 Overlay</button>
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="diceSpinner">Overlay</button>
             <span>▾</span>
           </div>
         </div>
@@ -1275,9 +1494,9 @@
       <!-- Deck of Cards -->
       <div class="tool-card" data-tool="cardDeck">
         <div class="tool-header bg-orange" onclick="toggleTool(this)">
-          <span class="title">🃏 Deck of Cards</span>
+          <span class="title">Deck of Cards</span>
           <div class="header-controls">
-            <button type="button" class="overlay-toggle-btn" data-overlay-btn="cardDeck">📌 Overlay</button>
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="cardDeck">Overlay</button>
             <span>▾</span>
           </div>
         </div>
@@ -1287,9 +1506,9 @@
       <!-- Voice Level -->
       <div class="tool-card" data-tool="voiceLevel">
         <div class="tool-header bg-purple" onclick="toggleTool(this)">
-          <span class="title">🔊 Voice Level</span>
+          <span class="title">Voice Level</span>
           <div class="header-controls">
-            <button type="button" class="overlay-toggle-btn" data-overlay-btn="voiceLevel">📌 Overlay</button>
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="voiceLevel">Overlay</button>
             <span>▾</span>
           </div>
         </div>
@@ -1299,9 +1518,9 @@
       <!-- Supplies Needed -->
       <div class="tool-card" data-tool="supplies">
         <div class="tool-header bg-blue" onclick="toggleTool(this)">
-          <span class="title">🎒 Supplies Needed</span>
+          <span class="title">Supplies Needed</span>
           <div class="header-controls">
-            <button type="button" class="overlay-toggle-btn" data-overlay-btn="supplies">📌 Overlay</button>
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="supplies">Overlay</button>
             <span>▾</span>
           </div>
         </div>
@@ -1311,9 +1530,9 @@
       <!-- Clock -->
       <div class="tool-card" data-tool="clock">
         <div class="tool-header bg-green" onclick="toggleTool(this)">
-          <span class="title">🕒 Clock</span>
+          <span class="title">Clock</span>
           <div class="header-controls">
-            <button type="button" class="overlay-toggle-btn" data-overlay-btn="clock">📌 Overlay</button>
+            <button type="button" class="overlay-toggle-btn" data-overlay-btn="clock">Overlay</button>
             <span>▾</span>
           </div>
         </div>
@@ -1325,8 +1544,13 @@
     <!-- Right Main Stage -->
     <main class="main-stage">
       <div class="stage-toolbar" id="stageToolbar">
-        <button type="button" class="btn btn-primary" onclick="openModal('addTabModal')">＋ Presentation</button>
+        <button type="button" class="btn btn-primary" onclick="openModal('addTabModal')">+ Presentation</button>
         <button type="button" class="btn" onclick="openModal('manageModal')">Manage</button>
+
+        <div class="folder-filter-wrap">
+          <label for="folderFilterSelect">Folder:</label>
+          <select id="folderFilterSelect" onchange="changeFolderFilter()"></select>
+        </div>
         
         <div id="tabContainer" style="display:flex; gap:8px; align-items:center;"></div>
 
@@ -1334,28 +1558,28 @@
 
         <select id="classSelector" style="width: auto;" onchange="switchClass()"></select>
 
-        <button type="button" class="btn" onclick="refreshStage()" title="Refresh">↻ Refresh</button>
-        <button type="button" class="btn" id="fullScreenBtn" onclick="toggleFullScreen()" title="Full Screen">⛶ Full Screen</button>
+        <button type="button" class="btn" onclick="refreshStage()" title="Refresh">Refresh</button>
+        <button type="button" class="btn" id="fullScreenBtn" onclick="toggleFullScreen()" title="Full Screen">Full Screen</button>
       </div>
 
       <div class="viewport-wrapper" id="viewportWrapper">
         <!-- Exit Button for Google Sites Theater Full-Screen Fallback -->
-        <button type="button" class="exit-theater-btn" onclick="exitFullScreenMode()">✕ Exit Full Screen</button>
+        <button type="button" class="exit-theater-btn" onclick="exitFullScreenMode()">Exit Full Screen</button>
 
         <!-- Floating Overlay Layer -->
         <div class="stage-overlay-layer" id="stageOverlayLayer"></div>
 
         <!-- Quick Memo Banner -->
         <div class="memo-overlay" id="memoOverlay">
-          <button type="button" class="memo-close" onclick="clearMemo()">✕</button>
+          <button type="button" class="memo-close" onclick="clearMemo()">x</button>
           <h3>Class Memo</h3>
           <p id="memoText"></p>
         </div>
 
         <div class="empty-stage" id="emptyStage">
-          <h2>No Presentations Added Yet</h2>
-          <p>Click <strong>＋ Presentation</strong> above to embed a Google Slides deck, Canva slideshow, or classroom webpage. Click <strong>📌 Overlay</strong> on any tool to float it right on top of your slides!</p>
-          <button type="button" class="btn btn-primary" onclick="openModal('addTabModal')">＋ Add Your First Presentation</button>
+          <h2 id="emptyStageTitle">No Presentations Added Yet</h2>
+          <p id="emptyStageDesc">Click <strong>+ Presentation</strong> above to embed a Google Slides deck, Canva slideshow, or classroom webpage. Organize decks into folders and click <strong>Overlay</strong> on any tool to float it on top!</p>
+          <button type="button" class="btn btn-primary" onclick="openModal('addTabModal')">+ Add Your First Presentation</button>
         </div>
 
         <iframe id="stageFrame" src="" allowfullscreen allow="fullscreen; autoplay; microphone"></iframe>
@@ -1371,7 +1595,11 @@
       <div class="bookmark-add-box">
         <input type="text" id="newBookmarkTitle" placeholder="Bookmark title (e.g., Epic Books)" />
         <input type="text" id="newBookmarkUrl" placeholder="URL (e.g., https://getepic.com)" />
-        <button type="button" class="btn btn-primary" style="justify-content:center;" onclick="addBookmark()">＋ Add Bookmark</button>
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:6px;">
+          <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">Color:</span>
+          <div class="color-swatch-row" id="newBookmarkColorPicker"></div>
+        </div>
+        <button type="button" class="btn btn-primary" style="justify-content:center;" onclick="addBookmark()">+ Add Bookmark</button>
       </div>
     </div>
 
@@ -1421,7 +1649,7 @@
       <div>
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
           <span style="font-size:0.74rem; color:var(--text-muted);">Presets</span>
-          <button type="button" class="btn btn-sm" style="padding:2px 8px; font-size:0.72rem;" onclick="openModal('editTimerModal')">✎ Edit Presets</button>
+          <button type="button" class="btn btn-sm" style="padding:2px 8px; font-size:0.72rem;" onclick="openModal('editTimerModal')">Edit Presets</button>
         </div>
         <div class="timer-presets-grid" id="timerPresetsContainer"></div>
       </div>
@@ -1446,7 +1674,7 @@
             <option value="xylophone">Xylophone</option>
             <option value="zen">Zen Gong</option>
           </select>
-          <button type="button" class="icon-btn" onclick="playTimerChime()" title="Test Sound">🔊</button>
+          <button type="button" class="icon-btn" onclick="playTimerChime()" title="Test Sound">Test</button>
         </div>
       </div>
     </div>
@@ -1461,7 +1689,7 @@
         <div class="noise-status" id="noiseStatus">Mic Off · Click Start</div>
         <div class="sandbox-mic-help" id="sandboxMicHelp">
           <span><strong>Google Sites Sandbox Block:</strong> Google Sites blocks microphone prompts inside embedded boxes.</span>
-          <button type="button" class="btn btn-sm btn-primary" style="justify-content:center;" onclick="openStandaloneMicPopup()">↗ Open Noise Meter Popup</button>
+          <button type="button" class="btn btn-sm btn-primary" style="justify-content:center;" onclick="openStandaloneMicPopup()">Open Noise Meter Popup</button>
         </div>
         <div>
           <label style="font-size:0.75rem; color:var(--text-muted); display:flex; justify-content:space-between;">
@@ -1482,8 +1710,8 @@
     <!-- Dice & Spinner Content -->
     <div id="content-diceSpinner" style="display:flex; flex-direction:column; gap:10px;">
       <div class="sub-tabs">
-        <button type="button" class="sub-tab active" onclick="switchDiceTab('diceView', this)">🎲 Dice</button>
-        <button type="button" class="sub-tab" onclick="switchDiceTab('spinnerView', this)">🎡 Spinner</button>
+        <button type="button" class="sub-tab active" onclick="switchDiceTab('diceView', this)">Dice</button>
+        <button type="button" class="sub-tab" onclick="switchDiceTab('spinnerView', this)">Spinner</button>
       </div>
       <div id="diceView" style="display:flex; flex-direction:column; gap:8px;">
         <div class="btn-row">
@@ -1516,8 +1744,8 @@
         </div>
         <div class="tool-hint" id="diceTotalLabel" style="text-align:center;">Click Roll to toss</div>
         <div class="btn-row">
-          <button type="button" class="btn btn-primary" onclick="rollDice()">🎲 Roll Dice</button>
-          <button type="button" class="btn" onclick="openModal('editDiceModal')">✎ Edit</button>
+          <button type="button" class="btn btn-primary" onclick="rollDice()">Roll Dice</button>
+          <button type="button" class="btn" onclick="openModal('editDiceModal')">Edit</button>
         </div>
       </div>
       <div id="spinnerView" style="display:none; flex-direction:column; gap:8px;">
@@ -1527,33 +1755,35 @@
         </div>
         <div class="result-box" id="spinnerResult" style="min-height:36px; padding:6px;">Click Spin!</div>
         <div class="btn-row">
-          <button type="button" class="btn btn-primary" onclick="spinWheel()">🎡 Spin</button>
-          <button type="button" class="btn" onclick="openModal('editSpinnerModal')">✎ Slices</button>
+          <button type="button" class="btn btn-primary" onclick="spinWheel()">Spin</button>
+          <button type="button" class="btn" onclick="openModal('editSpinnerModal')">Slices</button>
         </div>
       </div>
     </div>
 
     <!-- Deck of Cards Content -->
     <div id="content-cardDeck" style="display:flex; flex-direction:column; gap:10px;">
-      <div id="cardStage">
-        <div class="result-box" style="min-height:126px;">Click Draw Card to start</div>
+      <div class="card-table-felt" id="cardStage">
+        <div class="playing-card card-back">
+          <div class="playing-card-inner">Click Draw Card</div>
+        </div>
       </div>
       <div class="tool-hint" id="deckStatusLabel" style="text-align:center;">52 cards remaining</div>
       <div class="btn-row">
         <button type="button" class="btn btn-primary" onclick="drawCard()">Draw Card</button>
         <button type="button" class="btn" onclick="shuffleDeck()">Shuffle</button>
       </div>
-      <button type="button" class="btn btn-sm" style="justify-content:center;" onclick="openModal('editDeckModal')">✎ Modify Deck</button>
+      <button type="button" class="btn btn-sm" style="justify-content:center;" onclick="openModal('editDeckModal')">Modify Deck</button>
     </div>
 
     <!-- Voice Level Content -->
     <div id="content-voiceLevel" style="display:flex; flex-direction:column; gap:10px;">
       <div class="voice-levels" id="voiceLevels">
-        <button type="button" class="voice-btn active" onclick="selectVoice(this)"><span>0 · Silent</span><span>🤫</span></button>
-        <button type="button" class="voice-btn" onclick="selectVoice(this)"><span>1 · Whisper</span><span>💬</span></button>
-        <button type="button" class="voice-btn" onclick="selectVoice(this)"><span>2 · Partner Talk</span><span>👥</span></button>
-        <button type="button" class="voice-btn" onclick="selectVoice(this)"><span>3 · Group Work</span><span>🗣️</span></button>
-        <button type="button" class="voice-btn" onclick="selectVoice(this)"><span>4 · Outside Voice</span><span>📢</span></button>
+        <button type="button" class="voice-btn active" onclick="selectVoice(this)"><span>0 · Silent</span><span class="voice-badge">Level 0</span></button>
+        <button type="button" class="voice-btn" onclick="selectVoice(this)"><span>1 · Whisper</span><span class="voice-badge">Level 1</span></button>
+        <button type="button" class="voice-btn" onclick="selectVoice(this)"><span>2 · Partner Talk</span><span class="voice-badge">Level 2</span></button>
+        <button type="button" class="voice-btn" onclick="selectVoice(this)"><span>3 · Group Work</span><span class="voice-badge">Level 3</span></button>
+        <button type="button" class="voice-btn" onclick="selectVoice(this)"><span>4 · Outside Voice</span><span class="voice-badge">Level 4</span></button>
       </div>
     </div>
 
@@ -1568,6 +1798,9 @@
     </div>
   </div>
 
+  <!-- Datalist for Folder Suggestions -->
+  <datalist id="folderSuggestions"></datalist>
+
   <!-- Modal: Add Presentation Tab -->
   <div class="modal-backdrop" id="addTabModal">
     <div class="modal">
@@ -1577,18 +1810,16 @@
         <input type="text" id="newTabTitle" placeholder="e.g., Math Lesson 4" />
       </div>
       <div>
+        <label>Folder (type a new folder name or pick existing)</label>
+        <input type="text" id="newTabFolder" list="folderSuggestions" placeholder="e.g., General, Morning Meeting, Math, Reading" />
+      </div>
+      <div>
         <label>Embed URL (Google Slides, Canva ?embed, or Website)</label>
         <input type="text" id="newTabUrl" placeholder="https://docs.google.com/presentation/d/..." />
       </div>
       <div>
         <label>Tab Color</label>
-        <select id="newTabColor">
-          <option value="#fef3c7">Soft Yellow</option>
-          <option value="#ffedd5">Soft Peach</option>
-          <option value="#dcfce7">Soft Mint</option>
-          <option value="#e0f2fe">Soft Sky</option>
-          <option value="#fce7f3">Soft Pink</option>
-        </select>
+        <select id="newTabColor"></select>
       </div>
       <div class="btn-row" style="margin-top:8px;">
         <button type="button" class="btn" onclick="closeModal('addTabModal')">Cancel</button>
@@ -1602,9 +1833,9 @@
     <div class="modal">
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <h2>Manage Presentations</h2>
-        <button type="button" class="btn btn-primary" onclick="closeModal('manageModal'); openModal('addTabModal');">＋ New</button>
+        <button type="button" class="btn btn-primary" onclick="closeModal('manageModal'); openModal('addTabModal');">+ New</button>
       </div>
-      <p style="font-size:0.8rem; color:var(--text-muted);">Edit titles, paste a new slide URL, change tab colors, or reorder:</p>
+      <p style="font-size:0.8rem; color:var(--text-muted);">Edit titles, assign folders, paste a new slide URL, change tab colors, or reorder:</p>
       <div class="manage-list" id="manageList"></div>
       <div class="btn-row" style="margin-top:4px;">
         <button type="button" class="btn btn-primary" onclick="closeModal('manageModal')">Done</button>
@@ -1615,14 +1846,14 @@
   <!-- Modal: Edit Timer Presets -->
   <div class="modal-backdrop" id="editTimerModal">
     <div class="modal">
-      <h2>⏱️ Customize Timer Presets</h2>
+      <h2>Customize Timer Presets</h2>
       <p style="font-size:0.8rem; color:var(--text-muted);">Create custom quick-click timer buttons for your classroom routines:</p>
       <div class="pill-list" id="timerPresetChips"></div>
       <div class="btn-row">
         <input type="text" id="newPresetLabel" placeholder="Label (e.g., Clean Up)" style="flex:2;" />
         <input type="number" id="newPresetMins" min="0" max="180" placeholder="Min" style="flex:1;" />
         <input type="number" id="newPresetSecs" min="0" max="59" placeholder="Sec" style="flex:1;" />
-        <button type="button" class="btn btn-primary" style="flex:0 0 auto;" onclick="addTimerPreset()">＋ Add</button>
+        <button type="button" class="btn btn-primary" style="flex:0 0 auto;" onclick="addTimerPreset()">+ Add</button>
       </div>
       <div class="btn-row" style="margin-top:6px;">
         <button type="button" class="btn" onclick="resetTimerPresets()">Reset Defaults</button>
@@ -1634,8 +1865,8 @@
   <!-- Modal: Customize Custom Dice -->
   <div class="modal-backdrop" id="editDiceModal">
     <div class="modal">
-      <h2>🎲 Customize Custom Die Faces</h2>
-      <p style="font-size:0.8rem; color:var(--text-muted);">Enter one face value per line (numbers, words, fractions, or emojis). Selecting <strong>Custom Faces</strong> in the Dice tool will roll from this list:</p>
+      <h2>Customize Custom Die Faces</h2>
+      <p style="font-size:0.8rem; color:var(--text-muted);">Enter one face value per line (numbers, words, fractions, or symbols). Selecting <strong>Custom Faces</strong> in the Dice tool will roll from this list:</p>
       <textarea id="customDiceTextarea" rows="8" placeholder="1&#10;2&#10;3&#10;4&#10;5&#10;6"></textarea>
       <div class="btn-row">
         <button type="button" class="btn" onclick="resetCustomDice()">Reset to 1–6</button>
@@ -1648,7 +1879,7 @@
   <!-- Modal: Customize Spinner Slices -->
   <div class="modal-backdrop" id="editSpinnerModal">
     <div class="modal">
-      <h2>🎡 Customize Spinner Slices</h2>
+      <h2>Customize Spinner Slices</h2>
       <p style="font-size:0.8rem; color:var(--text-muted);">Enter one slice label per line (or click Load Class Roster to spin student names):</p>
       <textarea id="spinnerSlicesTextarea" rows="8"></textarea>
       <div class="btn-row">
@@ -1662,7 +1893,7 @@
   <!-- Modal: Modify Deck of Cards -->
   <div class="modal-backdrop" id="editDeckModal">
     <div class="modal">
-      <h2>🃏 Modify Deck of Cards</h2>
+      <h2>Modify Deck of Cards</h2>
       <div>
         <label>Deck Mode</label>
         <select id="deckModeSelect" onchange="toggleDeckModeUI()">
@@ -1675,10 +1906,10 @@
         <div>
           <label>Included Suits</label>
           <div class="toggle-grid">
-            <label class="toggle-card"><input type="checkbox" id="suitSpades" checked> ♠ Spades</label>
-            <label class="toggle-card"><input type="checkbox" id="suitHearts" checked> ♥ Hearts</label>
-            <label class="toggle-card"><input type="checkbox" id="suitDiamonds" checked> ♦ Diamonds</label>
-            <label class="toggle-card"><input type="checkbox" id="suitClubs" checked> ♣ Clubs</label>
+            <label class="toggle-card"><input type="checkbox" id="suitSpades" checked> Spades</label>
+            <label class="toggle-card"><input type="checkbox" id="suitHearts" checked> Hearts</label>
+            <label class="toggle-card"><input type="checkbox" id="suitDiamonds" checked> Diamonds</label>
+            <label class="toggle-card"><input type="checkbox" id="suitClubs" checked> Clubs</label>
           </div>
         </div>
         <div>
@@ -1694,7 +1925,7 @@
 
       <div id="customDeckOptions" style="display:none; flex-direction:column; gap:6px;">
         <label>Custom Cards (one card per line — great for sight words, math facts, or brain breaks)</label>
-        <textarea id="customDeckTextarea" rows="8" placeholder="2 + 2 = ?&#10;3 × 4 = ?&#10;10 - 6 = ?"></textarea>
+        <textarea id="customDeckTextarea" rows="8" placeholder="2 + 2 = ?&#10;3 x 4 = ?&#10;10 - 6 = ?"></textarea>
       </div>
 
       <div class="btn-row" style="margin-top:6px;">
@@ -1708,14 +1939,14 @@
   <div class="modal-backdrop" id="settingsModal">
     <div class="modal">
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h2>⚙ Home Base Settings</h2>
+        <h2>Home Base Settings</h2>
       </div>
 
       <div class="settings-tabs">
-        <button type="button" class="settings-tab-btn active" onclick="switchSettingsTab('rosterPanel', this)">👥 Class Rosters</button>
-        <button type="button" class="settings-tab-btn" onclick="switchSettingsTab('toolsPanel', this)">🧰 Tools &amp; Supplies</button>
-        <button type="button" class="settings-tab-btn" onclick="switchSettingsTab('appearancePanel', this)">🎨 Display &amp; Theme</button>
-        <button type="button" class="settings-tab-btn" onclick="switchSettingsTab('backupPanel', this)">💾 Backup &amp; Reset</button>
+        <button type="button" class="settings-tab-btn active" onclick="switchSettingsTab('rosterPanel', this)">Class Rosters</button>
+        <button type="button" class="settings-tab-btn" onclick="switchSettingsTab('toolsPanel', this)">Tools &amp; Supplies</button>
+        <button type="button" class="settings-tab-btn" onclick="switchSettingsTab('appearancePanel', this)">Display &amp; Theme</button>
+        <button type="button" class="settings-tab-btn" onclick="switchSettingsTab('backupPanel', this)">Backup &amp; Reset</button>
       </div>
 
       <!-- Tab 1: Class Rosters & Blocks -->
@@ -1732,7 +1963,7 @@
           <label>Add New Class Block</label>
           <div class="btn-row">
             <input type="text" id="newClassNameInput" placeholder="e.g., Period 1 or Reading Group" />
-            <button type="button" class="btn" style="flex:0 0 auto;" onclick="addClassBlock()">＋ Add Class</button>
+            <button type="button" class="btn" style="flex:0 0 auto;" onclick="addClassBlock()">+ Add Class</button>
           </div>
         </div>
 
@@ -1756,7 +1987,7 @@
           <div class="pill-list" id="settingsSuppliesChips" style="margin-bottom:8px;"></div>
           <div class="btn-row">
             <input type="text" id="newSupplyInput" placeholder="Add supply item (e.g., Folder)" />
-            <button type="button" class="btn" style="flex:0 0 auto;" onclick="addSupplyItem()">＋ Add</button>
+            <button type="button" class="btn" style="flex:0 0 auto;" onclick="addSupplyItem()">+ Add</button>
           </div>
         </div>
       </div>
@@ -1786,24 +2017,24 @@
       <div class="settings-panel" id="backupPanel">
         <div class="backup-card">
           <h3>Export Setup File</h3>
-          <p>Download a <code>.json</code> backup file containing all your presentation tabs, bookmarks, timer presets, custom dice/cards, overlays, rosters, and settings.</p>
+          <p>Download a <code>.json</code> backup file containing all your presentation tabs, folders, bookmarks, timer presets, custom dice/cards, overlays, rosters, and settings.</p>
           <div>
-            <button type="button" class="btn btn-primary" onclick="exportBackup()">⬇ Download Backup File</button>
+            <button type="button" class="btn btn-primary" onclick="exportBackup()">Download Backup File</button>
           </div>
         </div>
 
         <div class="backup-card">
           <h3>Import Setup File</h3>
-          <p>Restore your tabs, bookmarks, timer presets, custom dice/cards, overlays, rosters, and settings from a previously exported <code>.json</code> backup file.</p>
+          <p>Restore your tabs, folders, bookmarks, timer presets, custom dice/cards, overlays, rosters, and settings from a previously exported <code>.json</code> backup file.</p>
           <div>
             <input type="file" id="importFileInput" accept=".json,application/json" style="display:none;" onchange="importBackup(event)" />
-            <button type="button" class="btn" onclick="document.getElementById('importFileInput').click()">⬆ Choose Backup File to Restore</button>
+            <button type="button" class="btn" onclick="document.getElementById('importFileInput').click()">Choose Backup File to Restore</button>
           </div>
         </div>
 
         <div class="backup-card" style="border-color:#fecaca; background:#fef2f2;">
           <h3 style="color:#991b1b;">Reset All Data</h3>
-          <p>Clear all saved tabs, bookmarks, custom presets, dice/cards, overlays, and rosters to restore default settings.</p>
+          <p>Clear all saved tabs, folders, bookmarks, custom presets, dice/cards, overlays, and rosters to restore default settings.</p>
           <div>
             <button type="button" class="btn btn-danger" onclick="resetAllData()">Reset Home Base</button>
           </div>
@@ -1825,6 +2056,7 @@
       CURRENT_CLASS: "chb_current_class_v1",
       TABS: "chb_tabs_v1",
       ACTIVE_TAB: "chb_active_tab_v1",
+      ACTIVE_FOLDER: "chb_active_folder_v1",
       SUPPLIES: "chb_supplies_v1",
       BOOKMARKS: "chb_bookmarks_v1",
       SETTINGS: "chb_settings_v1",
@@ -1833,6 +2065,22 @@
       TIMER_CONFIG: "chb_timer_config_v1",
       OVERLAY_STATE: "chb_overlays_v1"
     };
+
+    // --- Color Palette (12 Teacher-Friendly Pastel Shades) ---
+    const colorPalette = [
+      { value: "#fef3c7", label: "Soft Yellow" },
+      { value: "#ffedd5", label: "Soft Peach" },
+      { value: "#dcfce7", label: "Soft Mint" },
+      { value: "#e0f2fe", label: "Soft Sky" },
+      { value: "#fce7f3", label: "Soft Pink" },
+      { value: "#f3e8ff", label: "Lavender" },
+      { value: "#ffe4e6", label: "Blush Rose" },
+      { value: "#ccfbf1", label: "Seafoam Aqua" },
+      { value: "#e0e7ff", label: "Periwinkle" },
+      { value: "#ecfccb", label: "Spring Lime" },
+      { value: "#fed7aa", label: "Warm Apricot" },
+      { value: "#e2e8f0", label: "Cloud Gray" }
+    ];
 
     // --- Default State ---
     const defaultRosters = {
@@ -1887,8 +2135,8 @@
         "2 + 3 = ?",
         "5 + 4 = ?",
         "10 - 3 = ?",
-        "6 × 2 = ?",
-        "12 ÷ 3 = ?",
+        "6 x 2 = ?",
+        "12 / 3 = ?",
         "8 + 7 = ?"
       ]
     };
@@ -1906,17 +2154,17 @@
     };
 
     const toolMeta = {
-      bookmarks: { label: "🔖 Bookmarks", bg: "bg-blue" },
-      randomName: { label: "☆ Random Name", bg: "bg-pink" },
-      groups: { label: "👥 Groups & Partners", bg: "bg-green" },
-      quickMessage: { label: "✏️ Quick Message", bg: "bg-orange" },
-      timer: { label: "⏱️ Timer", bg: "bg-yellow" },
-      noiseMeter: { label: "🎙️ Noise Meter", bg: "bg-pink" },
-      diceSpinner: { label: "🎲 Dice & Spinner", bg: "bg-purple" },
-      cardDeck: { label: "🃏 Deck of Cards", bg: "bg-orange" },
-      voiceLevel: { label: "🔊 Voice Level", bg: "bg-purple" },
-      supplies: { label: "🎒 Supplies Needed", bg: "bg-blue" },
-      clock: { label: "🕒 Clock", bg: "bg-green" }
+      bookmarks: { label: "Bookmarks", bg: "bg-blue" },
+      randomName: { label: "Random Name", bg: "bg-pink" },
+      groups: { label: "Groups & Partners", bg: "bg-green" },
+      quickMessage: { label: "Quick Message", bg: "bg-orange" },
+      timer: { label: "Timer", bg: "bg-yellow" },
+      noiseMeter: { label: "Noise Meter", bg: "bg-pink" },
+      diceSpinner: { label: "Dice & Spinner", bg: "bg-purple" },
+      cardDeck: { label: "Deck of Cards", bg: "bg-orange" },
+      voiceLevel: { label: "Voice Level", bg: "bg-purple" },
+      supplies: { label: "Supplies Needed", bg: "bg-blue" },
+      clock: { label: "Clock", bg: "bg-green" }
     };
 
     const themes = {
@@ -1948,12 +2196,22 @@
     if (!rosters[currentClass]) currentClass = Object.keys(rosters)[0];
 
     let availableStudents = [...rosters[currentClass]];
-    let tabs = loadJSON(STORAGE_KEYS.TABS, []);
+    let tabs = loadJSON(STORAGE_KEYS.TABS, []).map(t => ({
+      ...t,
+      folder: (t.folder || "General").trim() || "General"
+    }));
     let activeTabIndex = parseInt(localStorage.getItem(STORAGE_KEYS.ACTIVE_TAB) ?? "-1", 10);
     if (activeTabIndex >= tabs.length) activeTabIndex = tabs.length - 1;
+    let activeFolderFilter = localStorage.getItem(STORAGE_KEYS.ACTIVE_FOLDER) || "ALL";
 
     let supplies = loadJSON(STORAGE_KEYS.SUPPLIES, structuredClone(defaultSupplies));
-    let bookmarks = loadJSON(STORAGE_KEYS.BOOKMARKS, []);
+    let bookmarks = loadJSON(STORAGE_KEYS.BOOKMARKS, []).map(b => ({
+      ...b,
+      color: b.color || "#e0f2fe"
+    }));
+    let newBookmarkSelectedColor = "#e0f2fe";
+    let editingBookmarkIndex = -1;
+
     let settings = loadJSON(STORAGE_KEYS.SETTINGS, structuredClone(defaultSettings));
     settings.visibleTools = { ...defaultSettings.visibleTools, ...(settings.visibleTools || {}) };
 
@@ -1963,7 +2221,6 @@
 
     let rawOverlays = loadJSON(STORAGE_KEYS.OVERLAY_STATE, {});
     let activeOverlays = (rawOverlays && typeof rawOverlays === "object" && !Array.isArray(rawOverlays)) ? rawOverlays : {};
-    // Remove any invalid/stale overlay keys
     Object.keys(activeOverlays).forEach(k => {
       if (!toolMeta[k]) delete activeOverlays[k];
     });
@@ -1984,6 +2241,7 @@
         localStorage.setItem(STORAGE_KEYS.CURRENT_CLASS, currentClass);
         localStorage.setItem(STORAGE_KEYS.TABS, JSON.stringify(tabs));
         localStorage.setItem(STORAGE_KEYS.ACTIVE_TAB, String(activeTabIndex));
+        localStorage.setItem(STORAGE_KEYS.ACTIVE_FOLDER, activeFolderFilter);
         localStorage.setItem(STORAGE_KEYS.SUPPLIES, JSON.stringify(supplies));
         localStorage.setItem(STORAGE_KEYS.BOOKMARKS, JSON.stringify(bookmarks));
         localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
@@ -1998,7 +2256,6 @@
 
     // --- Initialization ---
     function init() {
-      // Wire up all overlay toggle buttons cleanly via event listeners
       document.querySelectorAll("[data-overlay-btn]").forEach(btn => {
         btn.addEventListener("click", (e) => {
           e.preventDefault();
@@ -2017,6 +2274,11 @@
         });
       }
 
+      const newTabColorSel = document.getElementById("newTabColor");
+      newTabColorSel.innerHTML = colorPalette
+        .map(opt => `<option value="${opt.value}">${opt.label}</option>`)
+        .join("");
+
       const groupSelect = document.getElementById("groupNumber");
       for (let i = 2; i <= 18; i++) {
         const opt = document.createElement("option");
@@ -2034,6 +2296,7 @@
 
       applySettings();
       renderClassDropdowns();
+      renderNewBookmarkColorPicker();
       renderBookmarks();
       renderTimerPresets();
       renderSupplies();
@@ -2044,7 +2307,7 @@
       startLiveClock();
     }
 
-    // --- Full Screen (Supports both Native Chrome Fullscreen & Google Sites Sandboxed Iframe) ---
+    // --- Full Screen ---
     function getFullscreenElement() {
       return document.fullscreenElement ||
              document.webkitFullscreenElement ||
@@ -2074,7 +2337,7 @@
           updateFullScreenButtonState();
           return;
         } catch (err) {
-          // Blocked by Google Sites sandboxed iframe -> fall through to Theater Fullscreen
+          // Fallback to Theater Fullscreen inside sandboxed iframes
         }
       }
 
@@ -2099,7 +2362,7 @@
     function updateFullScreenButtonState() {
       const btn = document.getElementById("fullScreenBtn");
       const active = Boolean(getFullscreenElement()) || document.body.classList.contains("theater-fullscreen");
-      btn.textContent = active ? "✕ Exit Full Screen" : "⛶ Full Screen";
+      btn.textContent = active ? "Exit Full Screen" : "Full Screen";
     }
 
     document.addEventListener("fullscreenchange", updateFullScreenButtonState);
@@ -2115,7 +2378,6 @@
       const overlayLayer = document.getElementById("stageOverlayLayer");
       const pool = document.getElementById("toolTemplatesPool");
 
-      // First rescue all tool content elements into the hidden pool so clearing overlayLayer never destroys them
       Object.keys(toolMeta).forEach(key => {
         const contentEl = document.getElementById(`content-${key}`);
         if (contentEl && pool) {
@@ -2154,7 +2416,7 @@
           const dockBtn = document.createElement("button");
           dockBtn.type = "button";
           dockBtn.className = "floating-close-btn";
-          dockBtn.textContent = "↙ Dock";
+          dockBtn.textContent = "Dock";
           dockBtn.title = "Return to Sidebar";
           dockBtn.addEventListener("click", (e) => {
             e.preventDefault();
@@ -2182,7 +2444,7 @@
 
           const dockLink = document.createElement("a");
           dockLink.href = "#";
-          dockLink.style.cssText = "color:var(--teal-primary); font-weight:600;";
+          dockLink.style.cssText = "color:var(--teal-primary); font-weight:700;";
           dockLink.textContent = "Dock back";
           dockLink.addEventListener("click", (e) => {
             e.preventDefault();
@@ -2194,14 +2456,14 @@
           slotEl.appendChild(hintDiv);
 
           if (btn) {
-            btn.textContent = "✓ Overlaid";
+            btn.textContent = "Overlaid";
             btn.classList.add("active");
           }
         } else {
           slotEl.innerHTML = "";
           slotEl.appendChild(contentEl);
           if (btn) {
-            btn.textContent = "📌 Overlay";
+            btn.textContent = "Overlay";
             btn.classList.remove("active");
           }
         }
@@ -2458,7 +2720,7 @@
         return `
           <span class="edit-chip">
             <strong>${p.label}</strong> (${timeText})
-            <button type="button" onclick="removeTimerPreset(${idx})" title="Remove">✕</button>
+            <button type="button" onclick="removeTimerPreset(${idx})" title="Remove">x</button>
           </span>
         `;
       }).join("");
@@ -2563,14 +2825,14 @@
 
           barFill.style.width = `${level}%`;
           if (level > noiseThreshold) {
-            statusEl.textContent = `⚠️ Too Loud! (${level}%)`;
+            statusEl.textContent = `Too Loud! (${level}%)`;
             statusEl.classList.add("loud");
             if (document.getElementById("noiseChimeCheck").checked && Date.now() - lastChimeTime > 4000) {
               lastChimeTime = Date.now();
               playGentleChime();
             }
           } else {
-            statusEl.textContent = `✅ Good Volume (${level}%)`;
+            statusEl.textContent = `Good Volume (${level}%)`;
             statusEl.classList.remove("loud");
           }
           noiseAnimId = requestAnimationFrame(tick);
@@ -2596,22 +2858,22 @@
 <html>
 <head>
   <title>Classroom Noise Meter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: system-ui, sans-serif; padding: 18px; background: #f8fafc; color: #1e293b; display: flex; flex-direction: column; gap: 12px; }
-    h2 { font-size: 1.05rem; margin: 0; }
+    body { font-family: "Quicksand", system-ui, sans-serif; padding: 18px; background: #f8fafc; color: #1e293b; display: flex; flex-direction: column; gap: 12px; }
+    h2 { font-family: "Fredoka", sans-serif; font-size: 1.15rem; margin: 0; }
     .bar-wrap { height: 26px; background: #e2e8f0; border-radius: 999px; overflow: hidden; position: relative; border: 1px solid #cbd5e1; }
     .bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #22c55e 0%, #eab308 65%, #ef4444 90%); transition: width 0.08s linear; }
     .line { position: absolute; top: 0; bottom: 0; width: 3px; background: #0f172a; left: ${noiseThreshold}%; }
     .status { text-align: center; font-weight: 700; padding: 8px; border-radius: 8px; background: #e2e8f0; }
     .status.loud { background: #fee2e2; color: #b91c1c; }
-    button { padding: 9px 14px; border-radius: 8px; border: none; background: #5e8b89; color: #fff; font-weight: 600; cursor: pointer; }
   </style>
 </head>
 <body>
-  <h2>🎙️ Classroom Noise Meter</h2>
+  <h2>Classroom Noise Meter</h2>
   <div class="bar-wrap"><div class="bar-fill" id="fill"></div><div class="line" id="line"></div></div>
   <div class="status" id="status">Requesting microphone...</div>
-  <label style="font-size:0.82rem;">Threshold: <span id="lbl">${noiseThreshold}%</span>
+  <label style="font-size:0.82rem; font-weight:700;">Threshold: <span id="lbl">${noiseThreshold}%</span>
     <input type="range" min="15" max="95" value="${noiseThreshold}" style="width:100%;" oninput="thresh=Number(this.value);document.getElementById('lbl').textContent=thresh+'%';document.getElementById('line').style.left=thresh+'%';">
   </label>
   <script>
@@ -2636,17 +2898,17 @@
         document.getElementById('fill').style.width = lvl + '%';
         const st = document.getElementById('status');
         if (lvl > thresh) {
-          st.textContent = '⚠️ Too Loud! (' + lvl + '%)'; st.classList.add('loud');
+          st.textContent = 'Too Loud! (' + lvl + '%)'; st.classList.add('loud');
           if (Date.now() - lastChime > 4000) { lastChime = Date.now(); chime(); }
         } else {
-          st.textContent = '✅ Good Volume (' + lvl + '%)'; st.classList.remove('loud');
+          st.textContent = 'Good Volume (' + lvl + '%)'; st.classList.remove('loud');
         }
         requestAnimationFrame(loop);
       };
       loop();
     }).catch(() => {
       const st = document.getElementById('status');
-      st.textContent = '❌ Microphone permission blocked in browser settings.';
+      st.textContent = 'Microphone permission blocked in browser settings.';
       st.classList.add('loud');
     });
   <\/script>
@@ -2776,7 +3038,7 @@
         ctx.rotate(start + arc / 2);
         ctx.textAlign = "right";
         ctx.fillStyle = "#1e293b";
-        ctx.font = "bold 11px sans-serif";
+        ctx.font = "bold 11px Quicksand, sans-serif";
         const displayLabel = label.length > 12 ? label.slice(0, 11) + "…" : label;
         ctx.fillText(displayLabel, radius - 10, 4);
         ctx.restore();
@@ -2809,7 +3071,7 @@
           isSpinning = false;
           const normalized = ((1.5 * Math.PI - (spinnerAngle % (2 * Math.PI))) + 2 * Math.PI) % (2 * Math.PI);
           const sliceIndex = Math.floor(normalized / ((2 * Math.PI) / slices.length)) % slices.length;
-          document.getElementById("spinnerResult").innerHTML = `🎉 <strong>${slices[sliceIndex]}</strong>`;
+          document.getElementById("spinnerResult").innerHTML = `Winner: <strong>${slices[sliceIndex]}</strong>`;
         }
       };
       requestAnimationFrame(animate);
@@ -2832,7 +3094,7 @@
       closeModal("editSpinnerModal");
     }
 
-    // --- Deck of Cards ---
+    // --- Portrait Deck of Cards ---
     let activeDeck = [];
 
     function buildDeck() {
@@ -2864,8 +3126,8 @@
       });
 
       if (deckConfig.ranks.jokers) {
-        cards.push({ type: "standard", rank: "JOKER", suit: "🃏", color: "red" });
-        cards.push({ type: "standard", rank: "JOKER", suit: "🃏", color: "black" });
+        cards.push({ type: "standard", rank: "JOKER", suit: "★", color: "red" });
+        cards.push({ type: "standard", rank: "JOKER", suit: "★", color: "black" });
       }
 
       if (cards.length === 0) {
@@ -2882,13 +3144,21 @@
       }
       document.getElementById("deckStatusLabel").textContent = `${activeDeck.length} cards remaining`;
       if (!silent) {
-        document.getElementById("cardStage").innerHTML = `<div class="result-box" style="min-height:126px;">Deck shuffled! Click Draw Card</div>`;
+        document.getElementById("cardStage").innerHTML = `
+          <div class="playing-card card-back">
+            <div class="playing-card-inner">Deck Shuffled!<br>Click Draw</div>
+          </div>
+        `;
       }
     }
 
     function drawCard() {
       if (activeDeck.length === 0) {
-        document.getElementById("cardStage").innerHTML = `<div class="result-box" style="min-height:126px;">Deck empty! Click Shuffle</div>`;
+        document.getElementById("cardStage").innerHTML = `
+          <div class="playing-card card-back">
+            <div class="playing-card-inner">Deck Empty!<br>Click Shuffle</div>
+          </div>
+        `;
         document.getElementById("deckStatusLabel").textContent = "0 cards remaining";
         return;
       }
@@ -2897,13 +3167,29 @@
       const stage = document.getElementById("cardStage");
 
       if (card.type === "custom") {
-        stage.innerHTML = `<div class="playing-card custom-card">${card.text}</div>`;
+        stage.innerHTML = `
+          <div class="playing-card custom-card">
+            <div class="playing-card-inner">
+              <span class="custom-card-badge">Prompt</span>
+              <div class="custom-card-text">${card.text}</div>
+              <span class="custom-card-badge">Card</span>
+            </div>
+          </div>
+        `;
       } else {
         stage.innerHTML = `
           <div class="playing-card ${card.color}">
-            <div class="card-corner">${card.rank}<br>${card.suit}</div>
-            <div class="card-center">${card.suit}</div>
-            <div class="card-corner bottom">${card.rank}<br>${card.suit}</div>
+            <div class="playing-card-inner">
+              <div class="card-corner">
+                <span>${card.rank}</span>
+                <span>${card.suit}</span>
+              </div>
+              <div class="card-center">${card.suit}</div>
+              <div class="card-corner bottom">
+                <span>${card.rank}</span>
+                <span>${card.suit}</span>
+              </div>
+            </div>
           </div>
         `;
       }
@@ -3007,7 +3293,7 @@
       container.innerHTML = supplies.map((item, idx) => `
         <span class="edit-chip">
           ${item.label}
-          <button type="button" onclick="removeSupplyItem(${idx})" title="Remove">✕</button>
+          <button type="button" onclick="removeSupplyItem(${idx})" title="Remove">x</button>
         </span>
       `).join("");
     }
@@ -3120,7 +3406,26 @@
       document.getElementById("groupsOutput").innerHTML = "";
     }
 
-    // --- Bookmarks ---
+    // --- Editable Bookmarks with Color Choices ---
+    function renderNewBookmarkColorPicker() {
+      const container = document.getElementById("newBookmarkColorPicker");
+      if (!container) return;
+      container.innerHTML = colorPalette.map(c => `
+        <button
+          type="button"
+          class="color-dot ${newBookmarkSelectedColor === c.value ? "selected" : ""}"
+          style="background-color:${c.value};"
+          title="${c.label}"
+          onclick="selectNewBookmarkColor('${c.value}')"
+        ></button>
+      `).join("");
+    }
+
+    function selectNewBookmarkColor(hex) {
+      newBookmarkSelectedColor = hex;
+      renderNewBookmarkColorPicker();
+    }
+
     function renderBookmarks() {
       const list = document.getElementById("bookmarkList");
       if (bookmarks.length === 0) {
@@ -3128,15 +3433,79 @@
         return;
       }
 
-      list.innerHTML = bookmarks.map((bm, idx) => `
-        <div class="bookmark-row">
-          <a href="${bm.url}" target="_blank" rel="noopener noreferrer" class="btn bookmark-link" title="${bm.url}">
-            <span>${bm.title}</span>
-            <span>↗</span>
-          </a>
-          <button type="button" class="bookmark-del" onclick="removeBookmark(${idx})" title="Remove bookmark">✕</button>
-        </div>
-      `).join("");
+      list.innerHTML = bookmarks.map((bm, idx) => {
+        const bgColor = bm.color || "#e0f2fe";
+        if (editingBookmarkIndex === idx) {
+          return `
+            <div class="bookmark-edit-card">
+              <input type="text" id="editBmTitle-${idx}" value="${bm.title.replace(/"/g, '&quot;')}" placeholder="Bookmark title" />
+              <input type="text" id="editBmUrl-${idx}" value="${bm.url.replace(/"/g, '&quot;')}" placeholder="https://..." />
+              <div class="color-swatch-row">
+                ${colorPalette.map(c => `
+                  <button
+                    type="button"
+                    class="color-dot ${bgColor === c.value ? "selected" : ""}"
+                    style="background-color:${c.value};"
+                    title="${c.label}"
+                    onclick="setBookmarkColor(${idx}, '${c.value}')"
+                  ></button>
+                `).join("")}
+              </div>
+              <div class="btn-row">
+                <button type="button" class="btn btn-sm btn-primary" onclick="saveEditedBookmark(${idx})">Save</button>
+                <button type="button" class="btn btn-sm" onclick="cancelEditBookmark()">Cancel</button>
+              </div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="bookmark-row">
+            <a href="${bm.url}" target="_blank" rel="noopener noreferrer" class="btn bookmark-link" style="background-color:${bgColor};" title="${bm.url}">
+              <span>${bm.title}</span>
+              <span>↗</span>
+            </a>
+            <button type="button" class="bookmark-action-btn" onclick="startEditBookmark(${idx})" title="Edit bookmark">Edit</button>
+            <button type="button" class="bookmark-del" onclick="removeBookmark(${idx})" title="Remove bookmark">x</button>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function startEditBookmark(idx) {
+      editingBookmarkIndex = idx;
+      renderBookmarks();
+    }
+
+    function cancelEditBookmark() {
+      editingBookmarkIndex = -1;
+      renderBookmarks();
+    }
+
+    function setBookmarkColor(idx, hex) {
+      if (!bookmarks[idx]) return;
+      bookmarks[idx].color = hex;
+      saveState();
+      renderBookmarks();
+    }
+
+    function saveEditedBookmark(idx) {
+      const titleEl = document.getElementById(`editBmTitle-${idx}`);
+      const urlEl = document.getElementById(`editBmUrl-${idx}`);
+      if (!titleEl || !urlEl) return;
+
+      const title = titleEl.value.trim();
+      let url = urlEl.value.trim();
+      if (!title || !url) return;
+      if (!/^https?:\/\//i.test(url)) {
+        url = "https://" + url;
+      }
+
+      bookmarks[idx].title = title;
+      bookmarks[idx].url = url;
+      editingBookmarkIndex = -1;
+      saveState();
+      renderBookmarks();
     }
 
     function addBookmark() {
@@ -3150,7 +3519,7 @@
         url = "https://" + url;
       }
 
-      bookmarks.push({ title, url });
+      bookmarks.push({ title, url, color: newBookmarkSelectedColor });
       titleInput.value = "";
       urlInput.value = "";
       saveState();
@@ -3158,6 +3527,8 @@
     }
 
     function removeBookmark(idx) {
+      if (editingBookmarkIndex === idx) editingBookmarkIndex = -1;
+      else if (editingBookmarkIndex > idx) editingBookmarkIndex--;
       bookmarks.splice(idx, 1);
       saveState();
       renderBookmarks();
@@ -3167,13 +3538,14 @@
     function exportBackup() {
       const backupData = {
         app: "Classroom Home Base",
-        version: 8,
+        version: 10,
         exportedAt: new Date().toISOString(),
         data: {
           rosters,
           currentClass,
           tabs,
           activeTabIndex,
+          activeFolderFilter,
           supplies,
           bookmarks,
           settings,
@@ -3216,11 +3588,13 @@
           currentClass = payload.currentClass && rosters[payload.currentClass]
             ? payload.currentClass
             : Object.keys(rosters)[0];
-          tabs = payload.tabs;
+          tabs = payload.tabs.map(t => ({ ...t, folder: (t.folder || "General").trim() || "General" }));
           activeTabIndex = typeof payload.activeTabIndex === "number" ? payload.activeTabIndex : (tabs.length > 0 ? 0 : -1);
           if (activeTabIndex >= tabs.length) activeTabIndex = tabs.length - 1;
+          activeFolderFilter = payload.activeFolderFilter || "ALL";
           supplies = Array.isArray(payload.supplies) ? payload.supplies : structuredClone(defaultSupplies);
-          bookmarks = Array.isArray(payload.bookmarks) ? payload.bookmarks : [];
+          bookmarks = Array.isArray(payload.bookmarks) ? payload.bookmarks.map(b => ({ ...b, color: b.color || "#e0f2fe" })) : [];
+          editingBookmarkIndex = -1;
           if (payload.settings) {
             settings = {
               ...structuredClone(defaultSettings),
@@ -3269,14 +3643,16 @@
     }
 
     function resetAllData() {
-      if (!confirm("Reset all presentations, bookmarks, timer presets, custom dice/cards, overlays, rosters, and settings back to defaults?")) return;
+      if (!confirm("Reset all presentations, folders, bookmarks, timer presets, custom dice/cards, overlays, rosters, and settings back to defaults?")) return;
       Object.values(STORAGE_KEYS).forEach(k => localStorage.removeItem(k));
       rosters = structuredClone(defaultRosters);
       currentClass = "My Class";
       tabs = [];
       activeTabIndex = -1;
+      activeFolderFilter = "ALL";
       supplies = structuredClone(defaultSupplies);
       bookmarks = [];
+      editingBookmarkIndex = -1;
       settings = structuredClone(defaultSettings);
       diceSpinner = structuredClone(defaultDiceSpinner);
       deckConfig = structuredClone(defaultDeckConfig);
@@ -3307,7 +3683,7 @@
       const sb = document.getElementById("sidebar");
       const btn = document.getElementById("toggleToolsBtn");
       sb.classList.toggle("collapsed");
-      btn.textContent = sb.classList.contains("collapsed") ? "› Show Sidebar" : "‹ Hide Sidebar";
+      btn.textContent = sb.classList.contains("collapsed") ? "Show Sidebar" : "Hide Sidebar";
     }
 
     function toggleTool(headerEl) {
@@ -3342,7 +3718,7 @@
       }
       const idx = Math.floor(Math.random() * availableStudents.length);
       const chosen = availableStudents.splice(idx, 1)[0];
-      document.getElementById("randomNameResult").innerHTML = `<span style="font-size:1.2rem; color:#0f172a;">🎉 ${chosen}</span>`;
+      document.getElementById("randomNameResult").innerHTML = `<span style="font-family:var(--font-heading); font-size:1.35rem; color:#0f172a;">${chosen}</span>`;
       updateRemainingLabel();
     }
 
@@ -3415,7 +3791,54 @@
       setInterval(update, 1000);
     }
 
-    // --- Stage Tabs, Manage Modal & Iframe ---
+    // --- Presentation Folders, Stage Tabs, Manage Modal & Iframe ---
+    function getUniqueFolders() {
+      const set = new Set(["General"]);
+      tabs.forEach(t => {
+        const f = (t.folder || "General").trim();
+        if (f) set.add(f);
+      });
+      return Array.from(set);
+    }
+
+    function updateFolderDropdownAndSuggestions() {
+      const folders = getUniqueFolders();
+      const filterSel = document.getElementById("folderFilterSelect");
+      const datalist = document.getElementById("folderSuggestions");
+
+      if (activeFolderFilter !== "ALL" && !folders.includes(activeFolderFilter)) {
+        activeFolderFilter = "ALL";
+      }
+
+      filterSel.innerHTML = `<option value="ALL">All Folders (${tabs.length})</option>` +
+        folders.map(f => {
+          const count = tabs.filter(t => (t.folder || "General") === f).length;
+          return `<option value="${f.replace(/"/g, '&quot;')}">${f} (${count})</option>`;
+        }).join("");
+      filterSel.value = activeFolderFilter;
+
+      if (datalist) {
+        const presetSuggestions = new Set([...folders, "General", "Morning Meeting", "Math", "Reading", "Science", "Social Studies"]);
+        datalist.innerHTML = Array.from(presetSuggestions)
+          .map(f => `<option value="${f.replace(/"/g, '&quot;')}">`)
+          .join("");
+      }
+    }
+
+    function changeFolderFilter() {
+      activeFolderFilter = document.getElementById("folderFilterSelect").value;
+      const visibleIndices = tabs
+        .map((t, idx) => ({ t, idx }))
+        .filter(({ t }) => activeFolderFilter === "ALL" || (t.folder || "General") === activeFolderFilter)
+        .map(({ idx }) => idx);
+
+      if (visibleIndices.length > 0 && !visibleIndices.includes(activeTabIndex)) {
+        activeTabIndex = visibleIndices[0];
+      }
+      saveState();
+      renderStage();
+    }
+
     function normalizeEmbedUrl(rawUrl) {
       let url = rawUrl.trim();
       if (!url) return "";
@@ -3432,22 +3855,39 @@
     }
 
     function renderStage() {
+      updateFolderDropdownAndSuggestions();
+
       const container = document.getElementById("tabContainer");
       const frame = document.getElementById("stageFrame");
       const empty = document.getElementById("emptyStage");
+      const emptyTitle = document.getElementById("emptyStageTitle");
+      const emptyDesc = document.getElementById("emptyStageDesc");
 
-      container.innerHTML = tabs.map((tab, idx) => `
+      const filteredTabs = tabs
+        .map((tab, idx) => ({ tab, idx }))
+        .filter(({ tab }) => activeFolderFilter === "ALL" || (tab.folder || "General") === activeFolderFilter);
+
+      container.innerHTML = filteredTabs.map(({ tab, idx }) => `
         <button
           type="button"
           class="tab-pill ${idx === activeTabIndex ? 'active' : ''}"
           style="background-color: ${tab.color};"
           onclick="selectTab(${idx})"
+          title="Folder: ${tab.folder || 'General'}"
         >${tab.title}</button>
       `).join("");
 
       if (tabs.length === 0 || activeTabIndex < 0 || !tabs[activeTabIndex]) {
         frame.style.display = "none";
         frame.src = "";
+        emptyTitle.textContent = "No Presentations Added Yet";
+        emptyDesc.innerHTML = `Click <strong>+ Presentation</strong> above to embed a Google Slides deck, Canva slideshow, or classroom webpage. Organize decks into folders and click <strong>Overlay</strong> on any tool to float it on top!`;
+        empty.style.display = "flex";
+      } else if (filteredTabs.length === 0) {
+        frame.style.display = "none";
+        frame.src = "";
+        emptyTitle.textContent = `No Presentations in "${activeFolderFilter}"`;
+        emptyDesc.innerHTML = `Click <strong>+ Presentation</strong> to add a slideshow to this folder, or select <strong>All Folders</strong> from the dropdown above.`;
         empty.style.display = "flex";
       } else {
         empty.style.display = "none";
@@ -3466,27 +3906,24 @@
 
     function addNewTab() {
       const title = document.getElementById("newTabTitle").value.trim() || "New Slide Deck";
+      const folder = document.getElementById("newTabFolder").value.trim() || "General";
       const url = normalizeEmbedUrl(document.getElementById("newTabUrl").value);
       const color = document.getElementById("newTabColor").value;
 
       if (!url) return;
 
-      tabs.push({ title, url, color });
+      tabs.push({ title, folder, url, color });
+      if (activeFolderFilter !== "ALL" && activeFolderFilter !== folder) {
+        activeFolderFilter = folder;
+      }
       document.getElementById("newTabTitle").value = "";
       document.getElementById("newTabUrl").value = "";
       closeModal("addTabModal");
       selectTab(tabs.length - 1);
     }
 
-    const tabColorOptions = [
-      { value: "#fef3c7", label: "Yellow" },
-      { value: "#ffedd5", label: "Peach" },
-      { value: "#dcfce7", label: "Mint" },
-      { value: "#e0f2fe", label: "Sky" },
-      { value: "#fce7f3", label: "Pink" }
-    ];
-
     function renderManageList() {
+      updateFolderDropdownAndSuggestions();
       const list = document.getElementById("manageList");
       if (tabs.length === 0) {
         list.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted); text-align:center; padding:16px 0;">No presentations added yet.</p>`;
@@ -3499,16 +3936,20 @@
             <span class="manage-swatch" style="background:${tab.color};"></span>
             <input type="text" value="${tab.title.replace(/"/g, '&quot;')}" onchange="renameTab(${idx}, this.value)" placeholder="Tab Title" />
             <select class="manage-color-select" onchange="recolorTab(${idx}, this.value)" title="Tab Color">
-              ${tabColorOptions.map(opt => `<option value="${opt.value}" ${tab.color === opt.value ? "selected" : ""}>${opt.label}</option>`).join("")}
+              ${colorPalette.map(opt => `<option value="${opt.value}" ${tab.color === opt.value ? "selected" : ""}>${opt.label}</option>`).join("")}
             </select>
             <div class="manage-actions">
               <button type="button" class="icon-btn" onclick="moveTab(${idx}, -1)" ${idx === 0 ? "disabled" : ""} title="Move Left">↑</button>
               <button type="button" class="icon-btn" onclick="moveTab(${idx}, 1)" ${idx === tabs.length - 1 ? "disabled" : ""} title="Move Right">↓</button>
-              <button type="button" class="icon-btn btn-danger" onclick="deleteTab(${idx})" title="Remove">✕</button>
+              <button type="button" class="icon-btn btn-danger" onclick="deleteTab(${idx})" title="Remove">x</button>
             </div>
           </div>
+          <div class="manage-row-meta">
+            <label>Folder:</label>
+            <input type="text" class="manage-folder-input" list="folderSuggestions" value="${(tab.folder || 'General').replace(/"/g, '&quot;')}" onchange="updateTabFolder(${idx}, this.value)" placeholder="Folder name" />
+          </div>
           <div class="manage-url-row">
-            <span>🔗 URL</span>
+            <span>URL</span>
             <input type="text" value="${tab.url.replace(/"/g, '&quot;')}" onchange="updateTabUrl(${idx}, this.value)" placeholder="https://docs.google.com/presentation/d/..." />
           </div>
         </div>
@@ -3522,6 +3963,13 @@
         saveState();
         renderStage();
       }
+    }
+
+    function updateTabFolder(idx, newFolder) {
+      tabs[idx].folder = newFolder.trim() || "General";
+      saveState();
+      renderManageList();
+      renderStage();
     }
 
     function recolorTab(idx, newColor) {
@@ -3576,6 +4024,9 @@
       if (id === "settingsModal") {
         renderSettingsUI();
         document.getElementById("settingsStatus").className = "status-msg";
+      } else if (id === "addTabModal") {
+        updateFolderDropdownAndSuggestions();
+        document.getElementById("newTabFolder").value = activeFolderFilter !== "ALL" ? activeFolderFilter : "General";
       } else if (id === "manageModal") {
         renderManageList();
       } else if (id === "editTimerModal") {
