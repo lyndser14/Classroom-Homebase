@@ -892,7 +892,7 @@
     }
 
     .folder-filter-wrap {
-      display: flex;
+      display: none;
       align-items: center;
       gap: 5px;
       background: #f1f5f9;
@@ -900,6 +900,10 @@
       border-radius: var(--radius-md);
       border: 1px solid var(--border-light);
       flex-shrink: 0;
+    }
+
+    .folder-filter-wrap.visible {
+      display: flex;
     }
 
     .folder-filter-wrap label {
@@ -1547,7 +1551,7 @@
         <button type="button" class="btn btn-primary" onclick="openModal('addTabModal')">+ Presentation</button>
         <button type="button" class="btn" onclick="openModal('manageModal')">Manage</button>
 
-        <div class="folder-filter-wrap">
+        <div class="folder-filter-wrap" id="folderFilterWrap">
           <label for="folderFilterSelect">Folder:</label>
           <select id="folderFilterSelect" onchange="changeFolderFilter()"></select>
         </div>
@@ -1578,7 +1582,7 @@
 
         <div class="empty-stage" id="emptyStage">
           <h2 id="emptyStageTitle">No Presentations Added Yet</h2>
-          <p id="emptyStageDesc">Click <strong>+ Presentation</strong> above to embed a Google Slides deck, Canva slideshow, or classroom webpage. Organize decks into folders and click <strong>Overlay</strong> on any tool to float it on top!</p>
+          <p id="emptyStageDesc">Click <strong>+ Presentation</strong> above to embed a Google Slides deck, Canva slideshow, or classroom webpage. Optionally group similar decks into a folder, or click <strong>Overlay</strong> on any tool to float it on top!</p>
           <button type="button" class="btn btn-primary" onclick="openModal('addTabModal')">+ Add Your First Presentation</button>
         </div>
 
@@ -1798,7 +1802,7 @@
     </div>
   </div>
 
-  <!-- Datalist for Folder Suggestions -->
+  <!-- Datalist for Existing Folder Suggestions -->
   <datalist id="folderSuggestions"></datalist>
 
   <!-- Modal: Add Presentation Tab -->
@@ -1810,8 +1814,8 @@
         <input type="text" id="newTabTitle" placeholder="e.g., Math Lesson 4" />
       </div>
       <div>
-        <label>Folder (type a new folder name or pick existing)</label>
-        <input type="text" id="newTabFolder" list="folderSuggestions" placeholder="e.g., General, Morning Meeting, Math, Reading" />
+        <label>Folder <span style="font-weight:500; color:var(--text-muted);">(optional — leave blank for no folder)</span></label>
+        <input type="text" id="newTabFolder" list="folderSuggestions" placeholder="Leave blank, or enter a category (e.g., Math, Reading)" />
       </div>
       <div>
         <label>Embed URL (Google Slides, Canva ?embed, or Website)</label>
@@ -1835,7 +1839,7 @@
         <h2>Manage Presentations</h2>
         <button type="button" class="btn btn-primary" onclick="closeModal('manageModal'); openModal('addTabModal');">+ New</button>
       </div>
-      <p style="font-size:0.8rem; color:var(--text-muted);">Edit titles, assign folders, paste a new slide URL, change tab colors, or reorder:</p>
+      <p style="font-size:0.8rem; color:var(--text-muted);">Edit titles, assign an optional category folder, paste a new slide URL, change tab colors, or reorder:</p>
       <div class="manage-list" id="manageList"></div>
       <div class="btn-row" style="margin-top:4px;">
         <button type="button" class="btn btn-primary" onclick="closeModal('manageModal')">Done</button>
@@ -2198,7 +2202,7 @@
     let availableStudents = [...rosters[currentClass]];
     let tabs = loadJSON(STORAGE_KEYS.TABS, []).map(t => ({
       ...t,
-      folder: (t.folder || "General").trim() || "General"
+      folder: (t.folder || "").trim()
     }));
     let activeTabIndex = parseInt(localStorage.getItem(STORAGE_KEYS.ACTIVE_TAB) ?? "-1", 10);
     if (activeTabIndex >= tabs.length) activeTabIndex = tabs.length - 1;
@@ -3538,7 +3542,7 @@
     function exportBackup() {
       const backupData = {
         app: "Classroom Home Base",
-        version: 10,
+        version: 11,
         exportedAt: new Date().toISOString(),
         data: {
           rosters,
@@ -3588,7 +3592,7 @@
           currentClass = payload.currentClass && rosters[payload.currentClass]
             ? payload.currentClass
             : Object.keys(rosters)[0];
-          tabs = payload.tabs.map(t => ({ ...t, folder: (t.folder || "General").trim() || "General" }));
+          tabs = payload.tabs.map(t => ({ ...t, folder: (t.folder || "").trim() }));
           activeTabIndex = typeof payload.activeTabIndex === "number" ? payload.activeTabIndex : (tabs.length > 0 ? 0 : -1);
           if (activeTabIndex >= tabs.length) activeTabIndex = tabs.length - 1;
           activeFolderFilter = payload.activeFolderFilter || "ALL";
@@ -3791,18 +3795,19 @@
       setInterval(update, 1000);
     }
 
-    // --- Presentation Folders, Stage Tabs, Manage Modal & Iframe ---
-    function getUniqueFolders() {
-      const set = new Set(["General"]);
+    // --- Optional Presentation Folders, Stage Tabs, Manage Modal & Iframe ---
+    function getExistingFolders() {
+      const set = new Set();
       tabs.forEach(t => {
-        const f = (t.folder || "General").trim();
+        const f = (t.folder || "").trim();
         if (f) set.add(f);
       });
       return Array.from(set);
     }
 
     function updateFolderDropdownAndSuggestions() {
-      const folders = getUniqueFolders();
+      const folders = getExistingFolders();
+      const filterWrap = document.getElementById("folderFilterWrap");
       const filterSel = document.getElementById("folderFilterSelect");
       const datalist = document.getElementById("folderSuggestions");
 
@@ -3810,16 +3815,22 @@
         activeFolderFilter = "ALL";
       }
 
-      filterSel.innerHTML = `<option value="ALL">All Folders (${tabs.length})</option>` +
-        folders.map(f => {
-          const count = tabs.filter(t => (t.folder || "General") === f).length;
-          return `<option value="${f.replace(/"/g, '&quot;')}">${f} (${count})</option>`;
-        }).join("");
-      filterSel.value = activeFolderFilter;
+      // Only show the folder filter dropdown when at least one presentation has been assigned to a folder
+      if (folders.length > 0) {
+        filterWrap.classList.add("visible");
+        filterSel.innerHTML = `<option value="ALL">All Presentations (${tabs.length})</option>` +
+          folders.map(f => {
+            const count = tabs.filter(t => (t.folder || "").trim() === f).length;
+            return `<option value="${f.replace(/"/g, '&quot;')}">${f} (${count})</option>`;
+          }).join("");
+        filterSel.value = activeFolderFilter;
+      } else {
+        filterWrap.classList.remove("visible");
+        activeFolderFilter = "ALL";
+      }
 
       if (datalist) {
-        const presetSuggestions = new Set([...folders, "General", "Morning Meeting", "Math", "Reading", "Science", "Social Studies"]);
-        datalist.innerHTML = Array.from(presetSuggestions)
+        datalist.innerHTML = folders
           .map(f => `<option value="${f.replace(/"/g, '&quot;')}">`)
           .join("");
       }
@@ -3829,7 +3840,7 @@
       activeFolderFilter = document.getElementById("folderFilterSelect").value;
       const visibleIndices = tabs
         .map((t, idx) => ({ t, idx }))
-        .filter(({ t }) => activeFolderFilter === "ALL" || (t.folder || "General") === activeFolderFilter)
+        .filter(({ t }) => activeFolderFilter === "ALL" || (t.folder || "").trim() === activeFolderFilter)
         .map(({ idx }) => idx);
 
       if (visibleIndices.length > 0 && !visibleIndices.includes(activeTabIndex)) {
@@ -3865,29 +3876,33 @@
 
       const filteredTabs = tabs
         .map((tab, idx) => ({ tab, idx }))
-        .filter(({ tab }) => activeFolderFilter === "ALL" || (tab.folder || "General") === activeFolderFilter);
+        .filter(({ tab }) => activeFolderFilter === "ALL" || (tab.folder || "").trim() === activeFolderFilter);
 
-      container.innerHTML = filteredTabs.map(({ tab, idx }) => `
-        <button
-          type="button"
-          class="tab-pill ${idx === activeTabIndex ? 'active' : ''}"
-          style="background-color: ${tab.color};"
-          onclick="selectTab(${idx})"
-          title="Folder: ${tab.folder || 'General'}"
-        >${tab.title}</button>
-      `).join("");
+      container.innerHTML = filteredTabs.map(({ tab, idx }) => {
+        const folderName = (tab.folder || "").trim();
+        const tooltip = folderName ? `Folder: ${folderName}` : tab.title;
+        return `
+          <button
+            type="button"
+            class="tab-pill ${idx === activeTabIndex ? 'active' : ''}"
+            style="background-color: ${tab.color};"
+            onclick="selectTab(${idx})"
+            title="${tooltip.replace(/"/g, '&quot;')}"
+          >${tab.title}</button>
+        `;
+      }).join("");
 
       if (tabs.length === 0 || activeTabIndex < 0 || !tabs[activeTabIndex]) {
         frame.style.display = "none";
         frame.src = "";
         emptyTitle.textContent = "No Presentations Added Yet";
-        emptyDesc.innerHTML = `Click <strong>+ Presentation</strong> above to embed a Google Slides deck, Canva slideshow, or classroom webpage. Organize decks into folders and click <strong>Overlay</strong> on any tool to float it on top!`;
+        emptyDesc.innerHTML = `Click <strong>+ Presentation</strong> above to embed a Google Slides deck, Canva slideshow, or classroom webpage. Optionally group similar decks into a folder, or click <strong>Overlay</strong> on any tool to float it on top!`;
         empty.style.display = "flex";
       } else if (filteredTabs.length === 0) {
         frame.style.display = "none";
         frame.src = "";
         emptyTitle.textContent = `No Presentations in "${activeFolderFilter}"`;
-        emptyDesc.innerHTML = `Click <strong>+ Presentation</strong> to add a slideshow to this folder, or select <strong>All Folders</strong> from the dropdown above.`;
+        emptyDesc.innerHTML = `Click <strong>+ Presentation</strong> to add a slideshow to this folder, or select <strong>All Presentations</strong> from the dropdown above.`;
         empty.style.display = "flex";
       } else {
         empty.style.display = "none";
@@ -3906,7 +3921,7 @@
 
     function addNewTab() {
       const title = document.getElementById("newTabTitle").value.trim() || "New Slide Deck";
-      const folder = document.getElementById("newTabFolder").value.trim() || "General";
+      const folder = document.getElementById("newTabFolder").value.trim();
       const url = normalizeEmbedUrl(document.getElementById("newTabUrl").value);
       const color = document.getElementById("newTabColor").value;
 
@@ -3914,9 +3929,10 @@
 
       tabs.push({ title, folder, url, color });
       if (activeFolderFilter !== "ALL" && activeFolderFilter !== folder) {
-        activeFolderFilter = folder;
+        activeFolderFilter = folder || "ALL";
       }
       document.getElementById("newTabTitle").value = "";
+      document.getElementById("newTabFolder").value = "";
       document.getElementById("newTabUrl").value = "";
       closeModal("addTabModal");
       selectTab(tabs.length - 1);
@@ -3945,8 +3961,8 @@
             </div>
           </div>
           <div class="manage-row-meta">
-            <label>Folder:</label>
-            <input type="text" class="manage-folder-input" list="folderSuggestions" value="${(tab.folder || 'General').replace(/"/g, '&quot;')}" onchange="updateTabFolder(${idx}, this.value)" placeholder="Folder name" />
+            <label>Folder (optional):</label>
+            <input type="text" class="manage-folder-input" list="folderSuggestions" value="${(tab.folder || '').replace(/"/g, '&quot;')}" onchange="updateTabFolder(${idx}, this.value)" placeholder="None (leave blank for standalone tab)" />
           </div>
           <div class="manage-url-row">
             <span>URL</span>
@@ -3966,7 +3982,7 @@
     }
 
     function updateTabFolder(idx, newFolder) {
-      tabs[idx].folder = newFolder.trim() || "General";
+      tabs[idx].folder = newFolder.trim();
       saveState();
       renderManageList();
       renderStage();
@@ -4026,7 +4042,7 @@
         document.getElementById("settingsStatus").className = "status-msg";
       } else if (id === "addTabModal") {
         updateFolderDropdownAndSuggestions();
-        document.getElementById("newTabFolder").value = activeFolderFilter !== "ALL" ? activeFolderFilter : "General";
+        document.getElementById("newTabFolder").value = activeFolderFilter !== "ALL" ? activeFolderFilter : "";
       } else if (id === "manageModal") {
         renderManageList();
       } else if (id === "editTimerModal") {
